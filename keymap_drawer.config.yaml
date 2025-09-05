@@ -1,0 +1,37 @@
+# Config for keymap-drawer
+parse_config:
+  preprocess: true
+  # Remove shield suffixes from layer names
+  layer_names:
+    0: "Base"
+    1: "Lower"
+    2: "Raise"
+    3: "Extra"
+
+draw_config:
+  key_w: 60
+  key_h: 56
+  split_gap: 30
+  combo_w: 28
+  combo_h: 26
+  key_rx: 6
+  key_ry: 6
+  inner_pad_w: 2
+  inner_pad_h: 2
+  outer_pad_w: 30
+  outer_pad_h: 56
+  line_spacing: 1.2
+  arc_scale: 1.0
+  append_colon_to_layer_header: true
+  small_pad: 2
+  draw_key_sides: true
+  ghost_keys: []
+  svg_style: |
+    /* High contrast colors */
+    .background { fill: white; }
+    .key { fill: #ffffff; stroke: #333; stroke-width: 2; }
+    .key.held { fill: #ffeb3b; stroke: #333; stroke-width: 2; }
+    .key.ghost { stroke-dasharray: 4,4; stroke: #666; stroke-width: 2; }
+    .keycode { font-size: 12px; font-family: monospace; fill: #000; font-weight: 600; }
+    .layer { font-size: 16px; font-weight: bold; fill: #000; }
+    .combo { fill: #ff9800; stroke: #333; stroke-width: 2; }

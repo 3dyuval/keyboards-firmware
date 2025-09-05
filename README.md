@@ -1,10 +1,12 @@
 # Corne Graphite Layout
 
+![Keymap](keymap-drawer/corne.svg)
+
 ## Base
 
 ```
 ESC B L D W Z       ; F O U J =
-TAB N R T S G       Y A E I H '  
+TAB N R T S G       Y H A E I '  
 SFT Q X M C V       K P . - / , 
    CTRL LOWER SPC   ENT BSPC RALT
 ```
@@ -15,8 +17,8 @@ SFT Q X M C V       K P . - / ,
 
 ```
 --- 1 2 3 4 5      6    7  8   9   0 ---
----  [ { ( --- ↑   ↓    ←  →   `   --- ---
----  ] } ) PGDN HOME END +  \   --- --- ---
+--- --- [ { ( ↑   ↓    ←  →   `   --- ---
+--- --- ] } ) HOME END +  \   --- --- ---
    --- --- ---    --- --- ---
 ```
 

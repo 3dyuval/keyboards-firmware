@@ -21,7 +21,7 @@ else
 fi
 
 echo "Fetching latest build for $SIDE_NAME side..."
-RUN_DATA=$(gh run list --repo $REPO --limit 1 --status completed --json databaseId,createdAt --jq '.[0]')
+RUN_DATA=$(gh run list --repo $REPO --workflow=build.yml --limit 1 --status completed --json databaseId,createdAt --jq '.[0]')
 RUN_ID=$(echo "$RUN_DATA" | jq -r '.databaseId')
 BUILD_TIME_UTC=$(echo "$RUN_DATA" | jq -r '.createdAt')
 
