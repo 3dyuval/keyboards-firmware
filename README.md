@@ -4,8 +4,8 @@
 
 ```
 ESC B L D W Z       ; F O U J =
-TAB N R T S G       Y A E E I '  
-SFT Q X M C V       K P . / - , 
+TAB N R T S G       Y A E I H '  
+SFT Q X M C V       K P . - / , 
    CTRL LOWER SPC   ENT BSPC RALT
 ```
 
@@ -14,9 +14,9 @@ SFT Q X M C V       K P . / - ,
 ## Lower
 
 ```
---- 1 2 3 4 5      6    7  8   9   0
----  [ { (        ---   ↑  ↓   ←   → ` 
----  ] } )        PGDN HOME END \  + ---
+--- 1 2 3 4 5      6    7  8   9   0 ---
+---  [ { ( --- ↑   ↓    ←  →   `   --- ---
+---  ] } ) PGDN HOME END +  \   --- --- ---
    --- --- ---    --- --- ---
 ```
 
