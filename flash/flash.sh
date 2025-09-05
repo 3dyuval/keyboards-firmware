@@ -13,10 +13,10 @@ SIDE="$1"
 REPO="3dyuval/corne-zmk-config"
 
 if [ "$SIDE" = "l" ]; then
-    FIRMWARE="corne_left-nice_nano_v2-zmk.uf2"
+    FIRMWARE="corne_left nice_view_adapter nice_view-nice_nano_v2-zmk.uf2"
     SIDE_NAME="left"
 else
-    FIRMWARE="corne_right-nice_nano_v2-zmk.uf2"
+    FIRMWARE="corne_right nice_view_adapter nice_view-nice_nano_v2-zmk.uf2"
     SIDE_NAME="right"
 fi
 
