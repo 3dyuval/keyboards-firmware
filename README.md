@@ -6,10 +6,10 @@
 ESC B L D W Z       ; F O U J =
 TAB N R T S G       Y A E E I '  
 SFT Q X M C V       K P . / - , 
-   CTRL LOWER SPC   ENT BSPC EXTRA
+   CTRL LOWER SPC   ENT BSPC RALT
 ```
 
-*Hold SPACE for Raise layer • Press SPACE+LOWER for START key*
+*Hold ESC for Extra layer • Hold SPACE for Raise layer • Press SPACE+LOWER for START key*
 
 ## Lower
 
@@ -40,4 +40,4 @@ BTCLR --- --- BR_DN BR_UP PLAY    NEXT VOL+ VOL- --- --- BT_0
    --- --- ---    --- --- EXTRA
 ```
 
-*Access via EXTRA key on Base layer*
+*Hold ESC to access this layer*

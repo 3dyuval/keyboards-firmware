@@ -28,10 +28,10 @@
 // | SFT |  Q  |  X  |  M  |  C  |  V  |   |  K  |  P  |  .  |  /  |  -  |  ,  |
 //                  | CTRL| LWR | SPC |   | ENT | BSPC| RAISE|
                         bindings = <
-   &kp ESC   &kp B &kp L &kp D &kp W &kp Z   &kp SEMI &kp F &kp O    &kp U   &kp J &kp EQUAL
+   &lt 3 ESC   &kp B &kp L &kp D &kp W &kp Z   &kp SEMI &kp F &kp O    &kp U   &kp J &kp EQUAL
    &kp TAB   &kp N &kp R &kp T &kp S &kp G   &kp Y    &kp A &kp E    &kp E   &kp I &kp SQT
    &kp LSHFT &kp Q &kp X &kp M &kp C &kp V   &kp K    &kp P &kp DOT  &kp FSLH &kp MINUS &kp COMMA
-                    &kp LCTRL &mo 1 &lt 2 SPACE   &kp RET &kp BSPC &mo 3
+                    &kp LCTRL &mo 1 &lt 2 SPACE   &kp RET &kp BSPC &kp RALT
                         >;
                 };
                 lower_layer {
