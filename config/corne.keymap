@@ -89,6 +89,13 @@
                     2: "RAISE";
                     3: "EXTRA";
                 };
+                
+                bluetooth {
+                    enabled = <1>;
+                    show_profile = <1>;
+                    show_connection = <1>;
+                    show_battery = <1>;
+                };
             };
         };
 };
