@@ -1,85 +1,85 @@
 layout: {zmk_keyboard: corne}
 layers:
   base:
-  - '`'
+  - ESC
   - B
   - L
   - D
   - W
   - Z
-  - RSHFT
-  - J
-  - U
-  - O
-  - F
   - ;
-  - TAB
+  - F
+  - O
+  - U
+  - {t: J, h: '2'}
+  - RSHFT
+  - {t: TAB, h: LGUI}
   - N
   - R
   - T
   - S
   - G
-  - ''''
-  - I
-  - E
-  - A
-  - H
   - Y
+  - H
+  - A
+  - E
+  - I
+  - ''''
   - LSHFT
   - Q
   - X
   - M
   - C
   - V
-  - ','
-  - /
-  - '-'
-  - .
-  - P
   - K
+  - P
+  - .
+  - '-'
+  - /
+  - ','
   - LCTRL
   - symbols
-  - {t: SPACE, h: LGUI}
-  - RALT
-  - BSPC
+  - SPC
   - RET
+  - BSPC
+  - RALT
   symbols:
-  - MENU
-  - '1'
-  - '2'
-  - '3'
+  - {t: ▽, type: trans}
+  - KP 1
+  - KP 2
+  - KP 3
   - '4'
-  - '5'
-  - '`'
-  - '0'
-  - '9'
-  - '8'
-  - '7'
+  - KP 5
   - '6'
+  - '7'
+  - '8'
+  - '9'
+  - '0'
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '@'
   - '['
   - '{'
   - (
   - '%'
-  - RIGHT
-  - UP
-  - DOWN
-  - LEFT
   - PG UP
-  - '='
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - '`'
   - LSHFT
   - '!'
   - ']'
   - '}'
   - )
   - '#'
-  - \
-  - +
-  - END
-  - HOME
   - PG DN
-  - {t: ▽, type: trans}
+  - HOME
+  - END
+  - +
+  - \
+  - '='
   - {t: ▽, type: trans}
   - {type: held}
   - {t: ▽, type: trans}
@@ -87,92 +87,6 @@ layers:
   - DEL
   - {t: ▽, type: trans}
   function:
-  - RGB TOG
-  - '1'
-  - '2'
-  - '3'
-  - '4'
-  - '5'
-  - '&sys_reset'
-  - '0'
-  - '9'
-  - '8'
-  - '7'
-  - '6'
-  - RGB EFF
-  - PREV
-  - NEXT
-  - VOL UP
-  - PG UP
-  - _
-  - RGB BRI
-  - RGB SAI
-  - RGB HUI
-  - HOME
-  - '='
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - STOP
-  - PP
-  - VOL DN
-  - PG DN
-  - '-'
-  - RGB BRD
-  - RGB SAD
-  - RGB HUD
-  - END
-  - +
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - (
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  system:
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '&bootloader'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '&bootloader'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  extra:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - OUT TOG
@@ -184,19 +98,19 @@ layers:
   - VOL DN
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: BT, h: '0'}
-  - {t: BT, h: '0'}
-  - {t: BT, h: '1'}
-  - {t: BT, h: '2'}
-  - {t: BT, h: '3'}
-  - {t: BT, h: '4'}
-  - BT CLR
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - BT NXT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
