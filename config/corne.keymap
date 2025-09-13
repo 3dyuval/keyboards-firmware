@@ -10,21 +10,29 @@
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/rgb.h>
 
+// Layer definitions
+#define BASE 0
+#define SYM 1
+#define FUN 2
+#define SYS 3
+
 / {
 
     keymap {
         compatible = "zmk,keymap";
 
         base {
+            label = "Base";
             bindings = <
-   &mt LGUI ESC    &lt 4 B        &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U        &kp J        &kp RSHFT     
-   &lt 2 TAB       &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E        &kp I        &kp SQT       
+   &mt LGUI ESC    &lt SYS B      &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U        &kp J        &kp RSHFT     
+   &lt FUN TAB     &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E        &kp I        &kp SQT       
    &kp LSHFT       &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp DOT         &kp MINUS    &kp FSLH     &kp COMMA     
-                                               &kp LCTRL       &mo 1           &kp SPC      &kp RET       &kp BSPC        &kp RALT
+                                               &kp LCTRL       &mo SYM         &kp SPC      &kp RET       &kp BSPC        &kp RALT
          >;
         };
 
         symbols {
+            label = "Symbols";
             bindings = <
    &trans          &kp KP_N1      &kp KP_N2       &kp KP_N3       &kp N4          &kp KP_N5    &kp N6        &kp N7          &kp N8          &kp N9       &kp N0       &trans        
    &trans          &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp PRCNT    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP       &kp RIGHT    &kp GRAVE     
@@ -34,6 +42,7 @@
         };
 
         function {
+            label = "Function";
             bindings = <
    &trans          &kp F1         &kp F2          &kp F3          &kp F4          &kp F5       &kp F6        &kp F7          &kp F8          &kp F9       &kp F10      &kp F11       
    &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans       &trans       &kp F12       
@@ -43,6 +52,7 @@
         };
 
          system {
+            label = "System";
             bindings = <
    &trans          &trans         &out OUT_TOG    &kp C_BRI_DN    &kp C_BRI_UP    &kp C_PP     &kp C_NEXT    &kp C_VOL_UP    &kp C_VOL_DN    &trans       &trans       &trans        
    &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans       &trans       &trans        
