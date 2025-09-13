@@ -1,8 +1,8 @@
 layout: {zmk_keyboard: corne}
 layers:
-  base:
-  - {t: ESC, h: system}
-  - B
+  Base:
+  - {t: ESC, h: LGUI}
+  - {t: B, h: System}
   - L
   - D
   - W
@@ -13,7 +13,7 @@ layers:
   - U
   - J
   - RSHFT
-  - {t: TAB, h: function}
+  - {t: TAB, h: Function}
   - N
   - R
   - T
@@ -38,12 +38,12 @@ layers:
   - /
   - ','
   - LCTRL
-  - symbols
-  - {t: SPC, h: LGUI}
+  - Symbols
+  - SPC
   - RET
   - BSPC
   - RALT
-  symbols:
+  Symbols:
   - {t: ▽, type: trans}
   - KP 1
   - KP 2
@@ -86,7 +86,7 @@ layers:
   - {t: ▽, type: trans}
   - DEL
   - {t: ▽, type: trans}
-  function:
+  Function:
   - {t: ▽, type: trans}
   - F1
   - F2
@@ -98,7 +98,7 @@ layers:
   - F8
   - F9
   - F10
-  - '11'
+  - F11
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -129,9 +129,9 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  system:
-  - {type: held}
+  System:
   - {t: ▽, type: trans}
+  - {type: held}
   - OUT TOG
   - BRI DN
   - BRI UP
