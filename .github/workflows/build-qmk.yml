@@ -9,6 +9,9 @@ on:
       - '.github/workflows/build-qmk.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
