@@ -36,8 +36,8 @@ echo "Downloading firmware..."
 rm -rf /tmp/qmk-flash
 gh run download $RUN_ID --repo $REPO --name Firmware --dir /tmp/qmk-flash
 
-# Find the .hex file
-FIRMWARE=$(find /tmp/qmk-flash -name "*.hex" | head -1)
+# Find the firmware file (.hex or .bin)
+FIRMWARE=$(find /tmp/qmk-flash -name "*.hex" -o -name "*.bin" | head -1)
 
 if [ -z "$FIRMWARE" ]; then
     echo "Firmware file not found"
