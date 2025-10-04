@@ -10,7 +10,7 @@ if [ "$1" != "l" ] && [ "$1" != "r" ]; then
 fi
 
 SIDE="$1"
-REPO="3dyuval/corne-zmk-config"
+REPO="3dyuval/keyboards-firmware"
 
 if [ "$SIDE" = "l" ]; then
     FIRMWARE="corne_left nice_view_adapter nice_view-nice_nano_v2-zmk.uf2"

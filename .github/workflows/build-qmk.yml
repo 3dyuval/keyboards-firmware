@@ -1,11 +1,13 @@
 on:
   push:
     paths:
-      - 'config/iris-lm-r1.json'
+      - 'keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.json'
+      - 'qmk.json'
       - '.github/workflows/build-qmk.yml'
   pull_request:
     paths:
-      - 'config/iris-lm-r1.json'
+      - 'keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.json'
+      - 'qmk.json'
       - '.github/workflows/build-qmk.yml'
   workflow_dispatch:
 

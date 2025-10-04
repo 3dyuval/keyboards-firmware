@@ -1,0 +1,6 @@
+{
+    "userspace_version": "1.0",
+    "build_targets": [
+        ["keebio/iris_lm/k1", "graphite"]
+    ]
+}
