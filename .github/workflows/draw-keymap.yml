@@ -10,7 +10,8 @@ on:
       - main
 
 jobs:
-  draw:
+  keymap:
+    if: ${{ !vars.ACT }}
     uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@main
     permissions:
       contents: write

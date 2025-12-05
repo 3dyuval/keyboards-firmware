@@ -1,6 +1,16 @@
 # This file generates the GitHub Actions matrix
 include:
+  # Standard Corne with Nice!Nano
   - board: nice_nano_v2
     shield: corne_left nice_view_adapter nice_view
+    artifact-name: corne-left
   - board: nice_nano_v2
     shield: corne_right nice_view_adapter nice_view
+    artifact-name: corne-right
+  # Eyelash Corne
+  - board: eyelash_corne_left
+    shield: nice_view
+    artifact-name: eyelash-left
+  - board: eyelash_corne_right
+    shield: nice_view
+    artifact-name: eyelash-right

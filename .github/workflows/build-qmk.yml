@@ -15,5 +15,6 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  qmk:
+    if: ${{ !vars.ACT }}
     uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
