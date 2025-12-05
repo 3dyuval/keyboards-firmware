@@ -1,56 +1,39 @@
 #!/bin/bash
-
 set -e
 
-if [ "$1" != "l" ] && [ "$1" != "r" ]; then
-    echo "Usage: $0 <l|r>"
-    echo "  l - flash left side"
-    echo "  r - flash right side"
-    exit 1
-fi
+SIDE=${1:-$(gum choose 'left' 'right')}
 
-SIDE="$1"
 REPO="3dyuval/keyboards-firmware"
+FIRMWARE_DIR=".cache/artifacts"
 
-if [ "$SIDE" = "l" ]; then
-    SIDE_NAME="left"
-else
-    SIDE_NAME="right"
-fi
-
+# Fetch latest build
 echo "Fetching latest QMK build for Iris..."
-RUN_DATA=$(gh run list --repo $REPO --workflow=build-qmk.yml --limit 1 --status completed --json databaseId,createdAt --jq '.[0]')
-RUN_ID=$(echo "$RUN_DATA" | jq -r '.databaseId')
-BUILD_TIME_UTC=$(echo "$RUN_DATA" | jq -r '.createdAt')
+RUN_ID=$(gh run list --repo "$REPO" --workflow=build-qmk.yml --limit 1 --status completed --json databaseId --jq '.[0].databaseId')
 
 if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
-    echo "No completed builds found"
-    exit 1
+  echo "No completed builds found"
+  exit 1
 fi
 
-# Convert UTC to local time
-BUILD_TIME_LOCAL=$(date -d "$BUILD_TIME_UTC" "+%Y-%m-%d %H:%M:%S %Z")
+# Download firmware
+rm -rf "$FIRMWARE_DIR"
+gh run download "$RUN_ID" --repo "$REPO" --name Firmware --dir "$FIRMWARE_DIR"
 
-echo "Build completed: $BUILD_TIME_LOCAL"
-echo "Downloading firmware..."
-rm -rf /tmp/qmk-flash
-gh run download $RUN_ID --repo $REPO --name Firmware --dir /tmp/qmk-flash
-
-# Find the firmware file (.hex or .bin)
-FIRMWARE=$(find /tmp/qmk-flash -name "*.hex" -o -name "*.bin" | head -1)
+# Find the firmware file (.bin)
+FIRMWARE=$(find "$FIRMWARE_DIR" -name "*.bin" | head -1)
 
 if [ -z "$FIRMWARE" ]; then
-    echo "Firmware file not found"
-    exit 1
+  echo "Firmware not found"
+  echo "Available: $(ls "$FIRMWARE_DIR")"
+  exit 1
 fi
 
-echo "Found firmware: $(basename $FIRMWARE)"
-echo "Connect $SIDE_NAME side and press Enter to flash..."
-read -p "Press Enter when ready..."
+echo "Found: $(basename "$FIRMWARE")"
+echo "Put Iris $SIDE in DFU mode (hold BOOT + tap RESET), then press Enter..."
+read -r
 
-# Flash using QMK CLI
-qmk flash "$FIRMWARE"
+# Flash using dfu-util
+echo "Flashing..."
+dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "$FIRMWARE"
 
-echo "$SIDE_NAME side flashed successfully!"
-
-rm -rf /tmp/qmk-flash
+echo "Done!"

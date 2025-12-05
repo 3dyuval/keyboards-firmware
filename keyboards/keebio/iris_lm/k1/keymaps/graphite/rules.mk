@@ -1,2 +1,2 @@
-# Output UF2 format for RP2040
-FIRMWARE_FORMAT = uf2
+# Output bin format for STM32 DFU
+FIRMWARE_FORMAT = bin
