@@ -1,139 +1,57 @@
 #!/bin/bash
-
 set -e
 
-if [ "$1" != "l" ] && [ "$1" != "r" ]; then
-  echo "Usage: $0 <l|r>"
-  echo "  l - flash left side"
-  echo "  r - flash right side"
-  exit 1
-fi
+KEYBOARD=${1:-$(gum choose 'eyelash' 'corne')}
+SIDE=${2:-$(gum choose 'left' 'right')}
 
-SIDE="$1"
 REPO="3dyuval/keyboards-firmware"
+FIRMWARE="${KEYBOARD}-${SIDE}.uf2"
+FIRMWARE_DIR=".cache/artifacts"
 
-if [ "$SIDE" = "l" ]; then
-  FIRMWARE="corne_left nice_view_adapter nice_view-nice_nano_v2-zmk.uf2"
-  SIDE_NAME="left"
-else
-  FIRMWARE="corne_right nice_view_adapter nice_view-nice_nano_v2-zmk.uf2"
-  SIDE_NAME="right"
-fi
-
-echo "Fetching latest build for $SIDE_NAME side..."
-RUN_DATA=$(gh run list --repo $REPO --workflow=build-zmk.yml --limit 1 --status completed --json databaseId,createdAt --jq '.[0]')
-RUN_ID=$(echo "$RUN_DATA" | jq -r '.databaseId')
-BUILD_TIME_UTC=$(echo "$RUN_DATA" | jq -r '.createdAt')
+# Fetch latest build
+echo "Fetching latest build..."
+RUN_ID=$(gh run list --repo "$REPO" --workflow=build-zmk.yml --limit 1 --status completed --json databaseId --jq '.[0].databaseId')
 
 if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
   echo "No completed builds found"
   exit 1
 fi
 
-# Convert UTC to local time
-BUILD_TIME_LOCAL=$(date -d "$BUILD_TIME_UTC" "+%Y-%m-%d %H:%M:%S %Z")
+# Download firmware
+rm -rf "$FIRMWARE_DIR"
+gh run download "$RUN_ID" --repo "$REPO" --name firmware --dir "$FIRMWARE_DIR"
 
-echo "Build completed: $BUILD_TIME_LOCAL"
-echo "Downloading firmware..."
-rm -rf /tmp/zmk-flash
-gh run download $RUN_ID --repo $REPO --name firmware --dir /tmp/zmk-flash
-
-if [ ! -f "/tmp/zmk-flash/$FIRMWARE" ]; then
-  echo "Firmware file not found: $FIRMWARE"
+if [ ! -f "$FIRMWARE_DIR/$FIRMWARE" ]; then
+  echo "Firmware not found: $FIRMWARE"
+  echo "Available: $(ls "$FIRMWARE_DIR")"
   exit 1
 fi
 
-echo "Looking for bootloader drive..."
-
-# First, check if already mounted in standard locations
-DRIVE=$(find /media/$USER /mnt /run/media/$USER -maxdepth 2 -type d \( -name "*NANO*" -o -name "*RPI-RP2*" \) 2>/dev/null | head -1)
-
-# If not found in standard mounts, check by device label
-if [ -z "$DRIVE" ]; then
-  echo "Not found in standard mount points, checking by label..."
-  LABEL_PATH=$(find /dev/disk/by-label/ -name "*NANO*" -o -name "*RPI-RP2*" 2>/dev/null | head -1)
-
-  if [ -n "$LABEL_PATH" ]; then
-    DEVICE=$(readlink -f "$LABEL_PATH")
-    echo "Found device: $DEVICE"
-
-    # Check if it's already mounted somewhere else
-    EXISTING_MOUNT=$(findmnt -n -o TARGET "$DEVICE" 2>/dev/null)
-    if [ -n "$EXISTING_MOUNT" ]; then
-      echo "Device already mounted at: $EXISTING_MOUNT"
-      DRIVE="$EXISTING_MOUNT"
-    else
-      # Try to mount it ourselves
-      MOUNT_POINT="/tmp/nicenano-mount"
-      mkdir -p "$MOUNT_POINT"
-      if mount "$DEVICE" "$MOUNT_POINT" 2>/dev/null; then
-        echo "Mounted device at: $MOUNT_POINT"
-        DRIVE="$MOUNT_POINT"
-      else
-        echo "Failed to mount device"
-      fi
-    fi
-  fi
-fi
-
-# Verify the drive is accessible and writable
-if [ -n "$DRIVE" ] && [ -d "$DRIVE" ] && [ -w "$DRIVE" ]; then
-  echo "Drive verified: $DRIVE"
-else
-  echo "Drive not accessible or not writable: $DRIVE"
-  DRIVE=""
-fi
-
-if [ -z "$DRIVE" ]; then
-  echo "No bootloader drive found. Put $SIDE_NAME side in bootloader mode."
-  read -p "Press Enter when ready..."
-
-  # Retry the same detection logic
-  DRIVE=$(find /media/$USER /mnt /run/media/$USER -maxdepth 2 -type d \( -name "*NANO*" -o -name "*RPI-RP2*" \) 2>/dev/null | head -1)
-
-  if [ -z "$DRIVE" ]; then
-    LABEL_PATH=$(find /dev/disk/by-label/ -name "*NANO*" -o -name "*RPI-RP2*" 2>/dev/null | head -1)
-    if [ -n "$LABEL_PATH" ]; then
-      DEVICE=$(readlink -f "$LABEL_PATH")
-      EXISTING_MOUNT=$(findmnt -n -o TARGET "$DEVICE" 2>/dev/null)
-      if [ -n "$EXISTING_MOUNT" ]; then
-        DRIVE="$EXISTING_MOUNT"
-      else
-        MOUNT_POINT="/tmp/nicenano-mount"
-        mkdir -p "$MOUNT_POINT"
-        if mount "$DEVICE" "$MOUNT_POINT" 2>/dev/null; then
-          DRIVE="$MOUNT_POINT"
-        fi
-      fi
-    fi
-  fi
-
-  # Verify again
-  if [ -n "$DRIVE" ] && [ -d "$DRIVE" ] && [ -w "$DRIVE" ]; then
-    echo "Drive found: $DRIVE"
+# Find bootloader drive
+find_drive() {
+  BASE=/dev/disk/by-label 
+  DEFAULT="${BASE}/NICENANO" 
+  if [[ -e "$DEFAULT" ]]; then
+    echo "$DEFAULT"
   else
-    DRIVE=""
+  |  ls "$BASE" | gum choose
   fi
-fi
+}
+
+DRIVE=$(find_drive)
 
 if [ -z "$DRIVE" ]; then
-  echo "Still no drive found. Check connection."
+  echo "Put $KEYBOARD $SIDE in bootloader mode, then press Enter..."
+  read -r
+  DRIVE=$(find_drive)
+fi
+
+if [ -z "$DRIVE" ] || [ ! -w "$DRIVE" ]; then
+  echo "No writable bootloader drive found"
   exit 1
 fi
 
-echo "Found drive: $DRIVE"
-echo "Will flash: $FIRMWARE"
-read -p "Continue? (y/N): " -n 1 -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  echo "Flashing $SIDE_NAME side..."
-  cp "/tmp/zmk-flash/$FIRMWARE" "$DRIVE/"
-  sync
-  echo "$SIDE_NAME side flashed successfully!"
-else
-  echo "Cancelled"
-fi
-
-rm -rf /tmp/zmk-flash
-
+echo "Flashing $FIRMWARE to $DRIVE..."
+cp "$FIRMWARE_DIR/$FIRMWARE" "$DRIVE/"
+sync
+echo "Done!"

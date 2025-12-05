@@ -1,4 +1,4 @@
---artifact-server-path=./firmware
+--artifact-server-path=.cache/artifacts
 --var ACT=true
 --cache-server-path=.cache/act
 --pull=false
