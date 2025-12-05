@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-SIDE=${1:-$(gum choose 'left' 'right')}
-
 REPO="3dyuval/keyboards-firmware"
 FIRMWARE_DIR=".cache/artifacts"
 
@@ -29,7 +27,7 @@ if [ -z "$FIRMWARE" ]; then
 fi
 
 echo "Found: $(basename "$FIRMWARE")"
-echo "Put Iris $SIDE in DFU mode (hold BOOT + tap RESET), then press Enter..."
+echo "Put Iris in DFU mode (hold BOOT + tap RESET), then press Enter..."
 read -r
 
 # Flash using dfu-util
