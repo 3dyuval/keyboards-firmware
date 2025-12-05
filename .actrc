@@ -1,0 +1,7 @@
+--artifact-server-path=./firmware
+--var ACT=true
+--cache-server-path=.cache/act
+--pull=false
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+--container-options=--dns=8.8.8.8
+--reuse

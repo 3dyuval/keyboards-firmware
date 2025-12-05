@@ -1,0 +1,83 @@
+/*
+ * Graphite Layout - Shared base layer definitions
+ * https://github.com/rdavison/graphite-layout
+ *
+ * Standard Corne (36 keys):
+ *   Uses GRAPHITE_BASE_36, GRAPHITE_SYM_36, GRAPHITE_FUN_36, GRAPHITE_SYS_36
+ *
+ * Eyelash Corne (42 keys + encoder):
+ *   Uses GRAPHITE_BASE_42, GRAPHITE_SYM_42, GRAPHITE_FUN_42, GRAPHITE_SYS_42
+ */
+
+// Layer indices
+#define BASE 0
+#define SYM 1
+#define FUN 2
+#define SYS 3
+
+// ============================================================================
+// GRAPHITE ALPHA KEYS (layout-agnostic core)
+// ============================================================================
+// Row 1: B L D W Z | ; F O U J
+// Row 2: N R T S G | Y H A E I
+// Row 3: Q X M C V | K P . - /
+
+// ============================================================================
+// 36-KEY LAYOUTS (Standard Corne)
+// ============================================================================
+
+#define GRAPHITE_BASE_36 \
+   &mt LGUI ESC    &lt SYS B      &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J           &kp RSHFT      \
+   &lt FUN TAB     &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I           &kp SQT        \
+   &kp LSHFT       &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp DOT         &kp MINUS       &kp FSLH        &kp COMMA      \
+                                               &kp LCTRL       &mo SYM         &kp SPC      &kp RET       &kp BSPC        &kp RALT
+
+#define GRAPHITE_SYM_36 \
+   &trans          &kp N1         &kp N2          &kp N3          &kp N4          &kp N5       &kp N6        &kp N7          &kp N8          &kp N9          &kp N0          &trans         \
+   &trans          &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp PRCNT    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &kp GRAVE      \
+   &kp LSHFT       &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp HASH     &kp PG_DN     &kp HOME        &kp END         &kp PLUS        &kp BSLH        &kp EQUAL      \
+                                               &trans          &trans          &trans       &trans        &kp DEL         &trans
+
+#define GRAPHITE_FUN_36 \
+   &trans          &kp F1         &kp F2          &kp F3          &kp F4          &kp F5       &kp F6        &kp F7          &kp F8          &kp F9          &kp F10         &kp F11        \
+   &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &trans          &kp F12        \
+   &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &trans          &trans         \
+                                               &trans          &trans          &trans       &trans        &trans          &trans
+
+#define GRAPHITE_SYS_36 \
+   &trans          &trans         &out OUT_TOG    &kp C_BRI_DN    &kp C_BRI_UP    &kp C_PP     &kp C_NEXT    &kp C_VOL_UP    &kp C_VOL_DN    &trans          &trans          &trans         \
+   &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &trans          &trans         \
+   &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR      &out OUT_USB    &out OUT_BLE    &bt BT_NXT     \
+                                               &trans          &trans          &trans       &trans        &trans          &trans
+
+// ============================================================================
+// 42-KEY LAYOUTS (Eyelash Corne with joystick + encoder)
+// Format: 6 left | 1 encoder | 6 right (row 1)
+//         6 left | 3 joystick | 6 right (row 2)
+//         6 left | 1 extra | 1 encoder | 6 right (row 3)
+//         3 thumb left | 3 thumb right
+// ============================================================================
+
+#define GRAPHITE_BASE_42 \
+&mt LGUI ESC  &lt SYS B  &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &kp RSHFT   \
+&lt FUN TAB   &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &kp SQT     \
+&kp LSHFT     &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp DOT    &kp MINUS  &kp FSLH  &kp COMMA   \
+                                &kp LCTRL &mo SYM     &kp SPC                                                        &kp RET        &kp BSPC &kp RALT
+
+#define GRAPHITE_SYM_42 \
+&trans  &kp N1      &kp N2    &kp N3    &kp N4    &kp N5                                     &mmv MOVE_UP                  &kp N6     &kp N7     &kp N8    &kp N9     &kp N0    &trans      \
+&trans  &kp EXCL    &kp LBKT  &kp LBRC  &kp LPAR  &kp PRCNT                   &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &kp GRAVE   \
+&trans  &kp AT_SIGN &kp RBKT  &kp RBRC  &kp RPAR  &kp HASH    &kp C_MUTE                     &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp PLUS   &kp BSLH  &kp EQUAL   \
+                              &trans    &trans    &trans                                                                   &trans     &kp DEL    &trans
+
+#define GRAPHITE_FUN_42 \
+&trans  &kp F1      &kp F2     &kp F3       &kp F4     &kp F5                                &mmv MOVE_UP                  &kp F6       &kp F7     &kp F8       &kp F9      &kp F10          &kp F11       \
+&trans  &trans      &mkp LCLK  &mkp MCLK    &mkp RCLK  &mkp MB4              &mmv MOVE_LEFT  &mkp LCLK    &mmv MOVE_RIGHT  &bootloader  &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12       \
+&trans  &sys_reset  &trans     &bootloader  &trans     &mkp MB5  &kp C_MUTE                  &mmv MOVE_DOWN                &trans       &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK \
+                               &trans       &trans     &trans                                                              &trans       &trans     &trans
+
+#define GRAPHITE_SYS_42 \
+&trans  &trans           &out OUT_TOG    &kp C_BRI_DN  &kp C_BRI_UP  &kp C_PP                                    &mmv MOVE_UP                  &kp C_NEXT       &kp C_VOL_UP     &kp C_VOL_DN     &trans           &trans    &trans    \
+&trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3                 &mmv MOVE_LEFT  &mkp LCLK    &mmv MOVE_RIGHT  &trans           &trans           &trans           &trans           &trans    &trans    \
+&trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &trans        &trans        &rgb_ug RGB_EFF &kp C_MUTE                   &mmv MOVE_DOWN                &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &trans    &trans    \
+                                         &trans        &trans        &trans                                                                     &trans           &trans           &trans
