@@ -16,5 +16,5 @@ permissions:
 
 jobs:
   qmk:
-    if: ${{ !vars.ACT }}
+    if: ${{ !vars.ACT || vars.RUN == 'qmk' }}
     uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
