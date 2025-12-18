@@ -27,11 +27,16 @@ if [ -z "$FIRMWARE" ]; then
 fi
 
 echo "Found: $(basename "$FIRMWARE")"
-echo "Put Iris in DFU mode (hold BOOT + tap RESET), then press Enter..."
-read -r
 
-# Flash using dfu-util
-echo "Flashing..."
-dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "$FIRMWARE"
+# Wait for DFU device with retry
+while true; do
+  if lsusb | grep -q "0483:df11"; then
+    echo "DFU device detected, flashing..."
+    dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "$FIRMWARE"
+    break
+  fi
+  gum confirm "Put Iris in DFU mode (double-tap reset), then confirm" && continue
+  exit 1
+done
 
 echo "Done!"
