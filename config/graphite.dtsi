@@ -15,6 +15,18 @@
 #define FUN 2
 #define SYS 3
 
+/ {
+    behaviors {
+        // GUI + PLUS sends GUI + = (not GUI + SHIFT + =)
+        plus_morph: plus_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp PLUS>, <&kp EQUAL>;
+            mods = <(MOD_LGUI|MOD_RGUI)>;
+        };
+    };
+};
+
 // ============================================================================
 // GRAPHITE ALPHA KEYS (layout-agnostic core)
 // ============================================================================
@@ -35,7 +47,7 @@
 #define GRAPHITE_SYM_36 \
    &trans          &kp N1         &kp N2          &kp N3          &kp N4          &kp N5       &kp N6        &kp N7          &kp N8          &kp N9          &kp N0          &trans         \
    &trans          &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp PRCNT    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &kp GRAVE      \
-   &kp LSHFT       &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp HASH     &kp PG_DN     &kp HOME        &kp END         &kp PLUS        &kp BSLH        &kp EQUAL      \
+   &kp LSHFT       &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp HASH     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH        &kp EQUAL      \
                                                &trans          &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_FUN_36 \
@@ -67,7 +79,7 @@
 #define GRAPHITE_SYM_42 \
 &trans  &kp N1      &kp N2    &kp N3    &kp N4    &kp N5                                     &mmv MOVE_UP                  &kp N6     &kp N7     &kp N8    &kp N9     &kp N0    &trans      \
 &trans  &kp EXCL    &kp LBKT  &kp LBRC  &kp LPAR  &kp PRCNT                   &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &kp GRAVE   \
-&trans  &kp AT_SIGN &kp RBKT  &kp RBRC  &kp RPAR  &kp HASH    &kp C_MUTE                     &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp PLUS   &kp BSLH  &kp EQUAL   \
+&trans  &kp AT_SIGN &kp RBKT  &kp RBRC  &kp RPAR  &kp HASH    &kp C_MUTE                     &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &plus_morph &kp BSLH  &kp EQUAL   \
                               &trans    &trans    &trans                                                                   &trans     &kp DEL    &trans
 
 #define GRAPHITE_FUN_42 \
