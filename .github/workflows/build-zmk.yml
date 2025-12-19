@@ -1,3 +1,4 @@
+name: build-zmk
 on:
   push:
     paths:

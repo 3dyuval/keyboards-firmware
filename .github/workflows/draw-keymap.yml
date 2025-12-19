@@ -1,4 +1,4 @@
-name: Draw keymap
+name: draw-readme
 on:
   workflow_dispatch:
   push:

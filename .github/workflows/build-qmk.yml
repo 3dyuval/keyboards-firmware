@@ -1,3 +1,4 @@
+name: build-qmk
 on:
   push:
     paths:
