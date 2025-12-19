@@ -1,5 +1,12 @@
 #include QMK_KEYBOARD_H
 
+// GUI + PLUS sends GUI + = (not GUI + SHIFT + =)
+const key_override_t plus_gui_override = ko_make_basic(MOD_MASK_GUI, KC_PLUS, KC_EQL);
+const key_override_t *key_overrides[] = {
+    &plus_gui_override,
+    NULL
+};
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t hue;
     switch (get_highest_layer(state)) {
