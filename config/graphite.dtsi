@@ -46,8 +46,8 @@
 
 #define GRAPHITE_SYM_36 \
    &trans          &kp N1         &kp N2          &kp N3          &kp N4          &kp N5       &kp N6        &kp N7          &kp N8          &kp N9          &kp N0          &trans         \
-   &trans          &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp PRCNT    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &kp GRAVE      \
-   &kp LSHFT       &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp HASH     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH        &kp EQUAL      \
+   &trans          &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp DOLLAR    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &kp GRAVE      \
+   &kp LSHFT       &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp PRCNT     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH        &kp EQUAL      \
                                                &trans          &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_FUN_36 \
