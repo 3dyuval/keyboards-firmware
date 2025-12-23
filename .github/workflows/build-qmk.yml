@@ -5,11 +5,6 @@ on:
       - 'keyboards/keebio/iris_lm/k1/keymaps/graphite/**'
       - 'qmk.json'
       - '.github/workflows/build-qmk.yml'
-  pull_request:
-    paths:
-      - 'keyboards/keebio/iris_lm/k1/keymaps/graphite/**'
-      - 'qmk.json'
-      - '.github/workflows/build-qmk.yml'
   workflow_dispatch:
 
 permissions:
