@@ -1,10 +1,10 @@
 {
   "version": 1,
   "notes": "Graphite layout for Iris",
-  "documentation": "\"This file is a QMK Configurator export. You can import this at <https://config.qmk.fm>. It can also be used directly with QMK's source code.\n\nTo setup your QMK environment check out the tutorial: <https://docs.qmk.fm/#/newbs>\n\nYou can convert this file to a keymap.c using this command: `qmk json2c {keymap}`\n\nYou can compile this keymap using this command: `qmk compile {keymap}`\"\n",
   "keyboard": "keebio/iris_lm/k1",
   "keymap": "graphite",
   "layout": "LAYOUT",
+  "author": ""
   "layers": [
     [
       "KC_F1",
@@ -31,7 +31,7 @@
       "KC_U",
       "KC_J",
       "KC_RSFT",
-      "LT(2,KC_TAB)",
+     "LT(2,KC_TAB)",
       "KC_N",
       "KC_R",
       "KC_T",
@@ -94,7 +94,7 @@
       "KC_LBRC",
       "KC_LCBR",
       "KC_LPRN",
-      "KC_PERC",
+      "KC_HASH",
       "KC_PGUP",
       "KC_LEFT",
       "KC_DOWN",
@@ -106,7 +106,7 @@
       "KC_RBRC",
       "KC_RCBR",
       "KC_RPRN",
-      "KC_HASH",
+      "KC_PERC",
       "KC_NO",
       "KC_NO",
       "KC_PGDN",
@@ -238,6 +238,5 @@
       "KC_TRNS",
       "KC_TRNS"
     ]
-  ],
-  "author": ""
+  ]
 }
