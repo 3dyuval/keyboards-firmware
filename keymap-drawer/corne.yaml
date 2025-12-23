@@ -61,7 +61,7 @@ layers:
   - '['
   - '{'
   - (
-  - '%'
+  - $
   - PG UP
   - LEFT
   - DOWN
@@ -73,7 +73,7 @@ layers:
   - ']'
   - '}'
   - )
-  - '#'
+  - '%'
   - PG DN
   - HOME
   - END
