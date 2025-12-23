@@ -7,12 +7,6 @@ on:
       - 'config/corne.conf'
       - 'build.yaml'
       - '.github/workflows/build-zmk.yml'
-  pull_request:
-    paths:
-      - 'config/corne.keymap'
-      - 'config/corne.conf'
-      - 'build.yaml'
-      - '.github/workflows/build-zmk.yml'
   workflow_dispatch:
 
 jobs:
