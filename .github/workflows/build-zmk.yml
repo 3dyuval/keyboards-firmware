@@ -2,6 +2,7 @@ name: build-zmk
 on:
   push:
     paths:
+      - 'config/graphite.dtsi'
       - 'config/corne.keymap'
       - 'config/corne.conf'
       - 'build.yaml'
