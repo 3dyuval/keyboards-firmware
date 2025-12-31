@@ -1,8 +1,20 @@
-layout: {zmk_keyboard: corne}
+layout: {qmk_keyboard: keebio/iris_lm/k1, layout_name: LAYOUT}
 layers:
-  Base:
+  L0:
+  - F1
+  - F2
+  - F3
+  - F4
+  - F5
+  - F6
+  - F7
+  - F8
+  - F9
+  - F10
+  - F11
+  - F12
   - {t: ESC, h: LGUI}
-  - {t: B, h: FN2 Nav}
+  - {t: B, h: L3}
   - L
   - D
   - W
@@ -12,8 +24,8 @@ layers:
   - O
   - U
   - J
-  - RSHFT
-  - {t: TAB, h: FN1}
+  - RSFT
+  - {t: TAB, h: L2}
   - N
   - R
   - T
@@ -25,25 +37,39 @@ layers:
   - E
   - I
   - ''''
-  - LSHFT
+  - LSFT
   - Q
   - X
   - M
   - C
   - V
+  - ''
+  - ''
   - K
   - P
   - .
   - '-'
   - /
   - ','
-  - LCTRL
-  - Symbols
+  - LCTL
+  - L1
   - SPC
-  - RET
-  - {t: BSPC, h: FN2 Nav}
-  - RALT
-  Symbols:
+  - ENT
+  - BSPC
+  - LALT
+  L1:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '1'
   - '2'
@@ -57,27 +83,29 @@ layers:
   - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - LEFT
-  - UP
-  - DOWN
-  - RIGHT
-  - $
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - '`'
-  - LSHFT
   - '!'
   - '['
   - '{'
   - (
-  - '%'
-  - PG DN
+  - $
+  - PGUP
+  - LEFT
+  - DOWN
+  - UP
+  - RGHT
+  - '`'
+  - LSFT
+  - '@'
   - ']'
   - '}'
   - )
+  - '%'
+  - ''
+  - ''
+  - PGDN
+  - HOME
+  - END
+  - +
   - \
   - '='
   - {t: ▽, type: trans}
@@ -86,7 +114,19 @@ layers:
   - {t: ▽, type: trans}
   - DEL
   - {t: ▽, type: trans}
-  FN1:
+  L2:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - F1
   - F2
@@ -117,6 +157,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - ''
+  - ''
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -129,30 +171,21 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  FN2 Nav:
-  - {t: ▽, type: trans}
-  - {t: OUT TOG, type: held}
-  - BRI DN
-  - BRI UP
-  - PP
-  - NEXT
-  - VOL UP
-  - VOL DN
+  L3:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - ''
+  - BRID
+  - BRIU
+  - MPLY
+  - MNXT
+  - VOLU
+  - VOLD
+  - UG NEXT
+  - UG HUEU
+  - UG VALU
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - LEFT
-  - UP
-  - DOWN
-  - RIGHT
-  - {t: ▽, type: trans}
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -160,12 +193,35 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - PG DN
-  - HOME
-  - END
-  - BT CLR
-  - OUT BLE
-  - BT NXT
+  - UG PREV
+  - UG HUED
+  - UG VALD
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - ''
+  - ''
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

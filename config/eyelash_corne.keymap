@@ -80,15 +80,15 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
-        function {
-            display-name = "Function";
-            bindings = < GRAPHITE_FUN_42 >;
+        fn1 {
+            display-name = "FN1";
+            bindings = < GRAPHITE_FN1_42 >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-        system {
-            display-name = "System";
-            bindings = < GRAPHITE_SYS_42 >;
+        fn2 {
+            display-name = "FN2 Nav";
+            bindings = < GRAPHITE_FN2_42 >;
             sensor-bindings = <&rgb_encoder>;
         };
     };

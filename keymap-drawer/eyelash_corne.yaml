@@ -2,7 +2,7 @@ layout: {zmk_keyboard: eyelash_corne}
 layers:
   Graphite:
   - {t: ESC, h: LGUI}
-  - {t: B, h: System}
+  - {t: B, h: FN2 Nav}
   - L
   - D
   - W
@@ -13,8 +13,8 @@ layers:
   - O
   - U
   - J
-  - RSHFT
-  - {t: TAB, h: Function}
+  - ','
+  - {t: TAB, h: FN1}
   - N
   - R
   - T
@@ -42,12 +42,12 @@ layers:
   - .
   - '-'
   - /
-  - ','
+  - RSHFT
   - LCTRL
   - Symbols
   - SPC
   - RET
-  - BSPC
+  - {t: BSPC, h: FN2 Nav}
   - RALT
   Symbols:
   - {t: ▽, type: trans}
@@ -64,10 +64,10 @@ layers:
   - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '!'
-  - '['
-  - '{'
-  - (
+  - LEFT
+  - UP
+  - DOWN
+  - RIGHT
   - '%'
   - '&mmv MOVE_LEFT'
   - '&mkp LCLK'
@@ -79,17 +79,17 @@ layers:
   - RIGHT
   - '`'
   - {t: ▽, type: trans}
-  - '@'
-  - ']'
-  - '}'
-  - )
+  - '!'
+  - '['
+  - '{'
+  - (
   - '#'
   - MUTE
   - '&mmv MOVE_DOWN'
   - PG DN
-  - HOME
-  - END
-  - {t: +, s: '='}
+  - ']'
+  - '}'
+  - )
   - \
   - '='
   - {t: ▽, type: trans}
@@ -98,7 +98,7 @@ layers:
   - {t: ▽, type: trans}
   - DEL
   - {t: ▽, type: trans}
-  Function:
+  FN1:
   - {t: ▽, type: trans}
   - F1
   - F2
@@ -147,19 +147,34 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  System:
+  FN2 Nav:
   - {t: ▽, type: trans}
-  - {type: held}
-  - OUT TOG
+  - {t: OUT TOG, type: held}
   - BRI DN
   - BRI UP
   - PP
-  - '&mmv MOVE_UP'
   - NEXT
+  - '&mmv MOVE_UP'
   - VOL UP
   - VOL DN
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - LEFT
+  - UP
+  - DOWN
+  - RIGHT
+  - {t: ▽, type: trans}
+  - '&mmv MOVE_LEFT'
+  - '&mkp LCLK'
+  - '&mmv MOVE_RIGHT'
+  - PG UP
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - BT CLR ALL
@@ -167,27 +182,12 @@ layers:
   - {t: BT, h: '1'}
   - {t: BT, h: '2'}
   - {t: BT, h: '3'}
-  - '&mmv MOVE_LEFT'
-  - '&mkp LCLK'
-  - '&mmv MOVE_RIGHT'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - RGB OFF
-  - RGB ON
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - RGB EFF
   - MUTE
   - '&mmv MOVE_DOWN'
-  - RGB EFR
-  - RGB SPI
-  - RGB BRI
-  - RGB BRD
+  - PG DN
+  - HOME
+  - END
+  - BT CLR
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
