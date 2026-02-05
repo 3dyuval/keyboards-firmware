@@ -12,7 +12,7 @@ const DIST_DIR = import.meta.filename.endsWith(".ts")
 /**
  * Creates a new MCP server instance with tools and resources registered.
  */
-const KEYBOARDS_JSON = path.join(import.meta.dirname, "..", "input", "src", "client", "keyboards.json");
+const KEYBOARDS_JSON = path.join(import.meta.dirname, "..", "..", "packages", "input", "src", "client", "keyboards.json");
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -21,7 +21,7 @@ export function createServer(): McpServer {
   });
 
   server.tool(
-    "get-config",
+    "get-keyboards",
     "Returns all keyboard configurations (physical layouts and keymaps).",
     {},
     async (): Promise<CallToolResult> => {

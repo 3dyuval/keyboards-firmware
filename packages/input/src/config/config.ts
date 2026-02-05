@@ -7,9 +7,9 @@ export type KeyEntry = string | { t?: string; h?: string; s?: string; type?: str
 export type KeymapData = { layers: Record<string, KeyEntry[]>; layout: any };
 export type ResolvedKeyboard = { name: string; physKeys: PhysKey[]; keymap: KeymapData };
 
-// input/ is ../../ from src/config/
+// packages/input/ is ../../ from src/config/
 const INPUT_DIR = resolve(import.meta.dir, "..", "..");
-const ROOT = resolve(INPUT_DIR, "..");
+const ROOT = resolve(INPUT_DIR, "..", "..");
 
 export function resolveAll(opts?: { yamlDir?: string; layoutsFile?: string }): ResolvedKeyboard[] {
   const yamlDir = opts?.yamlDir ?? resolve(ROOT, "keymap-drawer");
