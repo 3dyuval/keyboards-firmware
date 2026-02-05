@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
-import { resolveAll, resolveOne } from "./config";
-import { toButtons, toSvg } from "./transform";
+import { resolveAll, resolveOne } from "./src/config/config";
+import { toButtons, toSvg } from "./src/config/transform";
 import { serve } from "./server";
 
 const args = process.argv.slice(2);

@@ -7,11 +7,13 @@ export type KeyEntry = string | { t?: string; h?: string; s?: string; type?: str
 export type KeymapData = { layers: Record<string, KeyEntry[]>; layout: any };
 export type ResolvedKeyboard = { name: string; physKeys: PhysKey[]; keymap: KeymapData };
 
-const ROOT = resolve(import.meta.dir, "..");
+// input/ is ../../ from src/config/
+const INPUT_DIR = resolve(import.meta.dir, "..", "..");
+const ROOT = resolve(INPUT_DIR, "..");
 
 export function resolveAll(opts?: { yamlDir?: string; layoutsFile?: string }): ResolvedKeyboard[] {
   const yamlDir = opts?.yamlDir ?? resolve(ROOT, "keymap-drawer");
-  const layoutsFile = opts?.layoutsFile ?? resolve(import.meta.dir, "keyboard-layouts.json");
+  const layoutsFile = opts?.layoutsFile ?? resolve(INPUT_DIR, "keyboard-layouts.json");
 
   if (!existsSync(layoutsFile)) throw new Error(`Layouts not found: ${layoutsFile}`);
   if (!existsSync(yamlDir)) throw new Error(`YAML dir not found: ${yamlDir}`);
@@ -31,7 +33,7 @@ export function resolveAll(opts?: { yamlDir?: string; layoutsFile?: string }): R
 
 export function resolveOne(name: string, opts?: { yamlDir?: string; layoutsFile?: string }): ResolvedKeyboard {
   const yamlDir = opts?.yamlDir ?? resolve(ROOT, "keymap-drawer");
-  const layoutsFile = opts?.layoutsFile ?? resolve(import.meta.dir, "keyboard-layouts.json");
+  const layoutsFile = opts?.layoutsFile ?? resolve(INPUT_DIR, "keyboard-layouts.json");
 
   const layouts: Record<string, PhysKey[]> = JSON.parse(readFileSync(layoutsFile, "utf-8"));
   if (!layouts[name]) throw new Error(`No physical layout for: ${name}`);

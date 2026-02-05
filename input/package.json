@@ -3,8 +3,15 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "serve": "bun run prebuild.ts && bun run index.ts serve",
+    "dev": "bun run prebuild.ts && vite",
+    "html": "bun run index.ts html",
+    "svg": "bun run index.ts svg"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "vite": "^7.3.1"
   },
   "peerDependencies": {
     "typescript": "^5"
