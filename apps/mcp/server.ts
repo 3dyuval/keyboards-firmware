@@ -3,16 +3,14 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult, ReadResourceResult } from "@modelcontextprotocol/sdk/types.js";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { z } from "zod";
+import { resolveAll } from "config";
+
 // Works both from source (server.ts) and compiled (dist/server.js)
 const DIST_DIR = import.meta.filename.endsWith(".ts")
   ? path.join(import.meta.dirname, "dist")
   : import.meta.dirname;
 
-/**
- * Creates a new MCP server instance with tools and resources registered.
- */
-const KEYBOARDS_JSON = path.join(import.meta.dirname, "..", "..", "packages", "input", "src", "client", "keyboards.json");
+const resourceUri = "ui://keyboards";
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -20,54 +18,34 @@ export function createServer(): McpServer {
     version: "1.0.0",
   });
 
-  server.tool(
+  registerAppTool(server,
     "get-keyboards",
-    "Returns all keyboard configurations (physical layouts and keymaps).",
-    {},
+    {
+      title: "Get Keyboards",
+      description: "Returns all keyboard configurations (physical layouts and keymaps).",
+      inputSchema: {},
+      _meta: { ui: { resourceUri } },
+    },
     async (): Promise<CallToolResult> => {
-      const data = await fs.readFile(KEYBOARDS_JSON, "utf-8");
-      const keyboards = JSON.parse(data);
+      const all = resolveAll();
+      const keyboards = all.map((kb) => ({
+        name: kb.name,
+        physKeys: kb.physKeys,
+        layers: kb.keymap.layers,
+      }));
       return {
-        content: [{ type: "text", text: data }],
+        content: [{ type: "text", text: JSON.stringify(keyboards) }],
         structuredContent: { keyboards },
       };
     },
   );
 
-  // Two-part registration: tool + resource, tied together by the resource URI.
-  const resourceUri = "ui://get-time/mcp-app.html";
-
-  // Register a tool with UI metadata. When the host calls this tool, it reads
-  // `_meta.ui.resourceUri` to know which resource to fetch and render as an
-  // interactive UI.
-  registerAppTool(server,
-    "get-time",
-    {
-      title: "Get Time",
-      description: "Returns the current server time as an ISO 8601 string.",
-      inputSchema: {},
-      outputSchema: z.object({
-        time: z.string(),
-      }),
-      _meta: { ui: { resourceUri } }, // Links this tool to its UI resource
-    },
-    async (): Promise<CallToolResult> => {
-      const time = new Date().toISOString();
-      return {
-        content: [{ type: "text", text: time }],
-        structuredContent: { time },
-      };
-    },
-  );
-
-  // Register the resource, which returns the bundled HTML/JavaScript for the UI.
   registerAppResource(server,
     resourceUri,
     resourceUri,
     { mimeType: RESOURCE_MIME_TYPE },
     async (): Promise<ReadResourceResult> => {
-      const html = await fs.readFile(path.join(DIST_DIR, "mcp-app.html"), "utf-8");
-
+      const html = await fs.readFile(path.join(DIST_DIR, "keyboards.html"), "utf-8");
       return {
         contents: [
           { uri: resourceUri, mimeType: RESOURCE_MIME_TYPE, text: html },

@@ -2,8 +2,11 @@
   "private": true,
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
-    "mcp": "bun run --filter @modelcontextprotocol/server-basic-vanillajs serve",
-    "mcp:dev": "bun run --filter @modelcontextprotocol/server-basic-vanillajs dev",
-    "mcp:build": "bun run --filter @modelcontextprotocol/server-basic-vanillajs build"
+    "components": "bun run --filter components dev",
+    "mcp": "bun run --filter keyboards-mcp serve",
+    "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
+  },
+  "dependencies": {
+    "@mcpjam/inspector": "^1.5.12"
   }
 }

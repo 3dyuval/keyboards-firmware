@@ -1,0 +1,20 @@
+{
+  "name": "components",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/style.css"
+  },
+  "scripts": {
+    "dev": "bun run prebuild.ts && vite"
+  },
+  "dependencies": {
+    "config": "workspace:*",
+    "vue": "^3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5",
+    "vite": "^6.0.0"
+  }
+}
