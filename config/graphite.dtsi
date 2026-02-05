@@ -5,6 +5,9 @@
  * Standard Corne (36 keys):
  *   Uses GRAPHITE_BASE_36, GRAPHITE_SYM_36, GRAPHITE_FUN_36, GRAPHITE_SYS_36
  *
+ * TOTEM (38 keys):
+ *   Uses GRAPHITE_BASE_38, GRAPHITE_SYM_38, GRAPHITE_FUN_38, GRAPHITE_SYS_38
+ *
  * Eyelash Corne (42 keys + encoder):
  *   Uses GRAPHITE_BASE_42, GRAPHITE_SYM_42, GRAPHITE_FUN_42, GRAPHITE_SYS_42
  */
@@ -61,6 +64,37 @@
    &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &trans          &trans         \
    &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR      &out OUT_USB    &out OUT_BLE    &bt BT_NXT     \
                                                &trans          &trans          &trans       &trans        &trans          &trans
+
+// ============================================================================
+// 38-KEY LAYOUTS (TOTEM)
+// Format: 5 left | 5 right (row 1 & 2)
+//         1 pinky + 5 left | 5 right + 1 pinky (row 3)
+//         3 thumb left | 3 thumb right
+// ============================================================================
+
+#define GRAPHITE_BASE_38 \
+           &lt SYS B      &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
+           &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
+&kp LSHFT  &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp DOT         &kp MINUS       &kp FSLH  &kp SQT  \
+                                       &kp LCTRL       &mo SYM         &kp SPC      &kp RET       &kp BSPC        &kp RALT
+
+#define GRAPHITE_SYM_38 \
+           &kp N1         &kp N2          &kp N3          &kp N4          &kp N5       &kp N6        &kp N7          &kp N8          &kp N9          &kp N0             \
+           &kp EXCL       &kp LBKT        &kp LBRC        &kp LPAR        &kp DOLLAR    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
+&kp LSHFT  &kp AT_SIGN    &kp RBKT        &kp RBRC        &kp RPAR        &kp PRCNT     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH  &kp EQUAL  \
+                                       &trans          &trans          &trans       &trans        &kp DEL         &trans
+
+#define GRAPHITE_FUN_38 \
+           &kp F1         &kp F2          &kp F3          &kp F4          &kp F5       &kp F6        &kp F7          &kp F8          &kp F9          &kp F10            \
+           &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &kp F11            \
+&trans     &trans         &trans          &trans          &trans          &trans       &trans        &trans          &trans          &trans          &trans    &kp F12  \
+                                       &trans          &trans          &trans       &trans        &trans          &trans
+
+#define GRAPHITE_SYS_38 \
+           &out OUT_TOG   &kp C_BRI_DN    &kp C_BRI_UP    &kp C_PP        &kp C_NEXT   &kp C_VOL_UP  &kp C_VOL_DN    &trans          &trans          &trans             \
+           &bt BT_CLR_ALL &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3 &trans        &trans          &trans          &trans          &trans             \
+&trans     &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR      &out OUT_USB    &out OUT_BLE &bt BT_NXT \
+                                       &trans          &trans          &trans       &trans        &trans          &trans
 
 // ============================================================================
 // 42-KEY LAYOUTS (Eyelash Corne with joystick + encoder)

@@ -4,7 +4,7 @@
   "keyboard": "keebio/iris_lm/k1",
   "keymap": "graphite",
   "layout": "LAYOUT",
-  "author": ""
+  "author": "",
   "layers": [
     [
       "KC_F1",

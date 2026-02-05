@@ -1,0 +1,51 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+#include "graphite.dtsi"
+
+/ {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        device {
+            if-layers = <SYM FUN>;
+            then-layer = <SYS>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            display-name = "Base";
+            bindings = < GRAPHITE_BASE_38 >;
+        };
+
+        symbols {
+            display-name = "Symbols";
+            bindings = < GRAPHITE_SYM_38 >;
+        };
+
+        function {
+            display-name = "Function";
+            bindings = < GRAPHITE_FUN_38 >;
+        };
+
+        system {
+            display-name = "System";
+            bindings = < GRAPHITE_SYS_38 >;
+        };
+
+        extra1 { status = "reserved"; };
+        extra2 { status = "reserved"; };
+        extra3 { status = "reserved"; };
+    };
+};

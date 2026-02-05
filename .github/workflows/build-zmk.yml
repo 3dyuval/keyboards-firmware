@@ -5,6 +5,9 @@ on:
       - 'config/graphite.dtsi'
       - 'config/corne.keymap'
       - 'config/corne.conf'
+      - 'config/totem.keymap'
+      - 'config/totem.conf'
+      - 'config/boards/shields/totem/**'
       - 'build.yaml'
       - '.github/workflows/build-zmk.yml'
   workflow_dispatch:
