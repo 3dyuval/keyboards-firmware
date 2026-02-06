@@ -1,0 +1,46 @@
+{
+  "name": "keyboards-mcp",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "Keyboards MCP server with Vue UI",
+  "license": "MIT",
+  "main": "dist/server.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "postinstall": "vite build",
+    "build": "tsc --noEmit && vite build && tsc -p tsconfig.server.json && bun build server.ts --outdir dist --target node && bun build main.ts --outfile dist/index.js --target node --external \"./server.js\" --banner \"#!/usr/bin/env node\"",
+    "serve": "bun --watch main.ts",
+    "dev": "vite build --watch & bun --watch main.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
+    "config": "workspace:*",
+    "components": "workspace:*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "vue": "^3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.0",
+    "@types/node": "22.10.0",
+    "@vitejs/plugin-vue": "^5",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  },
+  "types": "dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
+  "bin": {
+    "keyboards-mcp": "dist/index.js"
+  }
+}

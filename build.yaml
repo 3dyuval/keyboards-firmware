@@ -14,3 +14,11 @@ include:
   - board: eyelash_corne_right
     shield: nice_view
     artifact-name: eyelash-right
+  # TOTEM Wireless with XIAO BLE
+  - board: xiao_ble
+    shield: totem_left
+    snippet: studio-rpc-usb-uart
+    artifact-name: totem-left
+  - board: xiao_ble
+    shield: totem_right
+    artifact-name: totem-right

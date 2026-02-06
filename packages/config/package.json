@@ -1,0 +1,15 @@
+{
+  "name": "config",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/config.ts",
+    "./transform": "./src/transform.ts"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "components": "bun run --filter components dev",
+    "mcp": "bun run --filter keyboards-mcp serve",
+    "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
+  },
+  "dependencies": {
+    "@mcpjam/inspector": "^1.5.12"
+  }
+}

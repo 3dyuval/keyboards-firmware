@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "keyboards": {
+      "command": "bun",
+      "args": ["/home/yuv/keyboards-firmware/apps/mcp/main.ts", "--stdio"]
+    }
+  }
+}
