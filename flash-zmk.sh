@@ -5,12 +5,12 @@ set -e
 USE_CACHE=false
 while getopts "c" opt; do
   case $opt in
-    c) USE_CACHE=true ;;
+  c) USE_CACHE=true ;;
   esac
 done
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
-KEYBOARD=${1:-$(gum choose 'eyelash' 'corne')}
+KEYBOARD=${1:-$(gum choose 'eyelash' 'corne' 'totem')}
 SIDE=${2:-$(gum choose 'left' 'right')}
 
 REPO="3dyuval/keyboards-firmware"
@@ -37,30 +37,44 @@ if [ ! -f "$FIRMWARE_DIR/$FIRMWARE" ]; then
   exit 1
 fi
 
-# Find bootloader drive
-find_drive() {
+# Find bootloader drive and return its mount point (mounting if needed)
+find_and_mount() {
   BASE=/dev/disk/by-label
-  DEFAULT="${BASE}/NICENANO"
-  if [[ -e "$DEFAULT" ]]; then
-    echo "$DEFAULT"
-  else
-    ls "$BASE" 2>/dev/null | gum choose
+  LABEL=""
+  for l in NICENANO XIAO-SENSE; do
+    if [[ -e "${BASE}/${l}" ]]; then
+      LABEL="$l"
+      break
+    fi
+  done
+  if [ -z "$LABEL" ]; then
+    LABEL=$(ls "$BASE" 2>/dev/null | gum choose)
   fi
+  [ -z "$LABEL" ] && return 1
+
+  DEV=$(readlink -f "${BASE}/${LABEL}")
+  MOUNT=$(lsblk -no MOUNTPOINT "$DEV" 2>/dev/null | head -1)
+
+  if [ -z "$MOUNT" ]; then
+    MOUNT=$(udisksctl mount -b "$DEV" 2>/dev/null | grep -oP 'at \K.+')
+  fi
+
+  echo "$MOUNT"
 }
 
-DRIVE=$(find_drive)
+MOUNT=$(find_and_mount) || true
 
-if [ -z "$DRIVE" ]; then
+if [ -z "$MOUNT" ]; then
   gum confirm "Put $KEYBOARD $SIDE in bootloader mode, then confirm" || exit 1
-  DRIVE=$(find_drive)
+  MOUNT=$(find_and_mount) || true
 fi
 
-if [ -z "$DRIVE" ] || [ ! -e "$DRIVE" ]; then
+if [ -z "$MOUNT" ] || [ ! -d "$MOUNT" ]; then
   gum style --foreground 196 "No bootloader drive found"
   exit 1
 fi
 
 gum style --foreground 212 "Flashing $FIRMWARE..."
-cp "$FIRMWARE_DIR/$FIRMWARE" "$DRIVE/"
+cp "$FIRMWARE_DIR/$FIRMWARE" "$MOUNT/"
 sync
 gum style --foreground 76 "Done!"
