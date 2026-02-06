@@ -22,3 +22,7 @@ include:
   - board: xiao_ble
     shield: totem_right
     artifact-name: totem-right
+  # Settings reset for XIAO BLE
+  - board: xiao_ble
+    shield: settings_reset
+    artifact-name: settings-reset-xiao
