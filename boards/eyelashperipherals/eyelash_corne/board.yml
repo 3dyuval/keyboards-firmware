@@ -1,0 +1,9 @@
+boards:
+  - name: eyelash_corne_left
+    vendor: eyelashperipherals
+    socs:
+      - name: nrf52840
+  - name: eyelash_corne_right
+    vendor: eyelashperipherals
+    socs:
+      - name: nrf52840
