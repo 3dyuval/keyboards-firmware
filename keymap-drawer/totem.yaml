@@ -6,7 +6,7 @@ layers:
   - D
   - W
   - Z
-  - '-'
+  - ;
   - F
   - O
   - U
@@ -29,8 +29,8 @@ layers:
   - V
   - K
   - P
-  - .
   - ','
+  - .
   - /
   - ''''
   - {t: ESC, h: LCTRL}
@@ -40,39 +40,39 @@ layers:
   - BSPC
   - Number
   Symbols:
-  - ']'
-  - '}'
-  - )
-  - '>'
-  - {t: ▽, type: trans}
   - ^
   - '&'
-  - '*'
+  - TAB
+  - $
+  - '%'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '-'
+  - '='
   - '['
   - '{'
   - (
-  - <
-  - ;
+  - '!'
+  - '*'
   - PG UP
   - LEFT
   - DOWN
   - UP
   - RIGHT
   - {t: ▽, type: trans}
-  - '!'
-  - '@'
+  - ']'
+  - '}'
+  - )
   - '#'
-  - $
-  - '%'
+  - '@'
   - PG DN
   - HOME
   - END
-  - {t: +, s: '='}
+  - {t: ▽, type: trans}
   - \
   - '`'
-  - TAB
+  - {t: ▽, type: trans}
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -84,21 +84,21 @@ layers:
   - PG UP
   - END
   - {t: ▽, type: trans}
-  - /
+  - {t: ▽, type: trans}
   - '7'
   - '8'
   - '9'
-  - '-'
+  - {t: ▽, type: trans}
   - LEFT
   - DOWN
   - UP
   - RIGHT
   - {t: ▽, type: trans}
-  - '*'
+  - {t: ▽, type: trans}
   - '4'
   - '5'
   - '6'
-  - +
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -109,8 +109,8 @@ layers:
   - '1'
   - '2'
   - '3'
-  - .
-  - '='
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -128,7 +128,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - BT CLR ALL
+  - PSCRN
   - {t: BT, h: '0'}
   - {t: BT, h: '1'}
   - {t: BT, h: '2'}
@@ -146,10 +146,10 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - BT CLR
-  - OUT USB
-  - OUT BLE
-  - BT NXT
+  - BT CLR ALL
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {type: held}
   - {t: ▽, type: trans}

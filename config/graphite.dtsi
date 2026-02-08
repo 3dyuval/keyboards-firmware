@@ -98,21 +98,21 @@
 // ============================================================================
 
 #define GRAPHITE_BASE_38 \
-           &mt LGUI B     &kp L           &kp D           &kp W           &kp Z        &kp MINUS     &kp F           &kp O           &kp U           &kp J              \
+           &mt LGUI B     &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
-&kp LSHFT  &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp DOT         &kp COMMA       &kp FSLH  &kp SQT  \
+&kp LSHFT  &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH  &kp SQT  \
                                        &mt LCTRL ESC   &mo SYM         &kp SPC      &kp RET       &kp BSPC        &mo NUM
 
 #define GRAPHITE_SYM_38 \
-           &kp RBKT       &kp RBRC        &kp RPAR        &kp GT          &trans       &kp CARET     &kp AMPS        &kp ASTRK       &trans          &trans             \
-           &kp LBKT       &kp LBRC        &kp LPAR        &kp LT          &kp SEMI      &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
-&trans     &kp EXCL       &kp AT_SIGN     &kp HASH        &kp DOLLAR      &kp PRCNT     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH  &kp GRAVE  \
-                                       &kp TAB         &trans          &trans       &trans        &kp DEL         &trans
+           &kp CARET      &kp AMPS        &kp TAB         &kp DOLLAR      &kp PRCNT   &trans        &trans          &trans          &kp MINUS       &kp EQUAL          \
+           &kp LBKT       &kp LBRC        &kp LPAR        &kp EXCL        &kp ASTRK    &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
+&trans     &kp RBKT       &kp RBRC        &kp RPAR        &kp HASH        &kp AT_SIGN    &kp PG_DN     &kp HOME        &kp END         &trans          &kp BSLH  &kp GRAVE  \
+                                       &trans          &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
-           &kp HOME       &kp PG_DN       &kp PG_UP       &kp END         &trans       &kp FSLH      &kp N7          &kp N8          &kp N9          &kp MINUS          \
-           &kp LEFT       &kp DOWN        &kp UP          &kp RIGHT       &trans       &kp ASTRK     &kp N4          &kp N5          &kp N6          &kp PLUS           \
-&trans     &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &kp N3          &kp DOT   &kp EQUAL  \
+           &kp HOME       &kp PG_DN       &kp PG_UP       &kp END         &trans       &trans        &kp N7          &kp N8          &kp N9          &trans             \
+           &kp LEFT       &kp DOWN        &kp UP          &kp RIGHT       &trans       &trans        &kp N4          &kp N5          &kp N6          &trans             \
+&trans     &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &kp N3          &trans    &trans     \
                                        &trans          &trans          &trans       &trans        &trans          &trans
 
 #define GRAPHITE_FUN_38 \
@@ -123,8 +123,8 @@
 
 #define GRAPHITE_SYS_38 \
            &out OUT_TOG   &kp C_BRI_DN    &kp C_BRI_UP    &kp C_PP        &kp C_NEXT   &kp C_VOL_UP  &kp C_VOL_DN    &trans          &trans          &trans             \
-           &bt BT_CLR_ALL &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3 &trans        &trans          &trans          &trans          &trans             \
-&trans     &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR      &out OUT_USB    &out OUT_BLE &bt BT_NXT \
+           &kp PSCRN      &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3 &trans        &trans          &trans          &trans          &trans             \
+&trans     &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR_ALL  &trans          &trans    &trans     \
                                        &trans          &trans          &trans       &trans        &trans          &trans
 
 // ============================================================================
