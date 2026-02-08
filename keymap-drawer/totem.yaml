@@ -72,7 +72,7 @@ layers:
   - {t: +, s: '='}
   - \
   - '`'
-  - {t: ▽, type: trans}
+  - TAB
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

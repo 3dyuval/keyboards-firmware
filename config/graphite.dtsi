@@ -107,7 +107,7 @@
            &kp RBKT       &kp RBRC        &kp RPAR        &kp GT          &trans       &kp CARET     &kp AMPS        &kp ASTRK       &trans          &trans             \
            &kp LBKT       &kp LBRC        &kp LPAR        &kp LT          &kp SEMI      &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
 &trans     &kp EXCL       &kp AT_SIGN     &kp HASH        &kp DOLLAR      &kp PRCNT     &kp PG_DN     &kp HOME        &kp END         &plus_morph     &kp BSLH  &kp GRAVE  \
-                                       &trans          &trans          &trans       &trans        &kp DEL         &trans
+                                       &kp TAB         &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
            &kp HOME       &kp PG_DN       &kp PG_UP       &kp END         &trans       &kp FSLH      &kp N7          &kp N8          &kp N9          &kp MINUS          \
