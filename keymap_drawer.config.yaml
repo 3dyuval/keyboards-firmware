@@ -1,11 +1,13 @@
 # Config for keymap-drawer
 parse_config:
   preprocess: true
+  raw_binding_map:
+    '&plus_morph': {t: '+', s: '='}
   layer_names:
     0: "Base"
-    1: "Lower"
-    2: "Raise"
-    3: "Extra"
+    1: "Symbols"
+    2: "Number"
+    3: "Device"
 
 draw_config:
   key_w: 60
@@ -22,17 +24,18 @@ draw_config:
   line_spacing: 1.2
   arc_scale: 1.0
   append_colon_to_layer_header: true
-  small_pad: 2
-  legend_rel_y: 4
+  small_pad: 12
+  legend_rel_y: 2
   draw_key_sides: false
   ghost_keys: []
   svg_style: |
-    .background { fill: #1a1b26; }
-    .key { fill: #292e42; stroke: #3b4261; stroke-width: 1; }
-    .key.held { fill: #3b4261; stroke: #e0af68; stroke-width: 1; }
+    .background { fill: #0f0f14; }
+    .key { fill: #1a1b26; stroke: #3b4261; stroke-width: 1; }
+    .key.held { fill: #292e42; stroke: #e0af68; stroke-width: 1; }
     .key.ghost { stroke-dasharray: 4,4; stroke: #565f89; stroke-width: 1; }
-    .keycode { font-size: 9px; font-family: monospace; fill: #c0caf5; text-anchor: middle; dominant-baseline: middle; }
-    .tap { font-size: 11px; }
-    .hold { font-size: 8px; fill: #7aa2f7; }
-    .layer { font-size: 14px; font-weight: bold; fill: #c0caf5; }
+    .keycode { font-size: 10px; font-family: monospace; fill: #c0caf5; text-anchor: middle; dominant-baseline: middle; }
+    text.tap { font-size: 12px; fill: #ffffff; stroke: none; transform: translateX(-8px); }
+    text.hold { font-size: 9px; fill: #9db8f8; stroke: none; transform: translate(-8px, 2px); }
+    text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate(-8px, 4px); }
+    .label { font-size: 14px; font-weight: bold; fill: #c0caf5; stroke: none; }
     .combo { fill: #bb9af7; stroke: #3b4261; stroke-width: 1; }

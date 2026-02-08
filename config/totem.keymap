@@ -16,7 +16,7 @@
         compatible = "zmk,conditional-layers";
 
         device {
-            if-layers = <SYM FUN>;
+            if-layers = <SYM NUM>;
             then-layer = <SYS>;
         };
     };
@@ -34,13 +34,13 @@
             bindings = < GRAPHITE_SYM_38 >;
         };
 
-        function {
-            display-name = "Function";
-            bindings = < GRAPHITE_FUN_38 >;
+        number {
+            display-name = "Number";
+            bindings = < GRAPHITE_NUM_38 >;
         };
 
-        system {
-            display-name = "System";
+        device {
+            display-name = "Device";
             bindings = < GRAPHITE_SYS_38 >;
         };
 

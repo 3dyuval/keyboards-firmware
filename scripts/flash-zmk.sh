@@ -10,7 +10,8 @@ while getopts "c" opt; do
 done
 shift $((OPTIND - 1))
 
-KEYBOARD=${1:-$(gum choose 'eyelash' 'corne' 'totem')}
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KEYBOARD=${1:-$("$SCRIPT_DIR/configs.sh" | gum choose --header "Keyboard")}
 SIDE=${2:-$(gum choose 'left' 'right')}
 
 REPO="3dyuval/keyboards-firmware"

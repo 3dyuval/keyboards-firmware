@@ -1,18 +1,51 @@
 # Keyboards Firmware
 
-Multi-keyboard firmware configurations with automated builds.
+Multi-keyboard firmware configurations using [Graphite](https://github.com/rdavison/graphite-layout) alpha layout with automated builds.
 
-## Corne (ZMK)
+## TOTEM
 
-![Keymap](keymap-drawer/corne.svg)
+38-key split, Seeeduino XIAO BLE, ZMK Studio enabled.
 
-*Hold ESC for Extra layer • Hold SPACE for Raise layer • Press SPACE+LOWER for START key*
+![Keymap](keymap-drawer/totem.svg)
 
-## Iris (QMK)
+### Layers
 
-Graphite layout with similar keybindings to Corne.
+```
+Base (Graphite)
+├── Symbols          left thumb hold     brackets, nav, arrows
+├── Number           right thumb hold    numpad, left-hand arrows
+└── Device           both thumbs held    BT, media, brightness
+                     (Symbols + Number conditional layer)
+```
+
+## Keyboards
+
+All ZMK keyboards share `graphite.dtsi` as the base layout definition, each extending it for their key count.
+
+```
+config/graphite.dtsi          shared alphas, layers, behaviors
+│
+├── ZMK
+│   ├── totem.keymap          38 keys (GRAPHITE_*_38)
+│   ├── corne.keymap          36 keys (GRAPHITE_*_36)
+│   └── eyelash_corne.keymap  42 keys (GRAPHITE_*_42)
+│
+└── QMK
+    └── iris/                 Keebio Iris, separate config
+```
+
+## Scripts
+
+```
+scripts/configs.sh        # list/pick keyboard, then draw or flash
+scripts/draw-keymaps.sh   # render keymap SVGs (all or filtered)
+scripts/flash-zmk.sh      # fetch + flash ZMK firmware
+scripts/flash-qmk.sh      # fetch + flash QMK firmware (Iris)
+```
 
 ## Dependencies
 
 - `gh` (GitHub CLI)
-- `qmk` (QMK CLI)
+- `gum` (interactive prompts)
+- `keymap-drawer` (keymap visualization, auto-installed in venv)
+- `qmk` (QMK CLI, for Iris only)
