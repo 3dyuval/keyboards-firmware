@@ -38,7 +38,7 @@ layers:
   - SPC
   - RET
   - BSPC
-  - {t: NUM, s: togNUM}
+  - NUM↓
   Symbols:
   - {t: ▽, type: trans}
   - '@'
@@ -60,7 +60,7 @@ layers:
   - DOWN
   - UP
   - RIGHT
-  - {t: ▽, type: trans}
+  - TAB
   - '!'
   - ']'
   - )
