@@ -6,7 +6,7 @@ layers:
   - D
   - W
   - Z
-  - {t: /, s: ':'}
+  - ;
   - F
   - O
   - U
@@ -31,7 +31,7 @@ layers:
   - P
   - ','
   - .
-  - {t: '''', s: '`'}
+  - /
   - {t: RSHFT, s: RGUI}
   - {t: ESC, h: LCTRL}
   - Symbols
@@ -40,37 +40,37 @@ layers:
   - BSPC
   - {t: NUM, s: togNUM}
   Symbols:
-  - ^
+  - {t: ▽, type: trans}
+  - '@'
+  - '`'
+  - {t: ▽, type: trans}
   - '&'
-  - ;
-  - $
-  - '%'
-  - \
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '-'
   - '='
+  - ^
   - '['
-  - '{'
   - (
-  - '!'
-  - '*'
+  - '#'
+  - $
   - PG UP
   - LEFT
   - DOWN
   - UP
   - RIGHT
   - {t: ▽, type: trans}
+  - '!'
   - ']'
-  - '}'
   - )
-  - '#'
-  - '@'
+  - '*'
+  - '%'
   - PG DN
   - HOME
   - END
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - ''''
+  - \
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {type: held}
@@ -80,8 +80,8 @@ layers:
   - {t: ▽, type: trans}
   Number:
   - HOME
-  - PG DN
   - PG UP
+  - PG DN
   - END
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -90,8 +90,8 @@ layers:
   - '9'
   - {t: ▽, type: trans}
   - LEFT
-  - DOWN
   - UP
+  - DOWN
   - RIGHT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

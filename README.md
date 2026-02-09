@@ -12,10 +12,23 @@ Multi-keyboard firmware configurations using [Graphite](https://github.com/rdavi
 
 | Key | Tap | + Shift | Notes |
 |-----|-----|---------|-------|
-| `'`/`` ` `` | `'` | `` ` `` | base row 1, quote_morph |
-| `LSHIFT` | `LSHIFT` | + RSHIFT held: `LGUI` | mod-morph, masks RSHIFT |
-| `RSHIFT` | `RSHIFT` | + LSHIFT held: `RGUI` | mod-morph, masks LSHIFT |
+| `LSHFT` | `LSHFT` | `LGUI` | left pinky, lshift_morph (+ RSHFT) |
+| `RSHFT` | `RSHFT` | `RGUI` | right pinky, rshift_morph (+ LSHFT) |
 | `NUM` | `&mo NUM` | `&tog NUM` | right thumb, num_morph |
+
+### Vim Symbols (SYM left hand)
+
+| Key | Vim usage |
+|-----|-----------|
+| `$` | end of line |
+| `^` | first non-blank character |
+| `{` `}` | paragraph movement |
+| `%` | bracket matching |
+| `*` `#` | search word under cursor reverse |
+| `;` | repeat last f t motion |
+| `!` | filter through external command |
+| `@` | execute macro |
+| `&` | repeat last substitution |
 
 ### Layers
 
