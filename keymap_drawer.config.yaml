@@ -2,6 +2,7 @@
 parse_config:
   preprocess: true
   raw_binding_map:
+    '&lshift_outer': {t: LSHFT, s: LGUI}
     '&lshift_morph': {t: LSHFT, s: LGUI}
     '&rshift_morph': {t: RSHFT, s: RGUI}
     '&num_morph': {t: NUM, s: togNUM}

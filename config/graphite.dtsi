@@ -69,6 +69,14 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        // CTRL+tap: TAB, otherwise inner lshift_morph
+        lshift_outer: lshift_outer {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&lshift_morph>, <&kp TAB>;
+            mods = <(MOD_LCTL|MOD_RCTL)>;
+        };
+
         // LSHFT normally, LGUI when RSHFT is held (masks RSHFT)
         lshift_morph: lshift_morph {
             compatible = "zmk,behavior-mod-morph";
@@ -132,7 +140,7 @@
 #define GRAPHITE_BASE_38 \
            &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
-&lshift_morph &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH    &rshift_morph \
+&lshift_outer &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH    &rshift_morph \
                                        &mt LCTRL ESC   &mo SYM         &kp SPC      &kp RET       &kp BSPC        &num_morph
 
 #define GRAPHITE_SYM_38 \
