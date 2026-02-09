@@ -1,12 +1,12 @@
 layout: {zmk_keyboard: totem}
 layers:
   Base:
-  - {t: B, h: LGUI}
+  - B
   - L
   - D
   - W
   - Z
-  - ;
+  - {t: /, s: ':'}
   - F
   - O
   - U
@@ -21,7 +21,7 @@ layers:
   - A
   - E
   - I
-  - LSHFT
+  - {t: LSHFT, s: LGUI}
   - Q
   - X
   - M
@@ -31,21 +31,21 @@ layers:
   - P
   - ','
   - .
-  - /
-  - ''''
+  - {t: '''', s: '`'}
+  - {t: RSHFT, s: RGUI}
   - {t: ESC, h: LCTRL}
   - Symbols
   - SPC
   - RET
   - BSPC
-  - Number
+  - {t: NUM, s: togNUM}
   Symbols:
   - ^
   - '&'
-  - TAB
+  - ;
   - $
   - '%'
-  - {t: ▽, type: trans}
+  - \
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '-'
@@ -70,8 +70,8 @@ layers:
   - HOME
   - END
   - {t: ▽, type: trans}
-  - \
-  - '`'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {type: held}
   - {t: ▽, type: trans}
@@ -99,7 +99,7 @@ layers:
   - '5'
   - '6'
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - TAB
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -116,16 +116,16 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
+  - {t: Number, h: toggle}
   Device:
   - OUT TOG
-  - BRI DN
-  - BRI UP
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - PP
   - NEXT
-  - VOL UP
-  - VOL DN
-  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - PSCRN
@@ -134,10 +134,10 @@ layers:
   - {t: BT, h: '2'}
   - {t: BT, h: '3'}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - VOL DN
+  - VOL UP
+  - BRI DN
+  - BRI UP
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -155,4 +155,4 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
+  - {t: ▽, type: trans}

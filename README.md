@@ -8,6 +8,15 @@ Multi-keyboard firmware configurations using [Graphite](https://github.com/rdavi
 
 ![Keymap](keymap-drawer/totem.svg)
 
+### Behaviors
+
+| Key | Tap | + Shift | Notes |
+|-----|-----|---------|-------|
+| `'`/`` ` `` | `'` | `` ` `` | base row 1, quote_morph |
+| `LSHIFT` | `LSHIFT` | + RSHIFT held: `LGUI` | mod-morph, masks RSHIFT |
+| `RSHIFT` | `RSHIFT` | + LSHIFT held: `RGUI` | mod-morph, masks LSHIFT |
+| `NUM` | `&mo NUM` | `&tog NUM` | right thumb, num_morph |
+
 ### Layers
 
 ```

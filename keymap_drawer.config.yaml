@@ -1,7 +1,12 @@
 # Config for keymap-drawer
 parse_config:
   preprocess: true
-  raw_binding_map: {}
+  raw_binding_map:
+    '&fslh_morph': {t: '/', s: ':'}
+    '&quote_morph': {t: "'", s: '`'}
+    '&lshift_morph': {t: LSHFT, s: LGUI}
+    '&rshift_morph': {t: RSHFT, s: RGUI}
+    '&num_morph': {t: NUM, s: togNUM}
   layer_names:
     0: "Base"
     1: "Symbols"
