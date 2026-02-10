@@ -2,9 +2,8 @@
 parse_config:
   preprocess: true
   raw_binding_map:
-    '&lshift_morph': {t: LSHFT, s: LGUI}
-    '&rshift_morph': {t: RSHFT, s: RGUI}
-    '&num_word NUM': {t: NUM↓}
+    '&lshift_dance': {t: LSHFT, h: TAB}
+    '&sym_ht SYM SYM': {t: SYM, h: SYM}
   layer_names:
     0: "Base"
     1: "Symbols"

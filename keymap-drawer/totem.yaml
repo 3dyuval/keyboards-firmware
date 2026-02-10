@@ -21,7 +21,7 @@ layers:
   - A
   - E
   - I
-  - {t: LSHFT, s: LGUI}
+  - {t: LSHFT, h: TAB}
   - Q
   - X
   - M
@@ -32,13 +32,13 @@ layers:
   - ','
   - .
   - /
-  - {t: RSHFT, s: RGUI}
+  - RSHFT
   - {t: ESC, h: LCTRL}
-  - Symbols
+  - {t: SYM, h: SYM}
   - SPC
   - RET
   - BSPC
-  - NUM↓
+  - RALT
   Symbols:
   - {t: ▽, type: trans}
   - '@'
@@ -60,7 +60,7 @@ layers:
   - DOWN
   - UP
   - RIGHT
-  - TAB
+  - LGUI
   - '!'
   - ']'
   - )
@@ -71,9 +71,9 @@ layers:
   - END
   - ''''
   - \
+  - RGUI
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
@@ -84,39 +84,39 @@ layers:
   - PG DN
   - END
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - .
   - '7'
   - '8'
   - '9'
-  - {t: ▽, type: trans}
+  - '-'
   - LEFT
   - UP
   - DOWN
   - RIGHT
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '='
   - '4'
   - '5'
   - '6'
-  - {t: ▽, type: trans}
+  - +
   - TAB
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '0'
+  - '*'
   - '1'
   - '2'
   - '3'
+  - /
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - RET
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: Number, h: toggle}
+  - '0'
   Device:
   - OUT TOG
   - {t: ▽, type: trans}
@@ -140,8 +140,8 @@ layers:
   - BRI UP
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -151,8 +151,15 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+combos:
+- p: [22, 23]
+  k: Device
+  l: [Base]
+- p: [28, 29]
+  k: '&num_word 2'
+  l: [Base]

@@ -13,6 +13,26 @@
 #include "graphite.dtsi"
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        // X+M: hold for Device layer
+        combo_device {
+            key-positions = <22 23>;
+            bindings = <&mo SYS>;
+            timeout-ms = <40>;
+            layers = <BASE>;
+        };
+
+        // ,+.: tap for num_word (smart number entry)
+        combo_num_word {
+            key-positions = <28 29>;
+            bindings = <&num_word NUM>;
+            timeout-ms = <40>;
+            layers = <BASE>;
+        };
+    };
+
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
