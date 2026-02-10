@@ -13,6 +13,21 @@
 #include "graphite.dtsi"
 
 / {
+    behaviors {
+        num_word_macro: num_word_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&num_word NUM>;
+        };
+
+        num_morph: num_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&mo NUM>, <&num_word_macro>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 

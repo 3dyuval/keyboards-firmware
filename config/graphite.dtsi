@@ -56,19 +56,6 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
-        num_word_macro: num_word_macro {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&num_word NUM>;
-        };
-
-        num_morph: num_morph {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&mo NUM>, <&num_word_macro>;
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
         lshift_dance: lshift_dance {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
