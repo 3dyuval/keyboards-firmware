@@ -84,7 +84,7 @@ layers:
   - PG DN
   - END
   - {t: ▽, type: trans}
-  - .
+  - '*'
   - '7'
   - '8'
   - '9'
@@ -102,13 +102,13 @@ layers:
   - TAB
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {type: held}
+  - {type: held}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '*'
+  - '0'
   - '1'
   - '2'
-  - '3'
+  - {t: '3', s: .}
   - /
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -116,7 +116,7 @@ layers:
   - {t: ▽, type: trans}
   - RET
   - {t: ▽, type: trans}
-  - '0'
+  - {t: ▽, type: trans}
   Device:
   - OUT TOG
   - {t: ▽, type: trans}
@@ -162,4 +162,7 @@ combos:
   l: [Base]
 - p: [28, 29]
   k: '&num_word 2'
+  l: [Base]
+- p: [23, 24]
+  k: Number
   l: [Base]
