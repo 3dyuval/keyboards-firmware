@@ -46,6 +46,14 @@
             timeout-ms = <40>;
             layers = <BASE>;
         };
+
+        // M+C: hold for NUM layer
+        combo_num {
+            key-positions = <23 24>;
+            bindings = <&mo NUM>;
+            timeout-ms = <40>;
+            layers = <BASE>;
+        };
     };
 
     conditional_layers {

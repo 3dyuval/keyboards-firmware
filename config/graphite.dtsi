@@ -56,10 +56,17 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        n3_morph: n3_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N3>, <&kp DOT>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
         lshift_dance: lshift_dance {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
-            tapping-term-ms = <150>;
+            tapping-term-ms = <200>;
             bindings = <&kp LSHFT>, <&kp TAB>;
         };
 
@@ -121,10 +128,10 @@
                                        &trans          &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
-           &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &kp DOT       &kp N7          &kp N8          &kp N9          &kp MINUS          \
+           &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &kp ASTRK     &kp N7          &kp N8          &kp N9          &kp MINUS          \
            &kp LEFT       &kp UP          &kp DOWN        &kp RIGHT       &trans       &kp EQUAL     &kp N4          &kp N5          &kp N6          &kp PLUS           \
-&kp TAB    &trans         &trans          &trans          &trans          &trans       &kp ASTRK     &kp N1          &kp N2          &kp N3          &kp FSLH  &trans     \
-                                       &trans          &trans          &trans       &kp RET       &trans          &kp N0
+&kp TAB    &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &n3_morph       &kp FSLH  &trans     \
+                                       &trans          &trans          &trans       &kp RET       &trans          &trans
 
 #define GRAPHITE_FUN_38 \
            &kp F1         &kp F2          &kp F3          &kp F4          &kp F5       &kp F6        &kp F7          &kp F8          &kp F9          &kp F10            \
