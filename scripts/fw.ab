@@ -1,0 +1,172 @@
+#!/usr/bin/env amber
+import { file_exists } from "std/fs"
+import { trim } from "std/text"
+
+let REPO = "3dyuval/keyboards-firmware"
+let ROOT = trim($ git rev-parse --show-toplevel $ failed { "." })
+let CACHE = "{ROOT}/.cache/artifacts"
+
+fun arg(args: [Text], idx: Num): Text {
+    if len(args) > idx {
+        return args[idx]
+    }
+    return ""
+}
+
+fun show_status(workflow: Text): Null? {
+    let json = $ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 1 --status completed --json databaseId,conclusion --jq ".[0]" $ failed {
+        echo "  no runs found"
+        fail 1
+    }
+    if json == "" or json == "null" {
+        echo "  no runs found"
+        return null
+    }
+    let id = trim($ echo '{json}' | jq -r ".databaseId" $?)
+    let conclusion = trim($ echo '{json}' | jq -r ".conclusion" $?)
+    echo "  run {id}: {conclusion}"
+    let jobs = $ gh run view {id} --repo "{REPO}" --json jobs --jq '.jobs[] | "  \(.conclusion)\t\(.name)"' $?
+    echo "{jobs}"
+}
+
+fun download(workflow: Text, artifact: Text): Null? {
+    let id = trim($ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 10 --status completed --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId' $?)
+    if id == "" or id == "null" {
+        echo "no successful build found"
+        fail 1
+    }
+    echo "downloading from run {id}..."
+    $ rm -rf "{CACHE}" $?
+    $ gh run download {id} --repo "{REPO}" --name "{artifact}" --dir "{CACHE}" $?
+}
+
+fun find_mount(): Text? {
+    let dev = trim($ ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE 2>/dev/null | head -1 $ failed { "" })
+    if dev == "" {
+        fail 1
+    }
+    dev = trim($ readlink -f "{dev}" $?)
+    let mount = trim($ lsblk -no MOUNTPOINT "{dev}" 2>/dev/null $ failed { "" })
+    if mount != "" {
+        return mount
+    }
+    mount = trim($ udisksctl mount -b "{dev}" 2>/dev/null | grep -oP "at \K.+" $ failed { "" })
+    if mount != "" {
+        return mount
+    }
+    fail 1
+}
+
+fun wait_for_drive(): Text? {
+    loop {
+        let mount = find_mount() failed {
+            echo "no bootloader drive — put board in bootloader mode, press enter"
+            trust $ read $
+            ""
+        }
+        if mount != "" {
+            return mount
+        }
+    }
+    fail 1
+}
+
+fun flash_zmk(keyboard: Text, side: Text, reset: Bool): Null? {
+    let firmware = "{keyboard}-{side}.uf2"
+    download("build-zmk.yml", "firmware")?
+    let path = "{CACHE}/{firmware}"
+    if not file_exists(path) {
+        echo "not found: {firmware}"
+        trust $ ls "{CACHE}" $
+        fail 1
+    }
+    let mount = wait_for_drive()?
+    if reset {
+        let reset_file = "{CACHE}/settings-reset-xiao.uf2"
+        if file_exists(reset_file) {
+            echo "flashing settings reset..."
+            $ cp "{reset_file}" "{mount}/" $?
+            $ sync $?
+            echo "done — put board in bootloader mode again, press enter"
+            trust $ read $
+            mount = wait_for_drive()?
+        }
+    }
+    echo "flashing {firmware}..."
+    $ cp "{path}" "{mount}/" $?
+    $ sync $?
+    echo "done"
+}
+
+fun flash_qmk(): Null? {
+    download("build-qmk.yml", "Firmware")?
+    let firmware = trim($ find "{CACHE}" -name "*.bin" 2>/dev/null | head -1 $?)
+    if firmware == "" {
+        echo "no .bin firmware found"
+        fail 1
+    }
+    echo "found: {firmware}"
+    loop {
+        let found = trim($ lsusb | grep -c "0483:df11" $ failed { "0" })
+        if found != "0" {
+            echo "flashing..."
+            trust $ dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "{firmware}" $
+            echo "done"
+            break
+        }
+        echo "put iris in DFU mode (double-tap reset), press enter"
+        trust $ read $
+    }
+}
+
+fun list_keyboards(): Null? {
+    let files = $ ls "{ROOT}/config/"*.keymap $?
+    let names = $ echo '{files}' | xargs -I \{} basename \{} .keymap $?
+    echo "{names}"
+}
+
+main(args) {
+    let cmd = arg(args, 1)
+    let keyboard = arg(args, 2)
+    let side = arg(args, 3)
+    let flag = arg(args, 4)
+
+    if {
+        cmd == "status" or cmd == "s" {
+            echo "zmk:"
+            trust show_status("build-zmk.yml")
+            echo ""
+            echo "qmk:"
+            trust show_status("build-qmk.yml")
+        }
+        cmd == "flash" or cmd == "f" {
+            if keyboard == "" {
+                echo "usage: fw flash <keyboard> [side] [-r]"
+                echo ""
+                echo "keyboards:"
+                trust list_keyboards()
+                fail 1
+            }
+            if keyboard == "iris" {
+                flash_qmk()?
+            } else {
+                if side == "" {
+                    echo "usage: fw flash {keyboard} <left|right> [-r]"
+                    fail 1
+                }
+                flash_zmk(keyboard, side, flag == "-r")?
+            }
+        }
+        cmd == "list" or cmd == "l" {
+            trust list_keyboards()
+        }
+        else {
+            echo "usage: fw <command>"
+            echo ""
+            echo "commands:"
+            echo "  status, s    show last CI build results"
+            echo "  flash, f     download and flash firmware"
+            echo "  list, l      list keyboards"
+        }
+    }
+}

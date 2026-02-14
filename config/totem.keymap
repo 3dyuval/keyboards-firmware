@@ -31,9 +31,9 @@
     combos {
         compatible = "zmk,combos";
 
-        // Q+X: hold for Device layer
+        // U+J: hold for Device layer
         combo_device {
-            key-positions = <21 22>;
+            key-positions = <8 9>;
             bindings = <&mo SYS>;
             timeout-ms = <65>;
             layers = <BASE>;
@@ -53,15 +53,6 @@
             bindings = <&mo NUM>;
             timeout-ms = <40>;
             layers = <BASE>;
-        };
-    };
-
-    conditional_layers {
-        compatible = "zmk,conditional-layers";
-
-        device {
-            if-layers = <SYM NUM>;
-            then-layer = <SYS>;
         };
     };
 
