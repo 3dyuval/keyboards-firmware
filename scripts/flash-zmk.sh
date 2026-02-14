@@ -3,9 +3,11 @@ set -e
 
 # Parse flags
 USE_CACHE=false
-while getopts "c" opt; do
+RESET=false
+while getopts "cr" opt; do
   case $opt in
   c) USE_CACHE=true ;;
+  r) RESET=true ;;
   esac
 done
 shift $((OPTIND - 1))
@@ -75,7 +77,23 @@ if [ -z "$MOUNT" ] || [ ! -d "$MOUNT" ]; then
   exit 1
 fi
 
-gum style --foreground 212 "Flashing $FIRMWARE..."
-cp "$FIRMWARE_DIR/$FIRMWARE" "$MOUNT/"
-sync
+flash_file() {
+  local file="$1" name="$2"
+  gum style --foreground 212 "Flashing $name..."
+  cp "$file" "$MOUNT/"
+  sync
+}
+
+if [ "$RESET" = true ] && [ -f "$FIRMWARE_DIR/settings-reset-xiao.uf2" ]; then
+  flash_file "$FIRMWARE_DIR/settings-reset-xiao.uf2" "settings reset"
+  gum style --foreground 76 "Settings cleared!"
+  gum confirm "Put $KEYBOARD $SIDE in bootloader mode again, then confirm" || exit 1
+  MOUNT=$(find_and_mount) || true
+  if [ -z "$MOUNT" ] || [ ! -d "$MOUNT" ]; then
+    gum style --foreground 196 "No bootloader drive found"
+    exit 1
+  fi
+fi
+
+flash_file "$FIRMWARE_DIR/$FIRMWARE" "$FIRMWARE"
 gum style --foreground 76 "Done!"

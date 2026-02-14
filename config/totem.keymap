@@ -31,11 +31,11 @@
     combos {
         compatible = "zmk,combos";
 
-        // X+M: hold for Device layer
+        // Q+X: hold for Device layer
         combo_device {
-            key-positions = <22 23>;
+            key-positions = <21 22>;
             bindings = <&mo SYS>;
-            timeout-ms = <40>;
+            timeout-ms = <65>;
             layers = <BASE>;
         };
 
