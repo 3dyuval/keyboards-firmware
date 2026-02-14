@@ -126,8 +126,8 @@ layers:
   - {t: ▽, type: trans}
   - PP
   - NEXT
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
+  - {type: held}
   - PSCRN
   - {t: BT, h: '0'}
   - {t: BT, h: '1'}
@@ -139,8 +139,8 @@ layers:
   - BRI DN
   - BRI UP
   - {t: ▽, type: trans}
-  - {type: held}
-  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -157,7 +157,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
 combos:
-- p: [21, 22]
+- p: [8, 9]
   k: Device
   l: [Base]
 - p: [28, 29]
