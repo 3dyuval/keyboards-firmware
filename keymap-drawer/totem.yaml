@@ -139,9 +139,9 @@ layers:
   - BRI DN
   - BRI UP
   - {t: ▽, type: trans}
+  - {type: held}
+  - {type: held}
   - {t: ▽, type: trans}
-  - {type: held}
-  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -157,7 +157,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
 combos:
-- p: [22, 23]
+- p: [21, 22]
   k: Device
   l: [Base]
 - p: [28, 29]
