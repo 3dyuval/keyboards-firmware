@@ -25,13 +25,21 @@ if [ "$USE_CACHE" = true ] && [ -f "$FIRMWARE_DIR/$FIRMWARE" ]; then
   gum style --foreground 212 "Using cached firmware"
 else
   gum spin --title "Fetching latest build..." -- bash -c '
-    RUN_ID=$(gh run list --repo "'"$REPO"'" --workflow=build-zmk.yml --limit 1 --status completed --json databaseId --jq ".[0].databaseId")
+    RUN_ID=$(gh run list --repo "'"$REPO"'" --workflow=build-zmk.yml --limit 1 --status completed --conclusion success --json databaseId --jq ".[0].databaseId")
     if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+      echo "No successful build found" >&2
       exit 1
     fi
     rm -rf "'"$FIRMWARE_DIR"'"
-    gh run download "$RUN_ID" --repo "'"$REPO"'" --name firmware --dir "'"$FIRMWARE_DIR"'"
+    gh run download "$RUN_ID" --repo "'"$REPO"'" --name firmware --dir "'"$FIRMWARE_DIR"'" 2>&1 || {
+      echo "Failed to download firmware from run $RUN_ID" >&2
+      exit 1
+    }
   '
+  if [ $? -ne 0 ]; then
+    gum style --foreground 196 "Failed to fetch firmware"
+    exit 1
+  fi
 fi
 
 if [ ! -f "$FIRMWARE_DIR/$FIRMWARE" ]; then
