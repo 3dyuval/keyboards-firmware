@@ -40,19 +40,19 @@ layers:
   - BSPC
   - RALT
   Symbols:
-  - {t: ▽, type: trans}
-  - '@'
-  - '`'
-  - {t: ▽, type: trans}
-  - '&'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '-'
-  - '='
-  - ^
-  - '['
+  - '!'
   - (
+  - )
+  - '&'
+  - '"'
+  - ':'
+  - '-'
+  - +
+  - '='
+  - _
+  - '*'
+  - '{'
+  - '}'
   - '#'
   - $
   - PG UP
@@ -61,10 +61,10 @@ layers:
   - UP
   - RIGHT
   - LGUI
-  - '!'
+  - ^
+  - '['
   - ']'
-  - )
-  - '*'
+  - '@'
   - '%'
   - PG DN
   - HOME

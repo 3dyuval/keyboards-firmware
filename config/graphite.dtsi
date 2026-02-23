@@ -122,9 +122,9 @@
                                        &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
 
 #define GRAPHITE_SYM_38 \
-           &trans         &kp AT_SIGN     &kp GRAVE       &trans          &kp AMPS    &trans       &trans          &trans          &kp MINUS       &kp EQUAL          \
-           &kp CARET      &kp LBKT        &kp LPAR        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
-&kp LGUI   &kp EXCL       &kp RBKT        &kp RPAR        &kp ASTRK       &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &kp RGUI     \
+           &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp DQT     &kp COLON    &kp MINUS       &kp PLUS        &kp EQUAL       &kp UNDER          \
+           &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
+&kp LGUI   &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &kp RGUI     \
                                        &trans          &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
