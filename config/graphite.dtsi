@@ -125,7 +125,7 @@
            &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp DQT     &kp COLON    &kp MINUS       &kp PLUS        &kp EQUAL       &kp UNDER          \
            &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
 &kp LGUI   &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &kp RGUI     \
-                                       &trans          &trans          &trans       &trans        &kp DEL         &trans
+                                       &mo NUM         &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
            &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &kp ASTRK     &kp N7          &kp N8          &kp N9          &kp MINUS          \
