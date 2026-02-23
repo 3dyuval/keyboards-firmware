@@ -173,17 +173,6 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <a href="#Device">
 <text x="792" y="87" class="combo tap layer-activator">Device</text>
 </a></g>
-<g class="combo combopos-1">
-<rect rx="6" ry="6" x="711" y="144" width="28" height="26" class="combo"/>
-<text x="725" y="157" class="combo tap">
-<tspan x="725" dy="-0.6em" style="font-size: 78%">&amp;num_word</tspan><tspan x="725" dy="1.2em" style="font-size: 78%">2</tspan>
-</text>
-</g>
-<g class="combo combopos-2">
-<rect rx="6" ry="6" x="214" y="141" width="28" height="26" class="combo"/>
-<a href="#Number">
-<text x="228" y="154" class="combo tap layer-activator">Number</text>
-</a></g>
 </g>
 </g>
 <g transform="translate(30, 365)" class="layer-Symbols">
@@ -321,10 +310,11 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">RGUI</text>
 </g>
-<g transform="translate(241, 236)" class="key trans keypos-32">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
-<text x="0" y="2" class="key trans tap">▽</text>
-</g>
+<g transform="translate(241, 236)" class="key keypos-32">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
+<a href="#Number">
+<text x="0" y="2" class="key tap layer-activator">Number</text>
+</a></g>
 <g transform="translate(303, 245) rotate(15.0)" class="key trans keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="2" class="key trans tap">▽</text>
@@ -446,11 +436,13 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="2" class="key trans tap">▽</text>
 </g>
-<g transform="translate(200, 140)" class="key held keypos-23">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held"/>
+<g transform="translate(200, 140)" class="key trans keypos-23">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
+<text x="0" y="2" class="key trans tap">▽</text>
 </g>
-<g transform="translate(256, 168)" class="key held keypos-24">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held"/>
+<g transform="translate(256, 168)" class="key trans keypos-24">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
+<text x="0" y="2" class="key trans tap">▽</text>
 </g>
 <g transform="translate(312, 177)" class="key trans keypos-25">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -481,9 +473,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="2" class="key trans tap">▽</text>
 </g>
-<g transform="translate(241, 236)" class="key trans keypos-32">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
-<text x="0" y="2" class="key trans tap">▽</text>
+<g transform="translate(241, 236)" class="key held keypos-32">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held"/>
 </g>
 <g transform="translate(303, 245) rotate(15.0)" class="key trans keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>

@@ -72,7 +72,7 @@ layers:
   - ''''
   - \
   - RGUI
-  - {t: ▽, type: trans}
+  - Number
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -102,8 +102,8 @@ layers:
   - TAB
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
-  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '0'
   - '1'
@@ -111,7 +111,7 @@ layers:
   - {t: '3', s: .}
   - /
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - RET
@@ -159,10 +159,4 @@ layers:
 combos:
 - p: [8, 9]
   k: Device
-  l: [Base]
-- p: [28, 29]
-  k: '&num_word 2'
-  l: [Base]
-- p: [23, 24]
-  k: Number
   l: [Base]
