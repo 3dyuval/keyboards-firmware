@@ -14,6 +14,10 @@ fun arg(args: [Text], idx: Num): Text {
 }
 
 fun show_status(workflow: Text): Null? {
+    let in_progress = trim($ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 1 --status in_progress --json databaseId --jq ".[0].databaseId" $ failed { "" })
+    if in_progress != "" and in_progress != "null" {
+        echo "  run {in_progress}: in progress"
+    }
     let json = $ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 1 --status completed --json databaseId,conclusion --jq ".[0]" $ failed {
         echo "  no runs found"
         fail 1
@@ -29,7 +33,20 @@ fun show_status(workflow: Text): Null? {
     echo "{jobs}"
 }
 
+fun wait_for_run(workflow: Text): Null? {
+    let in_progress = trim($ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 1 --status in_progress --json databaseId --jq ".[0].databaseId" $ failed { "" })
+    if in_progress != "" and in_progress != "null" {
+        echo "run {in_progress} in progress, waiting..."
+        $ gh run watch {in_progress} --repo "{REPO}" --exit-status $ failed {
+            echo "run {in_progress} failed"
+            fail 1
+        }
+        echo "run completed"
+    }
+}
+
 fun download(workflow: Text, artifact: Text): Null? {
+    wait_for_run(workflow)?
     let id = trim($ gh run list --repo "{REPO}" --workflow="{workflow}" --limit 10 --status completed --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId' $?)
     if id == "" or id == "null" {
         echo "no successful build found"

@@ -60,251 +60,289 @@ arg__53_v0() {
 
 show_status__54_v0() {
     local workflow=$1
-    command_4="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 1 --status completed --json databaseId,conclusion --jq ".[0]")"
+    command_4="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 1 --status in_progress --json databaseId --jq ".[0].databaseId")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        :
+    fi
+    trim__11_v0 "${command_4}"
+    in_progress_11="${ret_trim11_v0}"
+    if [ "$(( $([ "_${in_progress_11}" == "_" ]; echo $?) && $([ "_${in_progress_11}" == "_null" ]; echo $?) ))" != 0 ]; then
+        echo "  run ${in_progress_11}: in progress"
+    fi
+    command_5="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 1 --status completed --json databaseId,conclusion --jq ".[0]")"
     __status=$?
     if [ "${__status}" != 0 ]; then
         echo "  no runs found"
         ret_show_status54_v0=''
         return 1
     fi
-    json_11="${command_4}"
-    if [ "$(( $([ "_${json_11}" != "_" ]; echo $?) || $([ "_${json_11}" != "_null" ]; echo $?) ))" != 0 ]; then
+    json_12="${command_5}"
+    if [ "$(( $([ "_${json_12}" != "_" ]; echo $?) || $([ "_${json_12}" != "_null" ]; echo $?) ))" != 0 ]; then
         echo "  no runs found"
         ret_show_status54_v0=''
         return 0
     fi
-    command_5="$(echo ''"${json_11}"'' | jq -r ".databaseId")"
-    __status=$?
-    if [ "${__status}" != 0 ]; then
-        ret_show_status54_v0=''
-        return "${__status}"
-    fi
-    trim__11_v0 "${command_5}"
-    id_12="${ret_trim11_v0}"
-    command_6="$(echo ''"${json_11}"'' | jq -r ".conclusion")"
+    command_6="$(echo ''"${json_12}"'' | jq -r ".databaseId")"
     __status=$?
     if [ "${__status}" != 0 ]; then
         ret_show_status54_v0=''
         return "${__status}"
     fi
     trim__11_v0 "${command_6}"
-    conclusion_13="${ret_trim11_v0}"
-    echo "  run ${id_12}: ${conclusion_13}"
-    command_7="$(gh run view ${id_12} --repo "${__REPO_3}" --json jobs --jq '.jobs[] | "  \(.conclusion)	\(.name)"')"
+    id_13="${ret_trim11_v0}"
+    command_7="$(echo ''"${json_12}"'' | jq -r ".conclusion")"
     __status=$?
     if [ "${__status}" != 0 ]; then
         ret_show_status54_v0=''
         return "${__status}"
     fi
-    jobs_14="${command_7}"
-    echo "${jobs_14}"
+    trim__11_v0 "${command_7}"
+    conclusion_14="${ret_trim11_v0}"
+    echo "  run ${id_13}: ${conclusion_14}"
+    command_8="$(gh run view ${id_13} --repo "${__REPO_3}" --json jobs --jq '.jobs[] | "  \(.conclusion)	\(.name)"')"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_show_status54_v0=''
+        return "${__status}"
+    fi
+    jobs_15="${command_8}"
+    echo "${jobs_15}"
 }
 
-download__55_v0() {
+wait_for_run__55_v0() {
     local workflow=$1
-    local artifact=$2
-    command_8="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 10 --status completed --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId')"
-    __status=$?
-    if [ "${__status}" != 0 ]; then
-        ret_download55_v0=''
-        return "${__status}"
-    fi
-    trim__11_v0 "${command_8}"
-    id_17="${ret_trim11_v0}"
-    if [ "$(( $([ "_${id_17}" != "_" ]; echo $?) || $([ "_${id_17}" != "_null" ]; echo $?) ))" != 0 ]; then
-        echo "no successful build found"
-        ret_download55_v0=''
-        return 1
-    fi
-    echo "downloading from run ${id_17}..."
-    rm -rf "${__CACHE_5}"
-    __status=$?
-    if [ "${__status}" != 0 ]; then
-        ret_download55_v0=''
-        return "${__status}"
-    fi
-    gh run download ${id_17} --repo "${__REPO_3}" --name "${artifact}" --dir "${__CACHE_5}"
-    __status=$?
-    if [ "${__status}" != 0 ]; then
-        ret_download55_v0=''
-        return "${__status}"
-    fi
-}
-
-find_mount__56_v0() {
-    command_9="$(ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE 2>/dev/null | head -1)"
+    command_9="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 1 --status in_progress --json databaseId --jq ".[0].databaseId")"
     __status=$?
     if [ "${__status}" != 0 ]; then
         :
     fi
     trim__11_v0 "${command_9}"
-    dev_22="${ret_trim11_v0}"
-    if [ "$([ "_${dev_22}" != "_" ]; echo $?)" != 0 ]; then
-        ret_find_mount56_v0=''
-        return 1
+    in_progress_18="${ret_trim11_v0}"
+    if [ "$(( $([ "_${in_progress_18}" == "_" ]; echo $?) && $([ "_${in_progress_18}" == "_null" ]; echo $?) ))" != 0 ]; then
+        echo "run ${in_progress_18} in progress, waiting..."
+        gh run watch ${in_progress_18} --repo "${__REPO_3}" --exit-status
+        __status=$?
+        if [ "${__status}" != 0 ]; then
+            echo "run ${in_progress_18} failed"
+            ret_wait_for_run55_v0=''
+            return 1
+        fi
+        echo "run completed"
     fi
-    command_10="$(readlink -f "${dev_22}")"
+}
+
+download__56_v0() {
+    local workflow=$1
+    local artifact=$2
+    wait_for_run__55_v0 "${workflow}"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_find_mount56_v0=''
+        ret_download56_v0=''
+        return "${__status}"
+    fi
+    command_10="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 10 --status completed --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId')"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download56_v0=''
         return "${__status}"
     fi
     trim__11_v0 "${command_10}"
-    dev_22="${ret_trim11_v0}"
-    command_11="$(lsblk -no MOUNTPOINT "${dev_22}" 2>/dev/null)"
+    id_19="${ret_trim11_v0}"
+    if [ "$(( $([ "_${id_19}" != "_" ]; echo $?) || $([ "_${id_19}" != "_null" ]; echo $?) ))" != 0 ]; then
+        echo "no successful build found"
+        ret_download56_v0=''
+        return 1
+    fi
+    echo "downloading from run ${id_19}..."
+    rm -rf "${__CACHE_5}"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download56_v0=''
+        return "${__status}"
+    fi
+    gh run download ${id_19} --repo "${__REPO_3}" --name "${artifact}" --dir "${__CACHE_5}"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download56_v0=''
+        return "${__status}"
+    fi
+}
+
+find_mount__57_v0() {
+    command_11="$(ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE 2>/dev/null | head -1)"
     __status=$?
     if [ "${__status}" != 0 ]; then
         :
     fi
     trim__11_v0 "${command_11}"
-    mount_23="${ret_trim11_v0}"
-    if [ "$([ "_${mount_23}" == "_" ]; echo $?)" != 0 ]; then
-        ret_find_mount56_v0="${mount_23}"
-        return 0
+    dev_24="${ret_trim11_v0}"
+    if [ "$([ "_${dev_24}" != "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount57_v0=''
+        return 1
     fi
-    command_12="$(udisksctl mount -b "${dev_22}" 2>/dev/null | grep -oP "at \K.+")"
+    command_12="$(readlink -f "${dev_24}")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_find_mount57_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_12}"
+    dev_24="${ret_trim11_v0}"
+    command_13="$(lsblk -no MOUNTPOINT "${dev_24}" 2>/dev/null)"
     __status=$?
     if [ "${__status}" != 0 ]; then
         :
     fi
-    trim__11_v0 "${command_12}"
-    mount_23="${ret_trim11_v0}"
-    if [ "$([ "_${mount_23}" == "_" ]; echo $?)" != 0 ]; then
-        ret_find_mount56_v0="${mount_23}"
+    trim__11_v0 "${command_13}"
+    mount_25="${ret_trim11_v0}"
+    if [ "$([ "_${mount_25}" == "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount57_v0="${mount_25}"
         return 0
     fi
-    ret_find_mount56_v0=''
+    command_14="$(udisksctl mount -b "${dev_24}" 2>/dev/null | grep -oP "at \K.+")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        :
+    fi
+    trim__11_v0 "${command_14}"
+    mount_25="${ret_trim11_v0}"
+    if [ "$([ "_${mount_25}" == "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount57_v0="${mount_25}"
+        return 0
+    fi
+    ret_find_mount57_v0=''
     return 1
 }
 
-wait_for_drive__57_v0() {
+wait_for_drive__58_v0() {
     while :
     do
-        find_mount__56_v0 
+        find_mount__57_v0 
         __status=$?
         if [ "${__status}" != 0 ]; then
             echo "no bootloader drive — put board in bootloader mode, press enter"
             read
             __status=$?
         fi
-        mount_24="${ret_find_mount56_v0}"
-        if [ "$([ "_${mount_24}" == "_" ]; echo $?)" != 0 ]; then
-            ret_wait_for_drive57_v0="${mount_24}"
+        mount_26="${ret_find_mount57_v0}"
+        if [ "$([ "_${mount_26}" == "_" ]; echo $?)" != 0 ]; then
+            ret_wait_for_drive58_v0="${mount_26}"
             return 0
         fi
     done
-    ret_wait_for_drive57_v0=''
+    ret_wait_for_drive58_v0=''
     return 1
 }
 
-flash_zmk__58_v0() {
+flash_zmk__59_v0() {
     local keyboard=$1
     local side=$2
     local reset=$3
-    firmware_20="${keyboard}-${side}.uf2"
-    download__55_v0 "build-zmk.yml" "firmware"
+    firmware_22="${keyboard}-${side}.uf2"
+    download__56_v0 "build-zmk.yml" "firmware"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_zmk58_v0=''
+        ret_flash_zmk59_v0=''
         return "${__status}"
     fi
-    path_21="${__CACHE_5}/${firmware_20}"
-    file_exists__37_v0 "${path_21}"
-    ret_file_exists37_v0__78_12="${ret_file_exists37_v0}"
-    if [ "$(( ! ${ret_file_exists37_v0__78_12} ))" != 0 ]; then
-        echo "not found: ${firmware_20}"
+    path_23="${__CACHE_5}/${firmware_22}"
+    file_exists__37_v0 "${path_23}"
+    ret_file_exists37_v0__95_12="${ret_file_exists37_v0}"
+    if [ "$(( ! ${ret_file_exists37_v0__95_12} ))" != 0 ]; then
+        echo "not found: ${firmware_22}"
         ls "${__CACHE_5}"
         __status=$?
-        ret_flash_zmk58_v0=''
+        ret_flash_zmk59_v0=''
         return 1
     fi
-    wait_for_drive__57_v0 
+    wait_for_drive__58_v0 
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_zmk58_v0=''
+        ret_flash_zmk59_v0=''
         return "${__status}"
     fi
-    mount_25="${ret_wait_for_drive57_v0}"
+    mount_27="${ret_wait_for_drive58_v0}"
     if [ "${reset}" != 0 ]; then
-        reset_name_26="$(if [ "$([ "_${keyboard}" != "_totem" ]; echo $?)" != 0 ]; then echo "settings-reset-xiao"; else echo "settings-reset-nano"; fi)"
-        reset_file_27="${__CACHE_5}/${reset_name_26}.uf2"
-        file_exists__37_v0 "${reset_file_27}"
-        ret_file_exists37_v0__87_12="${ret_file_exists37_v0}"
-        if [ "${ret_file_exists37_v0__87_12}" != 0 ]; then
+        reset_name_28="$(if [ "$([ "_${keyboard}" != "_totem" ]; echo $?)" != 0 ]; then echo "settings-reset-xiao"; else echo "settings-reset-nano"; fi)"
+        reset_file_29="${__CACHE_5}/${reset_name_28}.uf2"
+        file_exists__37_v0 "${reset_file_29}"
+        ret_file_exists37_v0__104_12="${ret_file_exists37_v0}"
+        if [ "${ret_file_exists37_v0__104_12}" != 0 ]; then
             echo "flashing settings reset..."
-            cp "${reset_file_27}" "${mount_25}/"
+            cp "${reset_file_29}" "${mount_27}/"
             __status=$?
             if [ "${__status}" != 0 ]; then
-                ret_flash_zmk58_v0=''
+                ret_flash_zmk59_v0=''
                 return "${__status}"
             fi
             sync
             __status=$?
             if [ "${__status}" != 0 ]; then
-                ret_flash_zmk58_v0=''
+                ret_flash_zmk59_v0=''
                 return "${__status}"
             fi
             echo "done — put board in bootloader mode again, press enter"
             read
             __status=$?
-            wait_for_drive__57_v0 
+            wait_for_drive__58_v0 
             __status=$?
             if [ "${__status}" != 0 ]; then
-                ret_flash_zmk58_v0=''
+                ret_flash_zmk59_v0=''
                 return "${__status}"
             fi
-            mount_25="${ret_wait_for_drive57_v0}"
+            mount_27="${ret_wait_for_drive58_v0}"
         fi
     fi
-    echo "flashing ${firmware_20}..."
-    cp "${path_21}" "${mount_25}/"
+    echo "flashing ${firmware_22}..."
+    cp "${path_23}" "${mount_27}/"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_zmk58_v0=''
+        ret_flash_zmk59_v0=''
         return "${__status}"
     fi
     sync
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_zmk58_v0=''
+        ret_flash_zmk59_v0=''
         return "${__status}"
     fi
     echo "done"
 }
 
-flash_qmk__59_v0() {
-    download__55_v0 "build-qmk.yml" "Firmware"
+flash_qmk__60_v0() {
+    download__56_v0 "build-qmk.yml" "Firmware"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_qmk59_v0=''
+        ret_flash_qmk60_v0=''
         return "${__status}"
     fi
-    command_13="$(find "${__CACHE_5}" -name "*.bin" 2>/dev/null | head -1)"
+    command_15="$(find "${__CACHE_5}" -name "*.bin" 2>/dev/null | head -1)"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_flash_qmk59_v0=''
+        ret_flash_qmk60_v0=''
         return "${__status}"
     fi
-    trim__11_v0 "${command_13}"
-    firmware_18="${ret_trim11_v0}"
-    if [ "$([ "_${firmware_18}" != "_" ]; echo $?)" != 0 ]; then
+    trim__11_v0 "${command_15}"
+    firmware_20="${ret_trim11_v0}"
+    if [ "$([ "_${firmware_20}" != "_" ]; echo $?)" != 0 ]; then
         echo "no .bin firmware found"
-        ret_flash_qmk59_v0=''
+        ret_flash_qmk60_v0=''
         return 1
     fi
-    echo "found: ${firmware_18}"
+    echo "found: ${firmware_20}"
     while :
     do
-        command_14="$(lsusb | grep -c "0483:df11")"
+        command_16="$(lsusb | grep -c "0483:df11")"
         __status=$?
         if [ "${__status}" != 0 ]; then
             :
         fi
-        trim__11_v0 "${command_14}"
-        found_19="${ret_trim11_v0}"
-        if [ "$([ "_${found_19}" == "_0" ]; echo $?)" != 0 ]; then
+        trim__11_v0 "${command_16}"
+        found_21="${ret_trim11_v0}"
+        if [ "$([ "_${found_21}" == "_0" ]; echo $?)" != 0 ]; then
             echo "flashing..."
-            dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "${firmware_18}"
+            dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "${firmware_20}"
             __status=$?
             echo "done"
             break
@@ -315,22 +353,22 @@ flash_qmk__59_v0() {
     done
 }
 
-list_keyboards__60_v0() {
-    command_15="$(ls "${__ROOT_4}/config/"*.keymap)"
+list_keyboards__61_v0() {
+    command_17="$(ls "${__ROOT_4}/config/"*.keymap)"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_list_keyboards60_v0=''
+        ret_list_keyboards61_v0=''
         return "${__status}"
     fi
-    files_15="${command_15}"
-    command_16="$(echo ''"${files_15}"'' | xargs -I {} basename {} .keymap)"
+    files_16="${command_17}"
+    command_18="$(echo ''"${files_16}"'' | xargs -I {} basename {} .keymap)"
     __status=$?
     if [ "${__status}" != 0 ]; then
-        ret_list_keyboards60_v0=''
+        ret_list_keyboards61_v0=''
         return "${__status}"
     fi
-    names_16="${command_16}"
-    echo "${names_16}"
+    names_17="${command_18}"
+    echo "${names_17}"
 }
 
 declare -r args_6=("$0" "$@")
@@ -355,12 +393,12 @@ elif [ "$(( $([ "_${cmd_7}" != "_flash" ]; echo $?) || $([ "_${cmd_7}" != "_f" ]
         echo "usage: fw flash <keyboard> [side] [-r]"
         echo ""
         echo "keyboards:"
-        list_keyboards__60_v0 
+        list_keyboards__61_v0 
         __status=$?
         exit 1
     fi
     if [ "$([ "_${keyboard_8}" != "_iris" ]; echo $?)" != 0 ]; then
-        flash_qmk__59_v0 
+        flash_qmk__60_v0 
         __status=$?
         if [ "${__status}" != 0 ]; then
             exit "${__status}"
@@ -370,14 +408,14 @@ elif [ "$(( $([ "_${cmd_7}" != "_flash" ]; echo $?) || $([ "_${cmd_7}" != "_f" ]
             echo "usage: fw flash ${keyboard_8} <left|right> [-r]"
             exit 1
         fi
-        flash_zmk__58_v0 "${keyboard_8}" "${side_9}" "$([ "_${flag_10}" != "_-r" ]; echo $?)"
+        flash_zmk__59_v0 "${keyboard_8}" "${side_9}" "$([ "_${flag_10}" != "_-r" ]; echo $?)"
         __status=$?
         if [ "${__status}" != 0 ]; then
             exit "${__status}"
         fi
     fi
 elif [ "$(( $([ "_${cmd_7}" != "_list" ]; echo $?) || $([ "_${cmd_7}" != "_l" ]; echo $?) ))" != 0 ]; then
-    list_keyboards__60_v0 
+    list_keyboards__61_v0 
     __status=$?
 else
     echo "usage: fw <command>"

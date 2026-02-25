@@ -63,6 +63,14 @@
             bindings = <&soft_off>;
             key-positions = <1 15 29>;
         };
+
+        // U+J: hold for Device layer
+        combo_device {
+            key-positions = <10 11>;
+            bindings = <&mo SYS>;
+            timeout-ms = <65>;
+            layers = <BASE>;
+        };
     };
 
     keymap {
@@ -80,14 +88,14 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
-        function {
-            display-name = "Function";
-            bindings = < GRAPHITE_FUN_42 >;
+        number {
+            display-name = "Number";
+            bindings = < GRAPHITE_NUM_42 >;
             sensor-bindings = <&scroll_encoder>;
         };
 
-        system {
-            display-name = "System";
+        device {
+            display-name = "Device";
             bindings = < GRAPHITE_SYS_42 >;
             sensor-bindings = <&rgb_encoder>;
         };
