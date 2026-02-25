@@ -22,7 +22,10 @@ include:
   - board: xiao_ble//zmk
     shield: totem_right
     artifact-name: totem-right
-  # Settings reset for XIAO BLE
+  # Settings reset
   - board: xiao_ble//zmk
     shield: settings_reset
     artifact-name: settings-reset-xiao
+  - board: nice_nano//zmk
+    shield: settings_reset
+    artifact-name: settings-reset-nano

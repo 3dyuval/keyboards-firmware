@@ -82,7 +82,8 @@ fun flash_zmk(keyboard: Text, side: Text, reset: Bool): Null? {
     }
     let mount = wait_for_drive()?
     if reset {
-        let reset_file = "{CACHE}/settings-reset-xiao.uf2"
+        let reset_name = keyboard == "totem" then "settings-reset-xiao" else "settings-reset-nano"
+        let reset_file = "{CACHE}/{reset_name}.uf2"
         if file_exists(reset_file) {
             echo "flashing settings reset..."
             $ cp "{reset_file}" "{mount}/" $?

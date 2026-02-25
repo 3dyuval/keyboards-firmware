@@ -1,0 +1,389 @@
+#!/usr/bin/env bash
+# Written in [Amber](https://amber-lang.com/)
+# version: 0.5.1-alpha
+# We cannot import `bash_version` from `env.ab` because it imports `text.ab` making a circular dependency.
+# This is a workaround to avoid that issue and the import system should be improved in the future.
+trim_left__9_v0() {
+    local text=$1
+    command_0="$(echo "${text}" | sed -e 's/^[[:space:]]*//')"
+    __status=$?
+    ret_trim_left9_v0="${command_0}"
+    return 0
+}
+
+trim_right__10_v0() {
+    local text=$1
+    command_1="$(echo "${text}" | sed -e 's/[[:space:]]*$//')"
+    __status=$?
+    ret_trim_right10_v0="${command_1}"
+    return 0
+}
+
+trim__11_v0() {
+    local text=$1
+    trim_right__10_v0 "${text}"
+    ret_trim_right10_v0__178_22="${ret_trim_right10_v0}"
+    trim_left__9_v0 "${ret_trim_right10_v0__178_22}"
+    ret_trim11_v0="${ret_trim_left9_v0}"
+    return 0
+}
+
+file_exists__37_v0() {
+    local path=$1
+    [ -f "${path}" ]
+    __status=$?
+    ret_file_exists37_v0="$(( ${__status} == 0 ))"
+    return 0
+}
+
+# #!/usr/bin/env amber
+__REPO_3="3dyuval/keyboards-firmware"
+command_2="$(git rev-parse --show-toplevel)"
+__status=$?
+if [ "${__status}" != 0 ]; then
+    :
+fi
+trim__11_v0 "${command_2}"
+__ROOT_4="${ret_trim11_v0}"
+__CACHE_5="${__ROOT_4}/.cache/artifacts"
+arg__53_v0() {
+    local args=("${!1}")
+    local idx=$2
+    __length_3=("${args[@]}")
+    if [ "$(( ${#__length_3[@]} > ${idx} ))" != 0 ]; then
+        ret_arg53_v0="${args[${idx}]}"
+        return 0
+    fi
+    ret_arg53_v0=""
+    return 0
+}
+
+show_status__54_v0() {
+    local workflow=$1
+    command_4="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 1 --status completed --json databaseId,conclusion --jq ".[0]")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        echo "  no runs found"
+        ret_show_status54_v0=''
+        return 1
+    fi
+    json_11="${command_4}"
+    if [ "$(( $([ "_${json_11}" != "_" ]; echo $?) || $([ "_${json_11}" != "_null" ]; echo $?) ))" != 0 ]; then
+        echo "  no runs found"
+        ret_show_status54_v0=''
+        return 0
+    fi
+    command_5="$(echo ''"${json_11}"'' | jq -r ".databaseId")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_show_status54_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_5}"
+    id_12="${ret_trim11_v0}"
+    command_6="$(echo ''"${json_11}"'' | jq -r ".conclusion")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_show_status54_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_6}"
+    conclusion_13="${ret_trim11_v0}"
+    echo "  run ${id_12}: ${conclusion_13}"
+    command_7="$(gh run view ${id_12} --repo "${__REPO_3}" --json jobs --jq '.jobs[] | "  \(.conclusion)	\(.name)"')"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_show_status54_v0=''
+        return "${__status}"
+    fi
+    jobs_14="${command_7}"
+    echo "${jobs_14}"
+}
+
+download__55_v0() {
+    local workflow=$1
+    local artifact=$2
+    command_8="$(gh run list --repo "${__REPO_3}" --workflow="${workflow}" --limit 10 --status completed --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId')"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download55_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_8}"
+    id_17="${ret_trim11_v0}"
+    if [ "$(( $([ "_${id_17}" != "_" ]; echo $?) || $([ "_${id_17}" != "_null" ]; echo $?) ))" != 0 ]; then
+        echo "no successful build found"
+        ret_download55_v0=''
+        return 1
+    fi
+    echo "downloading from run ${id_17}..."
+    rm -rf "${__CACHE_5}"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download55_v0=''
+        return "${__status}"
+    fi
+    gh run download ${id_17} --repo "${__REPO_3}" --name "${artifact}" --dir "${__CACHE_5}"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_download55_v0=''
+        return "${__status}"
+    fi
+}
+
+find_mount__56_v0() {
+    command_9="$(ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE 2>/dev/null | head -1)"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        :
+    fi
+    trim__11_v0 "${command_9}"
+    dev_22="${ret_trim11_v0}"
+    if [ "$([ "_${dev_22}" != "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount56_v0=''
+        return 1
+    fi
+    command_10="$(readlink -f "${dev_22}")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_find_mount56_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_10}"
+    dev_22="${ret_trim11_v0}"
+    command_11="$(lsblk -no MOUNTPOINT "${dev_22}" 2>/dev/null)"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        :
+    fi
+    trim__11_v0 "${command_11}"
+    mount_23="${ret_trim11_v0}"
+    if [ "$([ "_${mount_23}" == "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount56_v0="${mount_23}"
+        return 0
+    fi
+    command_12="$(udisksctl mount -b "${dev_22}" 2>/dev/null | grep -oP "at \K.+")"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        :
+    fi
+    trim__11_v0 "${command_12}"
+    mount_23="${ret_trim11_v0}"
+    if [ "$([ "_${mount_23}" == "_" ]; echo $?)" != 0 ]; then
+        ret_find_mount56_v0="${mount_23}"
+        return 0
+    fi
+    ret_find_mount56_v0=''
+    return 1
+}
+
+wait_for_drive__57_v0() {
+    while :
+    do
+        find_mount__56_v0 
+        __status=$?
+        if [ "${__status}" != 0 ]; then
+            echo "no bootloader drive — put board in bootloader mode, press enter"
+            read
+            __status=$?
+        fi
+        mount_24="${ret_find_mount56_v0}"
+        if [ "$([ "_${mount_24}" == "_" ]; echo $?)" != 0 ]; then
+            ret_wait_for_drive57_v0="${mount_24}"
+            return 0
+        fi
+    done
+    ret_wait_for_drive57_v0=''
+    return 1
+}
+
+flash_zmk__58_v0() {
+    local keyboard=$1
+    local side=$2
+    local reset=$3
+    firmware_20="${keyboard}-${side}.uf2"
+    download__55_v0 "build-zmk.yml" "firmware"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_zmk58_v0=''
+        return "${__status}"
+    fi
+    path_21="${__CACHE_5}/${firmware_20}"
+    file_exists__37_v0 "${path_21}"
+    ret_file_exists37_v0__78_12="${ret_file_exists37_v0}"
+    if [ "$(( ! ${ret_file_exists37_v0__78_12} ))" != 0 ]; then
+        echo "not found: ${firmware_20}"
+        ls "${__CACHE_5}"
+        __status=$?
+        ret_flash_zmk58_v0=''
+        return 1
+    fi
+    wait_for_drive__57_v0 
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_zmk58_v0=''
+        return "${__status}"
+    fi
+    mount_25="${ret_wait_for_drive57_v0}"
+    if [ "${reset}" != 0 ]; then
+        reset_name_26="$(if [ "$([ "_${keyboard}" != "_totem" ]; echo $?)" != 0 ]; then echo "settings-reset-xiao"; else echo "settings-reset-nano"; fi)"
+        reset_file_27="${__CACHE_5}/${reset_name_26}.uf2"
+        file_exists__37_v0 "${reset_file_27}"
+        ret_file_exists37_v0__87_12="${ret_file_exists37_v0}"
+        if [ "${ret_file_exists37_v0__87_12}" != 0 ]; then
+            echo "flashing settings reset..."
+            cp "${reset_file_27}" "${mount_25}/"
+            __status=$?
+            if [ "${__status}" != 0 ]; then
+                ret_flash_zmk58_v0=''
+                return "${__status}"
+            fi
+            sync
+            __status=$?
+            if [ "${__status}" != 0 ]; then
+                ret_flash_zmk58_v0=''
+                return "${__status}"
+            fi
+            echo "done — put board in bootloader mode again, press enter"
+            read
+            __status=$?
+            wait_for_drive__57_v0 
+            __status=$?
+            if [ "${__status}" != 0 ]; then
+                ret_flash_zmk58_v0=''
+                return "${__status}"
+            fi
+            mount_25="${ret_wait_for_drive57_v0}"
+        fi
+    fi
+    echo "flashing ${firmware_20}..."
+    cp "${path_21}" "${mount_25}/"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_zmk58_v0=''
+        return "${__status}"
+    fi
+    sync
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_zmk58_v0=''
+        return "${__status}"
+    fi
+    echo "done"
+}
+
+flash_qmk__59_v0() {
+    download__55_v0 "build-qmk.yml" "Firmware"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_qmk59_v0=''
+        return "${__status}"
+    fi
+    command_13="$(find "${__CACHE_5}" -name "*.bin" 2>/dev/null | head -1)"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_flash_qmk59_v0=''
+        return "${__status}"
+    fi
+    trim__11_v0 "${command_13}"
+    firmware_18="${ret_trim11_v0}"
+    if [ "$([ "_${firmware_18}" != "_" ]; echo $?)" != 0 ]; then
+        echo "no .bin firmware found"
+        ret_flash_qmk59_v0=''
+        return 1
+    fi
+    echo "found: ${firmware_18}"
+    while :
+    do
+        command_14="$(lsusb | grep -c "0483:df11")"
+        __status=$?
+        if [ "${__status}" != 0 ]; then
+            :
+        fi
+        trim__11_v0 "${command_14}"
+        found_19="${ret_trim11_v0}"
+        if [ "$([ "_${found_19}" == "_0" ]; echo $?)" != 0 ]; then
+            echo "flashing..."
+            dfu-util -a 0 -d 0483:df11 -s 0x08000000:leave -D "${firmware_18}"
+            __status=$?
+            echo "done"
+            break
+        fi
+        echo "put iris in DFU mode (double-tap reset), press enter"
+        read
+        __status=$?
+    done
+}
+
+list_keyboards__60_v0() {
+    command_15="$(ls "${__ROOT_4}/config/"*.keymap)"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_list_keyboards60_v0=''
+        return "${__status}"
+    fi
+    files_15="${command_15}"
+    command_16="$(echo ''"${files_15}"'' | xargs -I {} basename {} .keymap)"
+    __status=$?
+    if [ "${__status}" != 0 ]; then
+        ret_list_keyboards60_v0=''
+        return "${__status}"
+    fi
+    names_16="${command_16}"
+    echo "${names_16}"
+}
+
+declare -r args_6=("$0" "$@")
+arg__53_v0 args_6[@] 1
+cmd_7="${ret_arg53_v0}"
+arg__53_v0 args_6[@] 2
+keyboard_8="${ret_arg53_v0}"
+arg__53_v0 args_6[@] 3
+side_9="${ret_arg53_v0}"
+arg__53_v0 args_6[@] 4
+flag_10="${ret_arg53_v0}"
+if [ "$(( $([ "_${cmd_7}" != "_status" ]; echo $?) || $([ "_${cmd_7}" != "_s" ]; echo $?) ))" != 0 ]; then
+    echo "zmk:"
+    show_status__54_v0 "build-zmk.yml"
+    __status=$?
+    echo ""
+    echo "qmk:"
+    show_status__54_v0 "build-qmk.yml"
+    __status=$?
+elif [ "$(( $([ "_${cmd_7}" != "_flash" ]; echo $?) || $([ "_${cmd_7}" != "_f" ]; echo $?) ))" != 0 ]; then
+    if [ "$([ "_${keyboard_8}" != "_" ]; echo $?)" != 0 ]; then
+        echo "usage: fw flash <keyboard> [side] [-r]"
+        echo ""
+        echo "keyboards:"
+        list_keyboards__60_v0 
+        __status=$?
+        exit 1
+    fi
+    if [ "$([ "_${keyboard_8}" != "_iris" ]; echo $?)" != 0 ]; then
+        flash_qmk__59_v0 
+        __status=$?
+        if [ "${__status}" != 0 ]; then
+            exit "${__status}"
+        fi
+    else
+        if [ "$([ "_${side_9}" != "_" ]; echo $?)" != 0 ]; then
+            echo "usage: fw flash ${keyboard_8} <left|right> [-r]"
+            exit 1
+        fi
+        flash_zmk__58_v0 "${keyboard_8}" "${side_9}" "$([ "_${flag_10}" != "_-r" ]; echo $?)"
+        __status=$?
+        if [ "${__status}" != 0 ]; then
+            exit "${__status}"
+        fi
+    fi
+elif [ "$(( $([ "_${cmd_7}" != "_list" ]; echo $?) || $([ "_${cmd_7}" != "_l" ]; echo $?) ))" != 0 ]; then
+    list_keyboards__60_v0 
+    __status=$?
+else
+    echo "usage: fw <command>"
+    echo ""
+    echo "commands:"
+    echo "  status, s    show last CI build results"
+    echo "  flash, f     download and flash firmware"
+    echo "  list, l      list keyboards"
+fi
