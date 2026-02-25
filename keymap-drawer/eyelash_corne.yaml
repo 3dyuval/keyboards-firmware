@@ -1,8 +1,8 @@
 layout: {zmk_keyboard: eyelash_corne}
 layers:
   Graphite:
-  - {t: ESC, h: LGUI}
-  - {t: B, h: System}
+  - ''
+  - B
   - L
   - D
   - W
@@ -13,8 +13,8 @@ layers:
   - O
   - U
   - J
-  - RSHFT
-  - {t: TAB, h: Function}
+  - ''
+  - {t: LSHFT, h: TAB}
   - N
   - R
   - T
@@ -28,8 +28,8 @@ layers:
   - A
   - E
   - I
-  - ''''
-  - LSHFT
+  - RSHFT
+  - ''
   - Q
   - X
   - M
@@ -39,36 +39,36 @@ layers:
   - DOWN
   - K
   - P
-  - .
-  - '-'
-  - /
   - ','
-  - LCTRL
-  - Symbols
+  - .
+  - /
+  - ''
+  - {t: ESC, h: LCTRL}
+  - {t: SYM, h: SYM}
   - SPC
   - RET
   - BSPC
   - RALT
   Symbols:
   - {t: ▽, type: trans}
-  - '1'
-  - '2'
-  - '3'
-  - '4'
-  - '5'
-  - '&mmv MOVE_UP'
-  - '6'
-  - '7'
-  - '8'
-  - '9'
-  - '0'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
   - '!'
-  - '['
-  - '{'
   - (
-  - '%'
+  - )
+  - '&'
+  - '"'
+  - '&mmv MOVE_UP'
+  - ':'
+  - '-'
+  - +
+  - '='
+  - _
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '*'
+  - '{'
+  - '}'
+  - '#'
+  - $
   - '&mmv MOVE_LEFT'
   - '&mkp LCLK'
   - '&mmv MOVE_RIGHT'
@@ -77,79 +77,79 @@ layers:
   - DOWN
   - UP
   - RIGHT
-  - '`'
   - {t: ▽, type: trans}
-  - '@'
+  - {t: ▽, type: trans}
+  - ^
+  - '['
   - ']'
-  - '}'
-  - )
-  - '#'
+  - '@'
+  - '%'
   - MUTE
   - '&mmv MOVE_DOWN'
   - PG DN
   - HOME
   - END
-  - {t: +, s: '='}
+  - ''''
   - \
-  - '='
   - {t: ▽, type: trans}
-  - {type: held}
+  - Number
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
   - {t: ▽, type: trans}
-  Function:
+  Number:
   - {t: ▽, type: trans}
-  - F1
-  - F2
-  - F3
-  - F4
-  - F5
+  - HOME
+  - PG UP
+  - PG DN
+  - END
+  - {t: ▽, type: trans}
   - '&mmv MOVE_UP'
-  - F6
-  - F7
-  - F8
-  - F9
-  - F10
-  - F11
-  - {type: held}
+  - '*'
+  - '7'
+  - '8'
+  - '9'
+  - '-'
   - {t: ▽, type: trans}
-  - '&mkp LCLK'
-  - '&mkp MCLK'
-  - '&mkp RCLK'
-  - '&mkp MB4'
+  - {t: ▽, type: trans}
+  - LEFT
+  - UP
+  - DOWN
+  - RIGHT
+  - {t: ▽, type: trans}
   - '&mmv MOVE_LEFT'
   - '&mkp LCLK'
   - '&mmv MOVE_RIGHT'
-  - '&bootloader'
-  - '&mkp LCLK'
-  - '&mkp MCLK'
-  - '&mkp RCLK'
-  - PRINTSCREEN
-  - F12
+  - '='
+  - '4'
+  - '5'
+  - '6'
+  - +
   - {t: ▽, type: trans}
-  - '&sys_reset'
   - {t: ▽, type: trans}
-  - '&bootloader'
   - {t: ▽, type: trans}
-  - '&mkp MB5'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - MUTE
   - '&mmv MOVE_DOWN'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '&bootloader'
-  - '&sys_reset'
-  - SCROLLLOCK
-  - PAUSE BREAK
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  System:
+  - '0'
+  - '1'
+  - '2'
+  - {t: '3', s: .}
+  - /
   - {t: ▽, type: trans}
   - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - RET
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  Device:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - OUT TOG
   - BRI DN
   - BRI UP
@@ -158,8 +158,8 @@ layers:
   - NEXT
   - VOL UP
   - VOL DN
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - BT CLR ALL
@@ -199,3 +199,6 @@ layers:
 combos:
 - p: [1, 15, 29]
   k: '&soft_off'
+- p: [10, 11]
+  k: Device
+  l: [Graphite]
