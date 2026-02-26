@@ -34,7 +34,7 @@ layers:
   - /
   - RSHFT
   - {t: ESC, h: LCTRL}
-  - {t: SYM, h: SYM}
+  - {t: SYM, h: SYM, s: Number}
   - SPC
   - RET
   - BSPC
@@ -46,9 +46,9 @@ layers:
   - '&'
   - '`'
   - ':'
+  - '='
   - '-'
   - +
-  - '='
   - _
   - '*'
   - '{'
@@ -72,7 +72,7 @@ layers:
   - ''''
   - \
   - {t: RGUI, h: RSHFT}
-  - Number
+  - LCTRL
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -111,8 +111,8 @@ layers:
   - {t: '3', s: .}
   - /
   - {t: ▽, type: trans}
-  - {type: held}
   - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   - RET
   - {t: ▽, type: trans}
