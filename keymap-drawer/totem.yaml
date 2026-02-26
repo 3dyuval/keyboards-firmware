@@ -44,7 +44,7 @@ layers:
   - (
   - )
   - '&'
-  - '"'
+  - '`'
   - ':'
   - '-'
   - +
@@ -60,7 +60,7 @@ layers:
   - DOWN
   - UP
   - RIGHT
-  - LGUI
+  - {t: LGUI, h: LSHFT}
   - ^
   - '['
   - ']'
@@ -71,7 +71,7 @@ layers:
   - END
   - ''''
   - \
-  - RGUI
+  - {t: RGUI, h: RSHFT}
   - Number
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
