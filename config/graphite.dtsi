@@ -78,6 +78,28 @@
             bindings = <&mo>, <&sl>;
         };
 
+        esc_morph: esc_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp ESC>, <&kp RGUI>;
+            mods = <(MOD_RALT)>;
+        };
+
+        lctrl_ht: lctrl_ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "balanced";
+            bindings = <&kp>, <&esc_morph>;
+        };
+
+        ralt_morph: ralt_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp RALT>, <&kp LGUI>;
+            mods = <(MOD_LCTL)>;
+        };
+
         sym_morph: sym_morph {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -126,12 +148,12 @@
            &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
 &lshift_dance &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH    &kp RSHFT \
-                                       &mt LCTRL ESC   &sym_morph      &kp SPC      &kp RET       &kp BSPC        &kp RALT
+                                       &lctrl_ht LCTRL 0 &sym_morph    &kp SPC      &kp RET       &kp BSPC        &ralt_morph
 
 #define GRAPHITE_SYM_38 \
            &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp GRAVE   &kp COLON    &kp EQUAL       &kp MINUS       &kp PLUS        &kp UNDER          \
            &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
-&mt LSHFT LGUI &kp CARET  &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &mt RSHFT RGUI \
+&trans     &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
                                        &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
@@ -164,7 +186,7 @@
 &none         &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
 &lshift_dance &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &kp RSHFT   \
 &none         &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &kp FSLH  &none       \
-                                &mt LCTRL ESC &sym_morph      &kp SPC                                                &kp RET        &kp BSPC &kp RALT
+                                &lctrl_ht LCTRL 0 &sym_morph  &kp SPC                                                &kp RET        &kp BSPC &ralt_morph
 
 #define GRAPHITE_SYM_42 \
 &trans  &kp EXCL    &kp LPAR  &kp RPAR  &kp AMPS  &kp GRAVE                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp MINUS  &kp PLUS  &kp UNDER &trans      \
