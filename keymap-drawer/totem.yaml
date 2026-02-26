@@ -39,45 +39,6 @@ layers:
   - RET
   - BSPC
   - {t: RALT, h: Number}
-  Symbols:
-  - '!'
-  - (
-  - )
-  - '&'
-  - '`'
-  - ':'
-  - '='
-  - '-'
-  - +
-  - _
-  - '*'
-  - '{'
-  - '}'
-  - '#'
-  - $
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - {t: ▽, type: trans}
-  - ^
-  - '['
-  - ']'
-  - '@'
-  - '%'
-  - PG DN
-  - HOME
-  - END
-  - ''''
-  - \
-  - {t: ▽, type: trans}
-  - LCTRL
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - DEL
-  - LGUI
   Number:
   - HOME
   - PG UP
@@ -117,6 +78,45 @@ layers:
   - RET
   - {t: ▽, type: trans}
   - {type: held}
+  Symbols:
+  - '!'
+  - (
+  - )
+  - '&'
+  - '`'
+  - ':'
+  - '='
+  - '-'
+  - +
+  - _
+  - '*'
+  - '{'
+  - '}'
+  - '#'
+  - $
+  - PG UP
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - {t: ▽, type: trans}
+  - ^
+  - '['
+  - ']'
+  - '@'
+  - '%'
+  - PG DN
+  - HOME
+  - END
+  - ''''
+  - \
+  - {t: ▽, type: trans}
+  - LCTRL
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - DEL
+  - LGUI
   Device:
   - OUT TOG
   - {t: ▽, type: trans}

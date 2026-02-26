@@ -49,55 +49,6 @@ layers:
   - RET
   - BSPC
   - {t: RALT, h: Number}
-  Symbols:
-  - {t: ▽, type: trans}
-  - '!'
-  - (
-  - )
-  - '&'
-  - '`'
-  - '&mmv MOVE_UP'
-  - ':'
-  - '='
-  - '-'
-  - +
-  - _
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '*'
-  - '{'
-  - '}'
-  - '#'
-  - $
-  - '&mmv MOVE_LEFT'
-  - '&mkp LCLK'
-  - '&mmv MOVE_RIGHT'
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - ^
-  - '['
-  - ']'
-  - '@'
-  - '%'
-  - MUTE
-  - '&mmv MOVE_DOWN'
-  - PG DN
-  - HOME
-  - END
-  - ''''
-  - \
-  - {t: ▽, type: trans}
-  - LCTRL
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - DEL
-  - LGUI
   Number:
   - {t: ▽, type: trans}
   - HOME
@@ -147,6 +98,55 @@ layers:
   - RET
   - {t: ▽, type: trans}
   - {type: held}
+  Symbols:
+  - {t: ▽, type: trans}
+  - '!'
+  - (
+  - )
+  - '&'
+  - '`'
+  - '&mmv MOVE_UP'
+  - ':'
+  - '='
+  - '-'
+  - +
+  - _
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '*'
+  - '{'
+  - '}'
+  - '#'
+  - $
+  - '&mmv MOVE_LEFT'
+  - '&mkp LCLK'
+  - '&mmv MOVE_RIGHT'
+  - PG UP
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ^
+  - '['
+  - ']'
+  - '@'
+  - '%'
+  - MUTE
+  - '&mmv MOVE_DOWN'
+  - PG DN
+  - HOME
+  - END
+  - ''''
+  - \
+  - {t: ▽, type: trans}
+  - LCTRL
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - DEL
+  - LGUI
   Device:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

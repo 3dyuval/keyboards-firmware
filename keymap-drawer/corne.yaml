@@ -43,49 +43,6 @@ layers:
   - RET
   - BSPC
   - RALT
-  Symbols:
-  - {t: ▽, type: trans}
-  - '1'
-  - '2'
-  - '3'
-  - '4'
-  - '5'
-  - '6'
-  - '7'
-  - '8'
-  - '9'
-  - '0'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '!'
-  - '['
-  - '{'
-  - (
-  - $
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - '`'
-  - LSHFT
-  - '@'
-  - ']'
-  - '}'
-  - )
-  - '%'
-  - PG DN
-  - HOME
-  - END
-  - {t: +, s: '='}
-  - \
-  - '='
-  - {t: ▽, type: trans}
-  - {type: held}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - DEL
-  - {t: ▽, type: trans}
   Function:
   - {t: ▽, type: trans}
   - F1
@@ -128,6 +85,49 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  Symbols:
+  - {t: ▽, type: trans}
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'
+  - '6'
+  - '7'
+  - '8'
+  - '9'
+  - '0'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '!'
+  - '['
+  - '{'
+  - (
+  - $
+  - PG UP
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - '`'
+  - LSHFT
+  - '@'
+  - ']'
+  - '}'
+  - )
+  - '%'
+  - PG DN
+  - HOME
+  - END
+  - {t: +, s: '='}
+  - \
+  - '='
+  - {t: ▽, type: trans}
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - DEL
   - {t: ▽, type: trans}
   System:
   - {t: ▽, type: trans}
