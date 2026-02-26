@@ -22,14 +22,14 @@
             bindings = < GRAPHITE_BASE_36 >;
         };
 
-        symbols {
-            label = "Symbols";
-            bindings = < GRAPHITE_SYM_36 >;
-        };
-
         function {
             label = "Function";
             bindings = < GRAPHITE_FUN_36 >;
+        };
+
+        symbols {
+            label = "Symbols";
+            bindings = < GRAPHITE_SYM_36 >;
         };
 
          system {

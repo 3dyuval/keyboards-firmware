@@ -14,9 +14,9 @@
 
 // Layer indices
 #define BASE 0
-#define SYM 1
-#define FUN 2
-#define NUM 2  // TOTEM uses NUM at same index as FUN
+#define NUM 1
+#define FUN 1  // Corne uses FUN at same index as NUM
+#define SYM 2
 #define SYS 3
 
 / {

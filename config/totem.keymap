@@ -33,14 +33,14 @@
             bindings = < GRAPHITE_BASE_38 >;
         };
 
-        symbols {
-            display-name = "Symbols";
-            bindings = < GRAPHITE_SYM_38 >;
-        };
-
         number {
             display-name = "Number";
             bindings = < GRAPHITE_NUM_38 >;
+        };
+
+        symbols {
+            display-name = "Symbols";
+            bindings = < GRAPHITE_SYM_38 >;
         };
 
         device {

@@ -82,15 +82,15 @@
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
 
-        symbols {
-            display-name = "Symbols";
-            bindings = < GRAPHITE_SYM_42 >;
-            sensor-bindings = <&scroll_encoder>;
-        };
-
         number {
             display-name = "Number";
             bindings = < GRAPHITE_NUM_42 >;
+            sensor-bindings = <&scroll_encoder>;
+        };
+
+        symbols {
+            display-name = "Symbols";
+            bindings = < GRAPHITE_SYM_42 >;
             sensor-bindings = <&scroll_encoder>;
         };
 
