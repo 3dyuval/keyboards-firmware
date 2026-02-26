@@ -100,11 +100,13 @@
             mods = <(MOD_LCTL)>;
         };
 
-        sym_morph: sym_morph {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&sym_ht SYM SYM>, <&mo NUM>;
-            mods = <(MOD_LCTL)>;
+        bspc_num_ht: bspc_num_ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            flavor = "balanced";
+            bindings = <&mo>, <&kp>;
         };
     };
 };
@@ -148,7 +150,7 @@
            &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
 &lshift_dance &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH    &kp RSHFT \
-                                       &lctrl_ht LCTRL 0 &sym_morph    &kp SPC      &kp RET       &kp BSPC        &ralt_morph
+                                       &lctrl_ht LCTRL 0 &sym_ht SYM SYM &kp SPC    &kp RET       &bspc_num_ht NUM BSPC &ralt_morph
 
 #define GRAPHITE_SYM_38 \
            &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp GRAVE   &kp COLON    &kp EQUAL       &kp MINUS       &kp PLUS        &kp UNDER          \
@@ -186,7 +188,7 @@
 &none         &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
 &lshift_dance &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &kp RSHFT   \
 &none         &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &kp FSLH  &none       \
-                                &lctrl_ht LCTRL 0 &sym_morph  &kp SPC                                                &kp RET        &kp BSPC &ralt_morph
+                                &lctrl_ht LCTRL 0 &sym_ht SYM SYM &kp SPC                                            &kp RET        &bspc_num_ht NUM BSPC &ralt_morph
 
 #define GRAPHITE_SYM_42 \
 &trans  &kp EXCL    &kp LPAR  &kp RPAR  &kp AMPS  &kp GRAVE                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp MINUS  &kp PLUS  &kp UNDER &trans      \
