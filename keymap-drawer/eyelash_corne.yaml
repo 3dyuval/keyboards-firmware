@@ -43,12 +43,12 @@ layers:
   - .
   - /
   - ''
-  - {t: ESC, h: LCTRL, s: RGUI}
+  - {t: ESC, h: LCTRL}
   - {t: SYM, h: SYM}
   - SPC
   - RET
-  - {t: BSPC, h: Number}
-  - {t: RALT, s: LGUI}
+  - BSPC
+  - {t: RALT, h: Number}
   Symbols:
   - {t: ▽, type: trans}
   - '!'
@@ -97,7 +97,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
-  - {t: ▽, type: trans}
+  - LGUI
   Number:
   - {t: ▽, type: trans}
   - HOME
@@ -145,8 +145,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - RET
-  - {type: held}
   - {t: ▽, type: trans}
+  - {type: held}
   Device:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}

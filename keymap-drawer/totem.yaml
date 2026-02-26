@@ -33,12 +33,12 @@ layers:
   - .
   - /
   - RSHFT
-  - {t: ESC, h: LCTRL, s: RGUI}
+  - {t: ESC, h: LCTRL}
   - {t: SYM, h: SYM}
   - SPC
   - RET
-  - {t: BSPC, h: Number}
-  - {t: RALT, s: LGUI}
+  - BSPC
+  - {t: RALT, h: Number}
   Symbols:
   - '!'
   - (
@@ -77,7 +77,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
-  - {t: ▽, type: trans}
+  - LGUI
   Number:
   - HOME
   - PG UP
@@ -115,8 +115,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - RET
-  - {type: held}
   - {t: ▽, type: trans}
+  - {type: held}
   Device:
   - OUT TOG
   - {t: ▽, type: trans}
