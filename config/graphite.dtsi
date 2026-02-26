@@ -78,33 +78,10 @@
             bindings = <&mo>, <&sl>;
         };
 
-        esc_morph: esc_morph {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp ESC>, <&kp RGUI>;
-            mods = <(MOD_RALT)>;
-        };
-
-        lctrl_ht: lctrl_ht {
+        ralt_num_ht: ralt_num_ht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
-            flavor = "balanced";
-            bindings = <&kp>, <&esc_morph>;
-        };
-
-        ralt_morph: ralt_morph {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp RALT>, <&kp LGUI>;
-            mods = <(MOD_LCTL)>;
-        };
-
-        bspc_num_ht: bspc_num_ht {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
             flavor = "balanced";
             bindings = <&mo>, <&kp>;
         };
@@ -150,13 +127,13 @@
            &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
 &lshift_dance &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &kp FSLH    &kp RSHFT \
-                                       &lctrl_ht LCTRL 0 &sym_ht SYM SYM &kp SPC    &kp RET       &bspc_num_ht NUM BSPC &ralt_morph
+                                       &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &ralt_num_ht NUM RALT
 
 #define GRAPHITE_SYM_38 \
            &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp GRAVE   &kp COLON    &kp EQUAL       &kp MINUS       &kp PLUS        &kp UNDER          \
            &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
 &trans     &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
-                                       &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
+                                       &kp LCTRL       &trans          &trans       &trans        &kp DEL         &kp LGUI
 
 #define GRAPHITE_NUM_38 \
            &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &kp ASTRK     &kp N7          &kp N8          &kp N9          &kp MINUS          \
@@ -188,13 +165,13 @@
 &none         &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
 &lshift_dance &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &kp RSHFT   \
 &none         &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &kp FSLH  &none       \
-                                &lctrl_ht LCTRL 0 &sym_ht SYM SYM &kp SPC                                            &kp RET        &bspc_num_ht NUM BSPC &ralt_morph
+                                &mt LCTRL ESC &sym_ht SYM SYM &kp SPC                                                &kp RET        &kp BSPC &ralt_num_ht NUM RALT
 
 #define GRAPHITE_SYM_42 \
 &trans  &kp EXCL    &kp LPAR  &kp RPAR  &kp AMPS  &kp GRAVE                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp MINUS  &kp PLUS  &kp UNDER &trans      \
 &trans  &kp ASTRK   &kp LBRC  &kp RBRC  &kp HASH  &kp DOLLAR                  &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
 &trans  &kp CARET   &kp LBKT  &kp RBKT  &kp AT_SIGN &kp PRCNT &kp C_MUTE                     &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
-                              &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &trans
+                              &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &kp LGUI
 
 #define GRAPHITE_NUM_42 \
 &trans  &kp HOME    &kp PG_UP  &kp PG_DN    &kp END    &trans                                &mmv MOVE_UP                  &kp ASTRK    &kp N7     &kp N8       &kp N9      &kp MINUS        &trans        \
