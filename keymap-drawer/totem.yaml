@@ -33,12 +33,12 @@ layers:
   - .
   - /
   - RSHFT
-  - {t: ESC, h: LCTRL}
-  - {t: SYM, h: SYM, s: Number}
+  - {t: ESC, h: LCTRL, s: RGUI}
+  - {t: SYM, h: SYM}
   - SPC
   - RET
-  - BSPC
-  - RALT
+  - {t: BSPC, h: Number}
+  - {t: RALT, s: LGUI}
   Symbols:
   - '!'
   - (
@@ -60,7 +60,7 @@ layers:
   - DOWN
   - UP
   - RIGHT
-  - {t: LGUI, h: LSHFT}
+  - {t: ▽, type: trans}
   - ^
   - '['
   - ']'
@@ -71,7 +71,7 @@ layers:
   - END
   - ''''
   - \
-  - {t: RGUI, h: RSHFT}
+  - {t: ▽, type: trans}
   - LCTRL
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -112,10 +112,10 @@ layers:
   - /
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - RET
-  - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   Device:
   - OUT TOG

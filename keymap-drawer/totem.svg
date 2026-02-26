@@ -146,14 +146,13 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">ESC</text>
 <text x="0" y="14" class="key hold">LCTRL</text>
+<text x="0" y="-14" class="key shifted">RGUI</text>
 </g>
 <g transform="translate(303, 245) rotate(15.0)" class="key keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">SYM</text>
 <text x="0" y="14" class="key hold">SYM</text>
-<a href="#Number">
-<text x="0" y="-14" class="key shifted layer-activator">Number</text>
-</a></g>
+</g>
 <g transform="translate(360, 270) rotate(30.0)" class="key keypos-34">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">SPC</text>
@@ -165,10 +164,13 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <g transform="translate(594, 245) rotate(-15.0)" class="key keypos-36">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">BSPC</text>
-</g>
+<a href="#Number">
+<text x="0" y="14" class="key hold layer-activator">Number</text>
+</a></g>
 <g transform="translate(656, 236)" class="key keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">RALT</text>
+<text x="0" y="-14" class="key shifted">LGUI</text>
 </g>
 <g class="combo combopos-0">
 <rect rx="6" ry="6" x="778" y="74" width="28" height="26" class="combo"/>
@@ -262,10 +264,9 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">RIGHT</text>
 </g>
-<g transform="translate(32, 209) rotate(-10.0)" class="key keypos-20">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">LGUI</text>
-<text x="0" y="14" class="key hold">LSHFT</text>
+<g transform="translate(32, 209) rotate(-10.0)" class="key trans keypos-20">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
+<text x="0" y="2" class="key trans tap">▽</text>
 </g>
 <g transform="translate(92, 223) rotate(-10.0)" class="key keypos-21">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -309,10 +310,9 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">\</text>
 </g>
-<g transform="translate(864, 209) rotate(10.0)" class="key keypos-31">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">RGUI</text>
-<text x="0" y="14" class="key hold">RSHFT</text>
+<g transform="translate(864, 209) rotate(10.0)" class="key trans keypos-31">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
+<text x="0" y="2" class="key trans tap">▽</text>
 </g>
 <g transform="translate(241, 236)" class="key keypos-32">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -480,8 +480,9 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
 <text x="0" y="2" class="key trans tap">▽</text>
 </g>
-<g transform="translate(303, 245) rotate(15.0)" class="key held keypos-33">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held"/>
+<g transform="translate(303, 245) rotate(15.0)" class="key trans keypos-33">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
+<text x="0" y="2" class="key trans tap">▽</text>
 </g>
 <g transform="translate(360, 270) rotate(30.0)" class="key trans keypos-34">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -491,9 +492,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">RET</text>
 </g>
-<g transform="translate(594, 245) rotate(-15.0)" class="key trans keypos-36">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
-<text x="0" y="2" class="key trans tap">▽</text>
+<g transform="translate(594, 245) rotate(-15.0)" class="key held keypos-36">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held"/>
 </g>
 <g transform="translate(656, 236)" class="key trans keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
