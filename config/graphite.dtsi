@@ -163,8 +163,8 @@
 
 #define GRAPHITE_BASE_42 \
 &none         &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
-&lshift_dance &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &kp RSHFT   \
-&none         &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &kp FSLH  &none       \
+&none         &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &none       \
+&lshift_dance &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &kp FSLH  &kp RSHFT   \
                                 &mt LCTRL ESC &sym_ht SYM SYM &kp SPC                                                &kp RET        &kp BSPC &ralt_num_ht NUM RALT
 
 #define GRAPHITE_SYM_42 \

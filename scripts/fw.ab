@@ -88,6 +88,15 @@ fun wait_for_drive(): Text? {
     fail 1
 }
 
+fun reset_name(keyboard: Text): Text {
+    if {
+        keyboard == "totem" { return "settings-reset-xiao" }
+        keyboard == "eyelash" { return "settings-reset-eyelash" }
+        else { return "settings-reset-nano" }
+    }
+    return "settings-reset-nano"
+}
+
 fun flash_zmk(keyboard: Text, side: Text, reset: Bool): Null? {
     let firmware = "{keyboard}-{side}.uf2"
     download("build-zmk.yml", "firmware")?
@@ -99,11 +108,7 @@ fun flash_zmk(keyboard: Text, side: Text, reset: Bool): Null? {
     }
     let mount = wait_for_drive()?
     if reset {
-        let reset_name = if {
-            keyboard == "totem" { "settings-reset-xiao" }
-            keyboard == "eyelash" { "settings-reset-eyelash" }
-            else { "settings-reset-nano" }
-        }
+        let reset_name = reset_name(keyboard)
         let reset_file = "{CACHE}/{reset_name}.uf2"
         if file_exists(reset_file) {
             echo "flashing settings reset..."
