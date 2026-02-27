@@ -14,7 +14,7 @@ layers:
   - U
   - J
   - ''
-  - {t: LSHFT, h: TAB}
+  - ''
   - N
   - R
   - T
@@ -28,8 +28,8 @@ layers:
   - A
   - E
   - I
-  - RSHFT
   - ''
+  - {t: LSHFT, h: TAB}
   - Q
   - X
   - M
@@ -42,7 +42,7 @@ layers:
   - ','
   - .
   - /
-  - ''
+  - RSHFT
   - {t: ESC, h: LCTRL}
   - {t: SYM, h: SYM}
   - SPC

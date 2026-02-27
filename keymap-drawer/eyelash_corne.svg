@@ -65,8 +65,6 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(28, 105)" class="key keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">LSHFT</text>
-<text x="0" y="14" class="key hold">TAB</text>
 </g>
 <g transform="translate(84, 105)" class="key keypos-14">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -122,10 +120,11 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(952, 105)" class="key keypos-27">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">RSHFT</text>
 </g>
 <g transform="translate(28, 161)" class="key keypos-28">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
+<text x="0" y="2" class="key tap">LSHFT</text>
+<text x="0" y="14" class="key hold">TAB</text>
 </g>
 <g transform="translate(84, 161)" class="key keypos-29">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -177,6 +176,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(952, 161)" class="key keypos-41">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
+<text x="0" y="2" class="key tap">RSHFT</text>
 </g>
 <g transform="translate(224, 203)" class="key keypos-42">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
