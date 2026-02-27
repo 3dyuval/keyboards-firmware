@@ -99,7 +99,11 @@ fun flash_zmk(keyboard: Text, side: Text, reset: Bool): Null? {
     }
     let mount = wait_for_drive()?
     if reset {
-        let reset_name = keyboard == "totem" then "settings-reset-xiao" else "settings-reset-nano"
+        let reset_name = if {
+            keyboard == "totem" { "settings-reset-xiao" }
+            keyboard == "eyelash" { "settings-reset-eyelash" }
+            else { "settings-reset-nano" }
+        }
         let reset_file = "{CACHE}/{reset_name}.uf2"
         if file_exists(reset_file) {
             echo "flashing settings reset..."

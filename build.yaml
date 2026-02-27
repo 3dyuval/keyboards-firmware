@@ -29,3 +29,6 @@ include:
   - board: nice_nano//zmk
     shield: settings_reset
     artifact-name: settings-reset-nano
+  - board: eyelash_corne_left
+    shield: settings_reset
+    artifact-name: settings-reset-eyelash
