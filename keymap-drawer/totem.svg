@@ -207,6 +207,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <g transform="translate(520, 65)" class="key keypos-5">
 <rect rx="6" ry="6" x="-28" y="-26" width="55" height="52" class="key"/>
 <text x="0" y="2" class="key tap">*</text>
+<text x="0" y="-14" class="key shifted">:</text>
 </g>
 <g transform="translate(580, 56)" class="key keypos-6">
 <rect rx="6" ry="6" x="-28" y="-26" width="55" height="52" class="key"/>
@@ -308,6 +309,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <g transform="translate(754, 223) rotate(10.0)" class="key keypos-30">
 <rect rx="6" ry="6" x="-28" y="-26" width="55" height="52" class="key"/>
 <text x="0" y="2" class="key tap">/</text>
+<text x="0" y="-14" class="key shifted">\</text>
 </g>
 <g transform="translate(817, 209) rotate(10.0)" class="key trans keypos-31">
 <rect rx="6" ry="6" x="-28" y="-26" width="55" height="52" class="key trans"/>

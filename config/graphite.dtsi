@@ -63,6 +63,20 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        slash_morph: slash_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp FSLH>, <&kp BSLH>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        star_morph: star_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp ASTRK>, <&kp COLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
         lshift_dance: lshift_dance {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
@@ -136,9 +150,9 @@
                                        &kp LCTRL       &trans          &trans       &trans        &kp DEL         &kp LGUI
 
 #define GRAPHITE_NUM_38 \
-           &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &kp ASTRK     &kp N7          &kp N8          &kp N9          &kp MINUS          \
+           &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &star_morph   &kp N7          &kp N8          &kp N9          &kp MINUS          \
            &kp LEFT       &kp UP          &kp DOWN        &kp RIGHT       &trans       &kp EQUAL     &kp N4          &kp N5          &kp N6          &kp PLUS           \
-&kp TAB    &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &n3_morph       &kp FSLH  &trans     \
+&kp TAB    &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &n3_morph       &slash_morph  &trans     \
                                        &trans          &trans          &trans       &kp RET       &trans          &trans
 
 #define GRAPHITE_FUN_38 \
@@ -174,9 +188,9 @@
                               &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &kp LGUI
 
 #define GRAPHITE_NUM_42 \
-&trans  &kp HOME    &kp PG_UP  &kp PG_DN    &kp END    &trans                                &mmv MOVE_UP                  &kp ASTRK    &kp N7     &kp N8       &kp N9      &kp MINUS        &trans        \
+&trans  &kp HOME    &kp PG_UP  &kp PG_DN    &kp END    &trans                                &mmv MOVE_UP                  &star_morph  &kp N7     &kp N8       &kp N9      &kp MINUS        &trans        \
 &trans  &kp LEFT    &kp UP     &kp DOWN     &kp RIGHT  &trans                &mmv MOVE_LEFT  &mkp LCLK    &mmv MOVE_RIGHT  &kp EQUAL    &kp N4     &kp N5       &kp N6      &kp PLUS         &trans        \
-&trans  &trans      &trans     &trans       &trans     &trans    &kp C_MUTE                  &mmv MOVE_DOWN                &kp N0       &kp N1     &kp N2       &n3_morph   &kp FSLH         &trans        \
+&trans  &trans      &trans     &trans       &trans     &trans    &kp C_MUTE                  &mmv MOVE_DOWN                &kp N0       &kp N1     &kp N2       &n3_morph   &slash_morph     &trans        \
                                &trans       &trans     &trans                                                              &kp RET      &trans     &trans
 
 #define GRAPHITE_SYS_42 \

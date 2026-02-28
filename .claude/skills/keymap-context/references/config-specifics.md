@@ -4,12 +4,21 @@ Per-tool binding details and known exceptions for the Graphite keybinding system
 
 ## Mod-Morphs (graphite.dtsi)
 
+### BASE layer (punctuation overrides)
 - `comma_morph`: COMMA / COLON (shift)
 - `dot_morph`: DOT / SEMICOLON (shift)
 - `qmark_morph`: QMARK / EXCL (shift)
 - `quote_morph`: SQT / GRAVE (shift)
-- `n3_morph`: N3 / DOT (shift)
 - `plus_morph`: PLUS / EQUAL (GUI)
+
+### NUM layer (shift merges NUM → SYM)
+Standard keycodes already give shift+number = symbol (shift+1=!, shift+2=@, etc.).
+These mod-morphs cover the operator keys where the standard shifted value
+doesn't match the SYM layer equivalent at the same position:
+
+- `star_morph`: ASTRK / COLON (shift) — `*` position matches `:` on SYM
+- `slash_morph`: FSLH / BSLH (shift) — `/` position matches `\` on SYM
+- `n3_morph`: N3 / DOT (shift) — decimal point for numpad (overrides standard `#`)
 
 ## Kitty
 

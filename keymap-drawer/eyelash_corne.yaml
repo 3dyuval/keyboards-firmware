@@ -57,7 +57,7 @@ layers:
   - END
   - {t: ▽, type: trans}
   - '&mmv MOVE_UP'
-  - '*'
+  - {t: '*', s: ':'}
   - '7'
   - '8'
   - '9'
@@ -90,7 +90,7 @@ layers:
   - '1'
   - '2'
   - {t: '3', s: .}
-  - /
+  - {t: /, s: \}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
