@@ -99,5 +99,11 @@
             bindings = < GRAPHITE_SYS_42 >;
             sensor-bindings = <&rgb_encoder>;
         };
+
+        numsym {
+            display-name = "NumSym";
+            bindings = < GRAPHITE_NUMSYM_42 >;
+            sensor-bindings = <&scroll_encoder>;
+        };
     };
 };

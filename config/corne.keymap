@@ -48,5 +48,10 @@
             bindings = < GRAPHITE_SYS_36 >;
         };
 
+        numsym {
+            label = "NumSym";
+            bindings = < GRAPHITE_NUMSYM_36 >;
+        };
+
     };
 };

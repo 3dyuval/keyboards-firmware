@@ -48,8 +48,12 @@
             bindings = < GRAPHITE_SYS_38 >;
         };
 
+        numsym {
+            display-name = "NumSym";
+            bindings = < GRAPHITE_NUMSYM_38 >;
+        };
+
         extra1 { status = "reserved"; };
         extra2 { status = "reserved"; };
-        extra3 { status = "reserved"; };
     };
 };

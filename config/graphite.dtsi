@@ -18,6 +18,7 @@
 #define FUN 1  // Corne uses FUN at same index as NUM
 #define SYM 2
 #define SYS 3
+#define NUMSYM 4  // Numpad overlay above SYM (accessed via SYM + %)
 
 / {
     behaviors {
@@ -115,7 +116,7 @@
 #define GRAPHITE_SYM_36 \
    &trans          &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp GRAVE    &kp COLON     &kp EQUAL       &kp MINUS       &kp PLUS        &kp UNDER       &trans         \
    &trans          &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &trans         \
-   &trans          &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT    &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH        &trans         \
+   &trans          &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &mo NUMSYM   &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH        &trans         \
                                                &kp LCTRL       &trans          &trans       &trans        &kp DEL         &kp LGUI
 
 #define GRAPHITE_NUM_36 \
@@ -129,6 +130,12 @@
    &trans          &kp PSCRN      &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3 &trans        &kp C_VOL_DN    &kp C_VOL_UP    &kp C_BRI_DN    &kp C_BRI_UP    &trans         \
    &trans          &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR_ALL  &trans          &trans          &trans         \
                                                &trans          &trans          &trans       &trans        &trans          &trans
+
+#define GRAPHITE_NUMSYM_36 \
+   &trans          &trans         &trans          &trans          &trans          &trans       &star_morph   &kp N7          &kp N8          &kp N9          &kp MINUS       &trans         \
+   &trans          &trans         &trans          &trans          &trans          &trans       &kp EQUAL     &kp N4          &kp N5          &kp N6          &kp PLUS        &trans         \
+   &trans          &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &n3_morph       &slash_morph    &trans         \
+                                               &trans          &trans          &trans       &kp RET       &trans          &trans
 
 // ============================================================================
 // 38-KEY LAYOUTS (TOTEM)
@@ -146,7 +153,7 @@
 #define GRAPHITE_SYM_38 \
            &kp EXCL       &kp LPAR        &kp RPAR        &kp AMPS        &kp GRAVE   &kp COLON    &kp EQUAL       &kp MINUS       &kp PLUS        &kp UNDER          \
            &kp ASTRK      &kp LBRC        &kp RBRC        &kp HASH        &kp DOLLAR   &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
-&trans     &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &kp PRCNT         &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
+&trans     &kp CARET      &kp LBKT        &kp RBKT        &kp AT_SIGN     &mo NUMSYM        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
                                        &kp LCTRL       &trans          &trans       &trans        &kp DEL         &kp LGUI
 
 #define GRAPHITE_NUM_38 \
@@ -167,6 +174,12 @@
 &trans     &trans         &trans          &trans          &trans          &trans       &trans        &trans          &bt BT_CLR_ALL  &trans          &trans    &trans     \
                                        &trans          &trans          &trans       &trans        &trans          &trans
 
+#define GRAPHITE_NUMSYM_38 \
+           &trans         &trans          &trans          &trans          &trans       &star_morph   &kp N7          &kp N8          &kp N9          &kp MINUS          \
+           &trans         &trans          &trans          &trans          &trans       &kp EQUAL     &kp N4          &kp N5          &kp N6          &kp PLUS           \
+&trans     &trans         &trans          &trans          &trans          &trans       &kp N0        &kp N1          &kp N2          &n3_morph       &slash_morph  &trans     \
+                                       &trans          &trans          &trans       &kp RET       &trans          &trans
+
 // ============================================================================
 // 42-KEY LAYOUTS (Eyelash Corne with joystick + encoder)
 // Format: 6 left | 1 encoder | 6 right (row 1)
@@ -184,7 +197,7 @@
 #define GRAPHITE_SYM_42 \
 &trans  &kp EXCL    &kp LPAR  &kp RPAR  &kp AMPS  &kp GRAVE                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp MINUS  &kp PLUS  &kp UNDER &trans      \
 &trans  &kp ASTRK   &kp LBRC  &kp RBRC  &kp HASH  &kp DOLLAR                  &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
-&trans  &kp CARET   &kp LBKT  &kp RBKT  &kp AT_SIGN &kp PRCNT &kp C_MUTE                     &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
+&trans  &kp CARET   &kp LBKT  &kp RBKT  &kp AT_SIGN &mo NUMSYM &kp C_MUTE                    &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
                               &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &kp LGUI
 
 #define GRAPHITE_NUM_42 \
@@ -198,3 +211,9 @@
 &trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3                 &mmv MOVE_LEFT  &mkp LCLK    &mmv MOVE_RIGHT  &trans           &trans           &trans           &trans           &trans    &trans    \
 &trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &trans        &trans        &rgb_ug RGB_EFF &kp C_MUTE                   &mmv MOVE_DOWN                &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &trans    &trans    \
                                          &trans        &trans        &trans                                                                     &trans           &trans           &trans
+
+#define GRAPHITE_NUMSYM_42 \
+&trans  &trans      &trans     &trans       &trans     &trans                                    &mmv MOVE_UP                  &star_morph  &kp N7     &kp N8       &kp N9      &kp MINUS        &trans        \
+&trans  &trans      &trans     &trans       &trans     &trans                    &mmv MOVE_LEFT  &mkp LCLK    &mmv MOVE_RIGHT  &kp EQUAL    &kp N4     &kp N5       &kp N6      &kp PLUS         &trans        \
+&trans  &trans      &trans     &trans       &trans     &trans    &kp C_MUTE                     &mmv MOVE_DOWN                &kp N0       &kp N1     &kp N2       &n3_morph   &slash_morph     &trans        \
+                               &trans       &trans     &trans                                                                 &kp RET      &trans     &trans
