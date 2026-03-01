@@ -1,8 +1,8 @@
 layout: {zmk_keyboard: corne}
 layers:
   Base:
-  - {t: ESC, h: LGUI}
-  - {t: B, h: System}
+  - ''
+  - B
   - L
   - D
   - W
@@ -12,8 +12,8 @@ layers:
   - O
   - U
   - J
-  - RSHFT
-  - {t: TAB, h: Function}
+  - ''
+  - ''
   - N
   - R
   - T
@@ -24,8 +24,8 @@ layers:
   - A
   - E
   - I
-  - ''''
-  - LSHFT
+  - ''
+  - {t: LSHFT, h: TAB}
   - Q
   - X
   - M
@@ -33,112 +33,126 @@ layers:
   - V
   - K
   - P
-  - .
-  - '-'
-  - /
   - ','
-  - LCTRL
-  - Symbols
+  - .
+  - /
+  - RSHFT
+  - {t: ESC, h: LCTRL}
+  - {t: SYM, h: SYM}
   - SPC
   - RET
   - BSPC
-  - RALT
-  Function:
+  - {t: RALT, h: Number}
+  Number:
   - {t: ▽, type: trans}
-  - F1
-  - F2
-  - F3
-  - F4
-  - F5
-  - F6
-  - F7
-  - F8
-  - F9
-  - F10
-  - F11
-  - {type: held}
+  - HOME
+  - PG UP
+  - PG DN
+  - END
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - F12
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  Symbols:
-  - {t: ▽, type: trans}
-  - '1'
-  - '2'
-  - '3'
-  - '4'
-  - '5'
-  - '6'
+  - {t: '*', s: ':'}
   - '7'
   - '8'
   - '9'
-  - '0'
+  - '-'
   - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - LEFT
+  - UP
+  - DOWN
+  - RIGHT
+  - {t: ▽, type: trans}
+  - '='
+  - '4'
+  - '5'
+  - '6'
+  - +
+  - {t: ▽, type: trans}
+  - TAB
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '0'
+  - '1'
+  - '2'
+  - {t: '3', s: .}
+  - {t: /, s: \}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - RET
+  - {t: ▽, type: trans}
+  - {type: held}
+  Symbols:
   - {t: ▽, type: trans}
   - '!'
-  - '['
-  - '{'
   - (
+  - )
+  - '&'
+  - '`'
+  - ':'
+  - '='
+  - '-'
+  - +
+  - _
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '*'
+  - '{'
+  - '}'
+  - '#'
   - $
   - PG UP
   - LEFT
   - DOWN
   - UP
   - RIGHT
-  - '`'
-  - LSHFT
-  - '@'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ^
+  - '['
   - ']'
-  - '}'
-  - )
+  - '@'
   - '%'
   - PG DN
   - HOME
   - END
-  - {t: +, s: '='}
+  - ''''
   - \
-  - '='
   - {t: ▽, type: trans}
-  - {type: held}
+  - LCTRL
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
-  - {t: ▽, type: trans}
+  - LGUI
   System:
   - {t: ▽, type: trans}
-  - {type: held}
   - OUT TOG
-  - BRI DN
-  - BRI UP
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - PP
   - NEXT
-  - VOL UP
+  - {type: held}
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - PSCRN
+  - {t: BT, h: '0'}
+  - {t: BT, h: '1'}
+  - {t: BT, h: '2'}
+  - {t: BT, h: '3'}
+  - {t: ▽, type: trans}
   - VOL DN
+  - VOL UP
+  - BRI DN
+  - BRI UP
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -148,6 +162,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - BT CLR ALL
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -157,18 +172,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - BT CLR
-  - OUT USB
-  - OUT BLE
-  - BT NXT
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+combos:
+- p: [9, 10]
+  k: System
+  l: [Base]
