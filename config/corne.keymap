@@ -13,6 +13,17 @@
 #include "graphite.dtsi"
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        // U+J: hold for Device layer
+        combo_device {
+            key-positions = <9 10>;
+            bindings = <&mo SYS>;
+            timeout-ms = <65>;
+            layers = <BASE>;
+        };
+    };
 
     keymap {
         compatible = "zmk,keymap";
@@ -22,9 +33,9 @@
             bindings = < GRAPHITE_BASE_36 >;
         };
 
-        function {
-            label = "Function";
-            bindings = < GRAPHITE_FUN_36 >;
+        number {
+            label = "Number";
+            bindings = < GRAPHITE_NUM_36 >;
         };
 
         symbols {
@@ -32,7 +43,7 @@
             bindings = < GRAPHITE_SYM_36 >;
         };
 
-         system {
+        system {
             label = "System";
             bindings = < GRAPHITE_SYS_36 >;
         };
