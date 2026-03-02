@@ -380,7 +380,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(672, 153)" class="key keypos-36">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">0</text>
+<text x="0" y="2" class="key tap">/</text>
+<text x="0" y="-14" class="key shifted">\</text>
 </g>
 <g transform="translate(728, 147)" class="key keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -397,8 +398,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(896, 161)" class="key keypos-40">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">/</text>
-<text x="0" y="-14" class="key shifted">\</text>
+<text x="0" y="2" class="key tap">0</text>
 </g>
 <g transform="translate(952, 161)" class="key trans keypos-41">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -420,9 +420,9 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">RET</text>
 </g>
-<g transform="translate(695, 209) rotate(-12.0)" class="key trans keypos-46">
-<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
-<text x="0" y="2" class="key trans tap">▽</text>
+<g transform="translate(695, 209) rotate(-12.0)" class="key keypos-46">
+<rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
+<text x="0" y="2" class="key tap">RALT</text>
 </g>
 <g transform="translate(756, 203)" class="key trans keypos-47">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -1052,7 +1052,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(672, 153)" class="key keypos-36">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">0</text>
+<text x="0" y="2" class="key tap">/</text>
+<text x="0" y="-14" class="key shifted">\</text>
 </g>
 <g transform="translate(728, 147)" class="key keypos-37">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -1069,8 +1070,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(896, 161)" class="key keypos-40">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">/</text>
-<text x="0" y="-14" class="key shifted">\</text>
+<text x="0" y="2" class="key tap">0</text>
 </g>
 <g transform="translate(952, 161)" class="key trans keypos-41">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>

@@ -86,17 +86,17 @@ layers:
   - {t: ▽, type: trans}
   - MUTE
   - '&mmv MOVE_DOWN'
-  - '0'
+  - {t: /, s: \}
   - '1'
   - '2'
   - {t: '3', s: .}
-  - {t: /, s: \}
+  - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - RET
-  - {t: ▽, type: trans}
+  - RALT
   - {t: ▽, type: trans}
   Symbols:
   - {t: ▽, type: trans}
@@ -233,11 +233,11 @@ layers:
   - {type: held}
   - MUTE
   - '&mmv MOVE_DOWN'
-  - '0'
+  - {t: /, s: \}
   - '1'
   - '2'
   - {t: '3', s: .}
-  - {t: /, s: \}
+  - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
