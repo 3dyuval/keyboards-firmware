@@ -38,7 +38,7 @@ layers:
   - SPC
   - RET
   - BSPC
-  - {t: RALT, h: Number}
+  - RALT
   Number:
   - HOME
   - PG UP
@@ -77,7 +77,7 @@ layers:
   - {t: ▽, type: trans}
   - RET
   - {t: ▽, type: trans}
-  - {type: held}
+  - {t: ▽, type: trans}
   Symbols:
   - '!'
   - (
@@ -103,7 +103,7 @@ layers:
   - ^
   - '['
   - ']'
-  - '@'
+  - {t: '@', h: LGUI}
   - NumSym
   - PG DN
   - HOME
@@ -116,7 +116,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
-  - LGUI
+  - {t: ▽, type: trans}
   Device:
   - OUT TOG
   - {t: ▽, type: trans}

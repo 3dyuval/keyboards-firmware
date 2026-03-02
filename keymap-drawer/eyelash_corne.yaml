@@ -48,7 +48,7 @@ layers:
   - SPC
   - RET
   - BSPC
-  - {t: RALT, h: Number}
+  - RALT
   Number:
   - {t: ▽, type: trans}
   - HOME
@@ -97,7 +97,7 @@ layers:
   - {t: ▽, type: trans}
   - RET
   - {t: ▽, type: trans}
-  - {type: held}
+  - {t: ▽, type: trans}
   Symbols:
   - {t: ▽, type: trans}
   - '!'
@@ -131,7 +131,7 @@ layers:
   - ^
   - '['
   - ']'
-  - '@'
+  - {t: '@', h: LGUI}
   - NumSym
   - MUTE
   - '&mmv MOVE_DOWN'
@@ -146,7 +146,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
-  - LGUI
+  - {t: ▽, type: trans}
   Device:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
