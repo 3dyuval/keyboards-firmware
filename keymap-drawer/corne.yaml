@@ -116,7 +116,7 @@ layers:
   - '['
   - ']'
   - {t: '@', h: LGUI}
-  - NumSym
+  - {t: '%', h: NumSym}
   - PG DN
   - HOME
   - END

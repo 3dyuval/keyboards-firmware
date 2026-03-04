@@ -132,7 +132,7 @@ layers:
   - '['
   - ']'
   - {t: '@', h: LGUI}
-  - NumSym
+  - {t: '%', h: NumSym}
   - MUTE
   - '&mmv MOVE_DOWN'
   - PG DN
