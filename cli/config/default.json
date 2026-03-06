@@ -1,0 +1,34 @@
+{
+  "logLevel": "debug",
+  "draw": {
+    "outputDir": "keymap-drawer",
+    "config": "keymap_drawer.config.yaml",
+    "qmkKeymap": "keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.json"
+  },
+  "github": {
+    "owner": "3dyuval",
+    "repo": "keyboards-firmware"
+  },
+  "keyboards": {
+    "iris": {
+      "workflow": "build-qmk.yml",
+      "artifact": "Firmware",
+      "type": "qmk"
+    },
+    "corne": {
+      "workflow": "build-zmk.yml",
+      "artifact": "firmware",
+      "type": "zmk"
+    },
+    "eyelash_corne": {
+      "workflow": "build-zmk.yml",
+      "artifact": "firmware",
+      "type": "zmk"
+    },
+    "totem": {
+      "workflow": "build-zmk.yml",
+      "artifact": "firmware",
+      "type": "zmk"
+    }
+  }
+}
