@@ -18,6 +18,9 @@ if BOARD_EYELASH_CORNE_LEFT || BOARD_EYELASH_CORNE_RIGHT
 config BOARD
     default "eyelash_corne"
 
+config ZMK_BOARD_COMPAT
+    default y
+
 config ZMK_SLEEP
     default y
 
