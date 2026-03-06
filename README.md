@@ -2,11 +2,23 @@
 
 Multi-keyboard firmware configurations using [Graphite](https://github.com/rdavison/graphite-layout) alpha layout with automated builds.
 
-## TOTEM
+## Totem
 
 38-key split, Seeeduino XIAO BLE, ZMK Studio enabled.
 
-![Keymap](keymap-drawer/totem.svg)
+![Totem Keymap](keymap-drawer/totem.svg)
+
+## Corne
+
+36-key split, nice!nano v2.
+
+![Corne Keymap](keymap-drawer/corne.svg)
+
+## Eyelash Corne
+
+42-key split, custom nRF52840 board, joystick + encoder.
+
+![Eyelash Corne Keymap](keymap-drawer/eyelash_corne.svg)
 
 ### Behaviors
 
