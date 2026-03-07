@@ -4,16 +4,16 @@ import configuration from "@feathersjs/configuration";
 import { join } from "path";
 import { mkdirSync } from "fs";
 
-import { DrawService } from "./draw.ts";
-import { FirmwareService } from "./firmware.ts";
-import { KeyboardsService } from "./keyboards.ts";
-import { LogService } from "./log.ts";
+import { DrawService } from "./src/draw.ts";
+import { FirmwareService } from "./src/firmware.ts";
+import { KeyboardsService } from "./src/keyboards.ts";
+import { LogService } from "./src/log.ts";
 
 // ── constants ────────────────────────────────────────────────────────
 
 const ROOT = Bun.spawnSync(["git", "rev-parse", "--show-toplevel"]).stdout.toString().trim() || ".";
 const CACHE = join(ROOT, ".cache/artifacts");
-const DB_PATH = join(import.meta.dir, "fw.sqlite");
+const DB_PATH = join(import.meta.dir, "db", "fw.sqlite");
 
 mkdirSync(join(ROOT, ".cache"), { recursive: true });
 
@@ -129,6 +129,11 @@ if (import.meta.path === Bun.main) {
         shortFlag: "r",
         default: false,
       },
+      yes: {
+        type: "boolean",
+        shortFlag: "y",
+        default: false,
+      },
       limit: {
         type: "number",
         shortFlag: "n",
@@ -202,7 +207,7 @@ if (import.meta.path === Bun.main) {
         console.log(`usage: keyboards-firmware flash ${keyboard} <left|right> [-r]`);
         process.exit(1);
       }
-      await app.service("firmware").create({ keyboard, side, reset: cli.flags.reset });
+      await app.service("firmware").create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes });
       break;
     }
 

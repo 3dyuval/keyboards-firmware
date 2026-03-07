@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "bin": {
-    "keyb": "fw.ts"
+    "keyb": "index.ts"
   },
   "scripts": {
-    "dev": "NODE_ENV=development bun fw.ts"
+    "dev": "NODE_ENV=development bun index.ts"
   },
   "dependencies": {
     "@feathersjs/configuration": "^5.0.42",
