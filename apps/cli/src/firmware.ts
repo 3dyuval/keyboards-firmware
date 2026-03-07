@@ -53,16 +53,16 @@ export class FirmwareService {
   }
 
   // POST /firmware — download + flash to hardware
-  async create(data: { keyboard: string; side?: string; reset?: boolean }, params: Params) {
-    const { keyboard, side, reset } = data;
+  async create(data: { keyboard: string; side?: string; reset?: boolean; yes?: boolean }, params: Params) {
+    const { keyboard, side, reset, yes } = data;
     const { type } = this.keyboardConfig(keyboard);
 
     const downloaded = await this.get(keyboard, params ?? {});
 
     if (type === "qmk") {
-      return { ...downloaded, ...hw.flashQmk(this.cacheDir) };
+      return { ...downloaded, ...await hw.flashQmk(this.cacheDir) };
     }
     if (!side) throw new Error(`side required for ${keyboard}`);
-    return { ...downloaded, ...hw.flashZmk(keyboard, side, reset ?? false, this.cacheDir) };
+    return { ...downloaded, ...await hw.flashZmk(keyboard, side, reset ?? false, this.cacheDir, yes ?? false) };
   }
 }

@@ -5,9 +5,9 @@
   ],
   "scripts": {
     "cli": "bun run --filter keyb dev",
-    "flash-totem": "bun run cli -- flash totem left && bun run cli -- flash totem right",
-    "flash-eyelash": "bun run cli -- flash eyelash left && bun run cli -- flash eyelash right",
-    "flash-corne": "bun run cli -- flash corne left && bun run cli -- flash corne right",
+    "flash-totem": "cd apps/cli && bun index.ts flash totem left -y && bun index.ts flash totem right -y",
+    "flash-eyelash": "cd apps/cli && bun index.ts flash eyelash left -y && bun index.ts flash eyelash right -y",
+    "flash-corne": "cd apps/cli && bun index.ts flash corne left -y && bun index.ts flash corne right -y",
     "mcp": "bun run --filter keyboards-mcp serve",
     "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
   },
