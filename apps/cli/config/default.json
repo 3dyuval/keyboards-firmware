@@ -2,7 +2,7 @@
   "logLevel": "debug",
   "draw": {
     "outputDir": "keymap-drawer",
-    "config": "keymap_drawer.config.yaml",
+    "config": "keymap-drawer/config.yaml",
     "qmkKeymap": "keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.json"
   },
   "github": {
