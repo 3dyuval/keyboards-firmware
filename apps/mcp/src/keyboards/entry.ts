@@ -7,8 +7,8 @@ import {
 } from "@modelcontextprotocol/ext-apps";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { createApp, ref, h } from "vue";
-import { KeyboardView } from "components";
-import "components/style.css";
+import KeyboardView from "../KeyboardView.vue";
+import "../components.css";
 import "../global.css";
 
 interface Keyboard {
