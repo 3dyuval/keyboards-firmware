@@ -5,6 +5,9 @@
   ],
   "scripts": {
     "cli": "bun run --filter keyb dev",
+    "flash-totem": "bun run cli -- flash totem left && bun run cli -- flash totem right",
+    "flash-eyelash": "bun run cli -- flash eyelash left && bun run cli -- flash eyelash right",
+    "flash-corne": "bun run cli -- flash corne left && bun run cli -- flash corne right",
     "mcp": "bun run --filter keyboards-mcp serve",
     "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
   },

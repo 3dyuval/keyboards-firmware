@@ -2,6 +2,18 @@
 
 Multi-keyboard firmware configurations using [Graphite](https://github.com/rdavison/graphite-layout) alpha layout with automated builds.
 
+## CLI
+
+```
+bun run cli -- status              # CI build status
+bun run cli -- list                # list keyboards
+bun run cli -- draw [keyboard]     # render keymap SVGs
+bun run cli -- flash <kb> <side>   # download + flash firmware
+bun run flash-totem                # flash both sides
+bun run flash-eyelash
+bun run flash-corne
+```
+
 ## Totem
 
 38-key split, Seeeduino XIAO BLE, ZMK Studio enabled.
@@ -52,34 +64,26 @@ Base (Graphite)
                      (Symbols + Number conditional layer)
 ```
 
-## Keyboards
+## ZMK
 
-All ZMK keyboards share `graphite.dtsi` as the base layout definition, each extending it for their key count.
-
-```
-config/graphite.dtsi          shared alphas, layers, behaviors
-│
-├── ZMK
-│   ├── totem.keymap          38 keys (GRAPHITE_*_38)
-│   ├── corne.keymap          36 keys (GRAPHITE_*_36)
-│   └── eyelash_corne.keymap  42 keys (GRAPHITE_*_42)
-│
-└── QMK
-    └── iris/                 Keebio Iris, separate config
-```
-
-## Scripts
+Config must live in `config/` (ZMK convention). All keyboards share `graphite.dtsi` as the base layout.
 
 ```
-scripts/configs.sh        # list/pick keyboard, then draw or flash
-scripts/draw-keymaps.sh   # render keymap SVGs (all or filtered)
-scripts/flash-zmk.sh      # fetch + flash ZMK firmware
-scripts/flash-qmk.sh      # fetch + flash QMK firmware (Iris)
+config/
+├── graphite.dtsi              shared alphas, layers, behaviors
+├── totem.keymap               38 keys (GRAPHITE_*_38)
+├── totem.conf
+├── corne.keymap               36 keys (GRAPHITE_*_36)
+├── corne.conf
+├── corne_left.conf
+├── eyelash_corne.keymap       42 keys (GRAPHITE_*_42)
+├── eyelash_corne.conf
+└── eyelash_corne_left.conf
+build.yaml                     GitHub Actions build matrix
 ```
 
-## Dependencies
+## QMK
 
-- `gh` (GitHub CLI)
-- `gum` (interactive prompts)
-- `keymap-drawer` (keymap visualization, auto-installed in venv)
-- `qmk` (QMK CLI, for Iris only)
+```
+keyboards/keebio/iris_lm/k1/keymaps/graphite/
+```
