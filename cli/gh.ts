@@ -1,5 +1,5 @@
 import { Octokit } from "octokit";
-import { mkdirSync, rmSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
 
 let _octokit: Octokit;
@@ -66,8 +66,15 @@ export async function waitAndResolve(owner: string, repo: string, workflow: stri
   return String(successful.id);
 }
 
-export async function downloadArtifact(owner: string, repo: string, workflow: string, artifactName: string, cacheDir: string): Promise<string> {
+export async function downloadArtifact(owner: string, repo: string, workflow: string, artifactName: string, cacheDir: string): Promise<{ runId: string; cached: boolean }> {
   const runId = await waitAndResolve(owner, repo, workflow);
+  const stampFile = join(cacheDir, ".run-id");
+
+  if (existsSync(stampFile) && readFileSync(stampFile, "utf-8").trim() === runId) {
+    console.log(`run ${runId} already cached, skipping download`);
+    return { runId, cached: true };
+  }
+
   console.log(`downloading from run ${runId}...`);
 
   const { data: artifacts } = await octo().rest.actions.listWorkflowRunArtifacts({
@@ -77,22 +84,20 @@ export async function downloadArtifact(owner: string, repo: string, workflow: st
   const artifact = artifacts.artifacts.find((a) => a.name === artifactName);
   if (!artifact) throw new Error(`artifact "${artifactName}" not found in run ${runId}`);
 
-  const { url } = await octo().rest.actions.downloadArtifact({
+  const { data } = await octo().rest.actions.downloadArtifact({
     owner, repo, artifact_id: artifact.id, archive_format: "zip",
   });
-
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`download failed: ${res.status}`);
 
   rmSync(cacheDir, { recursive: true, force: true });
   mkdirSync(cacheDir, { recursive: true });
 
   const zipPath = join(cacheDir, "__artifact.zip");
-  await Bun.write(zipPath, res);
+  await Bun.write(zipPath, Buffer.from(data as ArrayBuffer));
 
   const unzip = Bun.spawnSync(["unzip", "-o", zipPath, "-d", cacheDir]);
   if (unzip.exitCode !== 0) throw new Error("unzip failed");
   rmSync(zipPath);
 
-  return runId;
+  writeFileSync(stampFile, runId);
+  return { runId, cached: false };
 }

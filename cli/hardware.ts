@@ -48,6 +48,9 @@ export function flashZmk(keyboard: string, side: string, reset: boolean, cacheDi
   }
 
   let mount = waitForDrive();
+  console.log(`about to flash ${firmware} to ${mount}`);
+  console.log("correct board? press enter to continue, ctrl-c to abort");
+  Bun.spawnSync(["sh", "-c", "read _"], { stdin: "inherit", stdout: "inherit", stderr: "inherit" });
 
   if (reset) {
     const resetFile = join(cacheDir, `${resetName(keyboard)}.uf2`);

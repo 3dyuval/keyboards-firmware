@@ -45,7 +45,7 @@ function contextMeta(context: HookContext) {
     side: data.side ?? result.side,
     runId: result.runId,
     workflow: data.workflow ?? result.workflow ?? context.params?.query?.workflow,
-    detail: result.artifact ?? result.firmware ?? result.svg,
+    detail: result.cached != null ? (result.cached ? "cache-hit" : "cache-miss") : result.artifact ?? result.firmware ?? result.svg,
   };
 }
 

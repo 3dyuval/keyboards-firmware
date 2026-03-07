@@ -20,7 +20,7 @@
       "artifact": "firmware",
       "type": "zmk"
     },
-    "eyelash_corne": {
+    "eyelash": {
       "workflow": "build-zmk.yml",
       "artifact": "firmware",
       "type": "zmk"

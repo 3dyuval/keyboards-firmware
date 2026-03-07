@@ -48,8 +48,8 @@ export class FirmwareService {
     const kb = String(keyboard);
     const { owner, repo } = this.github();
     const { workflow, artifact } = this.keyboardConfig(kb);
-    const runId = await gh.downloadArtifact(owner, repo, workflow, artifact, this.cacheDir);
-    return { keyboard: kb, runId, workflow, artifact, cacheDir: this.cacheDir };
+    const { runId, cached } = await gh.downloadArtifact(owner, repo, workflow, artifact, this.cacheDir);
+    return { keyboard: kb, runId, workflow, artifact, cached, cacheDir: this.cacheDir };
   }
 
   // POST /firmware — download + flash to hardware
