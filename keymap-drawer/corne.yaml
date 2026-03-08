@@ -104,7 +104,7 @@ layers:
   - '['
   - ']'
   - $
-  - {t: '@', h: LGUI}
+  - '#'
   - PG UP
   - LEFT
   - DOWN
@@ -115,7 +115,7 @@ layers:
   - ^
   - '{'
   - '}'
-  - '#'
+  - {t: '@', h: LGUI}
   - {t: '%', h: NumSym}
   - PG DN
   - HOME

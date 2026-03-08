@@ -514,8 +514,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(308, 97)" class="key keypos-18">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">@</text>
-<text x="0" y="14" class="key hold">LGUI</text>
+<text x="0" y="2" class="key tap">#</text>
 </g>
 <g transform="translate(490, 97)" class="key keypos-19">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -579,7 +578,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(252, 147)" class="key keypos-32">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">#</text>
+<text x="0" y="2" class="key tap">@</text>
+<text x="0" y="14" class="key hold">LGUI</text>
 </g>
 <g transform="translate(308, 153)" class="key keypos-33">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>

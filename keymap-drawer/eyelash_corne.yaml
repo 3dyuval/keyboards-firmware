@@ -117,7 +117,7 @@ layers:
   - '['
   - ']'
   - $
-  - {t: '@', h: LGUI}
+  - '#'
   - '&mmv MOVE_LEFT'
   - '&mkp LCLK'
   - '&mmv MOVE_RIGHT'
@@ -131,7 +131,7 @@ layers:
   - ^
   - '{'
   - '}'
-  - '#'
+  - {t: '@', h: LGUI}
   - {t: '%', h: NumSym}
   - MUTE
   - '&mmv MOVE_DOWN'
