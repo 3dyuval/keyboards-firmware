@@ -1,9 +1,18 @@
 import { Octokit } from "octokit";
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { mkdirSync, rmSync } from "fs";
 import { join } from "path";
 
 let _octokit: Octokit;
-function octo() { return _octokit ??= new Octokit({ auth: process.env.GITHUB_TOKEN || process.env.GH_TOKEN }); }
+function octo() {
+  if (!_octokit) {
+    const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_AUTH_TOKEN;
+    if (!token) {
+      throw new Error("Missing GITHUB_TOKEN, GH_TOKEN, or GITHUB_AUTH_TOKEN. Set it in apps/cli/.env");
+    }
+    _octokit = new Octokit({ auth: token });
+  }
+  return _octokit;
+}
 
 export async function status(owner: string, repo: string, workflow: string) {
   const { data: inProgressRuns } = await octo().rest.actions.listWorkflowRuns({
@@ -42,7 +51,7 @@ export async function waitAndResolve(owner: string, repo: string, workflow: stri
 
   if (inProgressRuns.workflow_runs.length) {
     const runId = inProgressRuns.workflow_runs[0].id;
-    console.log(`run ${runId} in progress, waiting...`);
+    console.debug(`run ${runId} in progress, waiting...`);
     while (true) {
       await Bun.sleep(5000);
       const { data: run } = await octo().rest.actions.getWorkflowRun({
@@ -50,7 +59,7 @@ export async function waitAndResolve(owner: string, repo: string, workflow: stri
       });
       if (run.status === "completed") {
         if (run.conclusion !== "success") throw new Error(`run ${runId} ${run.conclusion}`);
-        console.log("run completed");
+        console.debug("run completed");
         break;
       }
     }
@@ -66,16 +75,8 @@ export async function waitAndResolve(owner: string, repo: string, workflow: stri
   return String(successful.id);
 }
 
-export async function downloadArtifact(owner: string, repo: string, workflow: string, artifactName: string, cacheDir: string): Promise<{ runId: string; cached: boolean }> {
-  const runId = await waitAndResolve(owner, repo, workflow);
-  const stampFile = join(cacheDir, ".run-id");
-
-  if (existsSync(stampFile) && readFileSync(stampFile, "utf-8").trim() === runId) {
-    console.log(`run ${runId} already cached, skipping download`);
-    return { runId, cached: true };
-  }
-
-  console.log(`downloading from run ${runId}...`);
+export async function downloadArtifact(owner: string, repo: string, runId: string, artifactName: string, cacheDir: string): Promise<void> {
+  console.debug(`downloading from run ${runId}...`);
 
   const { data: artifacts } = await octo().rest.actions.listWorkflowRunArtifacts({
     owner, repo, run_id: Number(runId),
@@ -97,7 +98,4 @@ export async function downloadArtifact(owner: string, repo: string, workflow: st
   const unzip = Bun.spawnSync(["unzip", "-o", zipPath, "-d", cacheDir]);
   if (unzip.exitCode !== 0) throw new Error("unzip failed");
   rmSync(zipPath);
-
-  writeFileSync(stampFile, runId);
-  return { runId, cached: false };
 }

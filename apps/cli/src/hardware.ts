@@ -25,13 +25,13 @@ export function findMount(): string | null {
   return null;
 }
 
-export async function waitForDrive(label?: string): Promise<string> {
+export async function waitForDrive(label?: string, spinner: any = "arrow3"): Promise<string> {
   const mount = findMount();
   if (mount) return mount;
   const msg = label
     ? `put ${c("magenta", label)} in bootloader mode`
     : "put board in bootloader mode";
-  const spin = ora({ discardStdin: false, text: msg, spinner: "arrow3", color: "magenta" }).start();
+  const spin = ora({ discardStdin: false, text: msg, spinner, color: "magenta" }).start();
   while (true) {
     await Bun.sleep(500);
     const mount = findMount();
@@ -61,7 +61,11 @@ export async function flashZmk(keyboard: string, side: string, reset: boolean, c
     throw new Error(`not found: ${firmware}\navailable: ${files}`);
   }
 
-  let mount = await waitForDrive(`${keyboard} ${side}`);
+  const sideColor = side === "left" ? "blue" : "yellow";
+  const sideSpinner = side === "left"
+    ? { interval: 120, frames: ["◃◃◃◃◃", "◂◃◃◃◃", "◃◂◃◃◃", "◃◃◂◃◃", "◃◃◃◂◃", "◃◃◃◃◂"] }
+    : "arrow3";
+  let mount = await waitForDrive(`${keyboard} ${c(sideColor, side)}`, sideSpinner);
   if (!skip) {
     const confirmSpin = ora({ discardStdin: false, text: `flash ${c("cyan", firmware)} to ${mount}? press enter or ctrl-c`, spinner: "arrow3", color: "magenta" }).start();
     await waitForEnter();

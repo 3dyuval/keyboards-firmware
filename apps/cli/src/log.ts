@@ -1,18 +1,13 @@
 import { Database } from "bun:sqlite";
 import type { Application, Params } from "@feathersjs/feathers";
 
-const LOG_LEVELS = ["error", "warn", "info", "debug"] as const;
-type LogLevel = (typeof LOG_LEVELS)[number];
-
 export class LogService {
   private db: Database;
   private env: string;
-  private logLevel: LogLevel;
 
   constructor(dbPath: string, app: Application) {
     this.db = new Database(dbPath);
     this.env = process.env.NODE_ENV || "development";
-    this.logLevel = (app.get("logLevel") as LogLevel) ?? "info";
     this.db.exec("PRAGMA journal_mode = WAL");
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS event_log (
@@ -72,16 +67,14 @@ export class LogService {
       data.error ?? null,
     );
 
-    if (LOG_LEVELS.indexOf(this.logLevel) >= LOG_LEVELS.indexOf("debug")) {
-      const parts = [this.env, data.phase, data.service, data.method];
-      if (data.keyboard) parts.push(data.keyboard);
-      if (data.side) parts.push(data.side);
-      if (data.runId) parts.push(`run:${data.runId}`);
-      if (data.workflow) parts.push(data.workflow);
-      if (data.detail) parts.push(data.detail);
-      if (data.error) parts.push(`ERR: ${data.error}`);
-      console.debug(`[log] ${parts.join("  ")}`);
-    }
+    const parts = [this.env, data.phase, data.service, data.method];
+    if (data.keyboard) parts.push(data.keyboard);
+    if (data.side) parts.push(data.side);
+    if (data.runId) parts.push(`run:${data.runId}`);
+    if (data.workflow) parts.push(data.workflow);
+    if (data.detail) parts.push(data.detail);
+    if (data.error) parts.push(`ERR: ${data.error}`);
+    console.debug(`[log] ${parts.join("  ")}`);
 
     return data;
   }

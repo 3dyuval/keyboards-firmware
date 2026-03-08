@@ -10,8 +10,14 @@ import { mkdirSync } from "fs";
 
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
+import { firmwareHooks } from "./src/firmware.hooks.ts";
 import { KeyboardsService } from "./src/keyboards.ts";
 import { LogService } from "./src/log.ts";
+
+// ── suppress debug logs in production ────────────────────────────────
+if (process.env.NODE_ENV !== "development") {
+  console.debug = () => {};
+}
 
 // ── constants ────────────────────────────────────────────────────────
 
@@ -35,10 +41,14 @@ type Services = {
 
 const app = feathers<Services>().configure(configuration());
 
+app.set("cacheDir", CACHE);
+
 app.use("log", new LogService(DB_PATH, app));
 app.use("draw", new DrawService(ROOT, app));
-app.use("firmware", new FirmwareService(CACHE, app));
+app.use("firmware", new FirmwareService(app));
 app.use("keyboards", new KeyboardsService(ROOT));
+
+app.service("firmware").hooks(firmwareHooks);
 
 // ── global event-log hooks ───────────────────────────────────────────
 

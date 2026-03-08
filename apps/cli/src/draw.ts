@@ -20,13 +20,13 @@ export class DrawService {
   private ensureVenv() {
     const venv = this.venvDir();
     if (!existsSync(venv)) {
-      console.log("Creating venv...");
+      console.debug("Creating venv...");
       const r = Bun.spawnSync(["python", "-m", "venv", venv]);
       if (r.exitCode !== 0) throw new Error("failed to create venv");
     }
     const keymapBin = join(venv, "bin", "keymap");
     if (!existsSync(keymapBin)) {
-      console.log("Installing keymap-drawer...");
+      console.debug("Installing keymap-drawer...");
       const r = Bun.spawnSync([join(venv, "bin", "pip"), "install", "keymap-drawer"]);
       if (r.exitCode !== 0) throw new Error("failed to install keymap-drawer");
     }
@@ -41,7 +41,7 @@ export class DrawService {
 
   private async drawZmk(kmap: string, bin: string, outDir: string, configPath: string) {
     const name = basename(kmap, ".keymap");
-    console.log(`  ${name}`);
+    console.debug(`  ${name}`);
     const yaml = this.keymap(bin, "-c", configPath, "parse", "-z", kmap);
     const yamlPath = join(outDir, `${name}.yaml`);
     await Bun.write(yamlPath, yaml);
@@ -52,7 +52,7 @@ export class DrawService {
   }
 
   private async drawQmk(bin: string, outDir: string, configPath: string, qmkPath: string) {
-    console.log("  iris");
+    console.debug("  iris");
     const yaml = this.keymap(bin, "-c", configPath, "parse", "-q", qmkPath);
     const yamlPath = join(outDir, "iris.yaml");
     await Bun.write(yamlPath, yaml);
@@ -86,13 +86,13 @@ export class DrawService {
     if (kb === "iris") {
       const qmkPath = join(this.root, qmkKeymap);
       if (!existsSync(qmkPath)) throw new Error(`QMK keymap not found: ${qmkPath}`);
-      console.log("Drawing QMK keymaps...");
+      console.debug("Drawing QMK keymaps...");
       return this.drawQmk(bin, outDir, configPath, qmkPath);
     }
 
     const kmap = join(this.root, "config", `${kb}.keymap`);
     if (!existsSync(kmap)) throw new Error(`keymap not found: ${kmap}`);
-    console.log("Drawing ZMK keymaps...");
+    console.debug("Drawing ZMK keymaps...");
     return this.drawZmk(kmap, bin, outDir, configPath);
   }
 
@@ -105,7 +105,7 @@ export class DrawService {
     const bin = this.ensureVenv();
     const results: any[] = [];
 
-    console.log("Drawing ZMK keymaps...");
+    console.debug("Drawing ZMK keymaps...");
     const glob = new Bun.Glob("*.keymap");
     for (const file of glob.scanSync(join(this.root, "config"))) {
       results.push(await this.drawZmk(join(this.root, "config", file), bin, outDir, configPath));
@@ -113,11 +113,11 @@ export class DrawService {
 
     const qmkPath = join(this.root, qmkKeymap);
     if (existsSync(qmkPath)) {
-      console.log("Drawing QMK keymaps...");
+      console.debug("Drawing QMK keymaps...");
       results.push(await this.drawQmk(bin, outDir, configPath, qmkPath));
     }
 
-    console.log(`Done! Output in ${outDir}`);
+    console.debug(`Done! Output in ${outDir}`);
     return results;
   }
 }
