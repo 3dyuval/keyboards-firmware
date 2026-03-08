@@ -1,5 +1,9 @@
 #!/usr/bin/env bun
-import { feathers, type HookContext, type NextFunction } from "@feathersjs/feathers";
+import {
+  feathers,
+  type HookContext,
+  type NextFunction,
+} from "@feathersjs/feathers";
 import configuration from "@feathersjs/configuration";
 import { join } from "path";
 import { mkdirSync } from "fs";
@@ -11,7 +15,10 @@ import { LogService } from "./src/log.ts";
 
 // ── constants ────────────────────────────────────────────────────────
 
-const ROOT = Bun.spawnSync(["git", "rev-parse", "--show-toplevel"]).stdout.toString().trim() || ".";
+const ROOT =
+  Bun.spawnSync(["git", "rev-parse", "--show-toplevel"])
+    .stdout.toString()
+    .trim() || ".";
 const CACHE = join(ROOT, ".cache/artifacts");
 const DB_PATH = join(import.meta.dir, "db", "fw.sqlite");
 
@@ -44,8 +51,14 @@ function contextMeta(context: HookContext) {
     keyboard: data.keyboard ?? result.keyboard ?? result.name,
     side: data.side ?? result.side,
     runId: result.runId,
-    workflow: data.workflow ?? result.workflow ?? context.params?.query?.workflow,
-    detail: result.cached != null ? (result.cached ? "cache-hit" : "cache-miss") : result.artifact ?? result.firmware ?? result.svg,
+    workflow:
+      data.workflow ?? result.workflow ?? context.params?.query?.workflow,
+    detail:
+      result.cached != null
+        ? result.cached
+          ? "cache-hit"
+          : "cache-miss"
+        : (result.artifact ?? result.firmware ?? result.svg),
   };
 }
 
@@ -54,7 +67,9 @@ app.hooks({
     all: [
       async (context: HookContext) => {
         if (context.path === "log") return;
-        await app.service("log").create({ phase: "before", ...contextMeta(context) });
+        await app
+          .service("log")
+          .create({ phase: "before", ...contextMeta(context) });
       },
     ],
   },
@@ -62,7 +77,9 @@ app.hooks({
     all: [
       async (context: HookContext) => {
         if (context.path === "log") return;
-        await app.service("log").create({ phase: "after", ...contextMeta(context) });
+        await app
+          .service("log")
+          .create({ phase: "after", ...contextMeta(context) });
       },
     ],
   },
@@ -98,7 +115,8 @@ if (import.meta.path === Bun.main) {
   }
   spin.succeed(`${keyboards.length} keyboards: ${keyboards.join(", ")}`);
 
-  const cli = meow(`
+  const cli = meow(
+    `
     Usage
       $ keyboards-firmware <command> [options]
 
@@ -121,26 +139,28 @@ if (import.meta.path === Bun.main) {
       $ keyboards-firmware draw
       $ keyboards-firmware draw totem
       $ keyboards-firmware log 50
-  `, {
-    importMeta: import.meta,
-    flags: {
-      reset: {
-        type: "boolean",
-        shortFlag: "r",
-        default: false,
-      },
-      yes: {
-        type: "boolean",
-        shortFlag: "y",
-        default: false,
-      },
-      limit: {
-        type: "number",
-        shortFlag: "n",
-        default: 20,
+  `,
+    {
+      importMeta: import.meta,
+      flags: {
+        reset: {
+          type: "boolean",
+          shortFlag: "r",
+          default: false,
+        },
+        yes: {
+          type: "boolean",
+          shortFlag: "y",
+          default: false,
+        },
+        limit: {
+          type: "number",
+          shortFlag: "n",
+          default: 20,
+        },
       },
     },
-  });
+  );
 
   const [cmd, ...rest] = cli.input;
 
@@ -158,7 +178,10 @@ if (import.meta.path === Bun.main) {
   }
 
   function renderLog(rows: any[]) {
-    if (!rows.length) { console.log("no events logged yet"); return; }
+    if (!rows.length) {
+      console.log("no events logged yet");
+      return;
+    }
     for (const r of rows) {
       const parts = [r.timestamp, r.env, r.phase, r.service, r.method];
       if (r.keyboard) parts.push(r.keyboard);
@@ -188,9 +211,14 @@ if (import.meta.path === Bun.main) {
     case "get":
     case "g": {
       const [keyboard] = rest;
-      if (!keyboard) { console.log("usage: keyboards-firmware get <keyboard>"); process.exit(1); }
+      if (!keyboard) {
+        console.log("usage: keyboards-firmware get <keyboard>");
+        process.exit(1);
+      }
       const result = await app.service("firmware").get(keyboard, {});
-      console.log(`firmware for ${result.keyboard} downloaded to ${result.cacheDir}`);
+      console.log(
+        `firmware for ${result.keyboard} downloaded to ${result.cacheDir}`,
+      );
       break;
     }
 
@@ -204,10 +232,14 @@ if (import.meta.path === Bun.main) {
         process.exit(1);
       }
       if (keyboard !== "iris" && !side) {
-        console.log(`usage: keyboards-firmware flash ${keyboard} <left|right> [-r]`);
+        console.log(
+          `usage: keyboards-firmware flash ${keyboard} <left|right> [-r]`,
+        );
         process.exit(1);
       }
-      await app.service("firmware").create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes });
+      await app
+        .service("firmware")
+        .create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes });
       break;
     }
 
