@@ -63,7 +63,7 @@ export async function flashZmk(keyboard: string, side: string, reset: boolean, c
 
   const sideColor = side === "left" ? "blue" : "yellow";
   const sideSpinner = side === "left"
-    ? { interval: 120, frames: ["◃◃◃◃◃", "◂◃◃◃◃", "◃◂◃◃◃", "◃◃◂◃◃", "◃◃◃◂◃", "◃◃◃◃◂"] }
+    ? { interval: 120, frames: ["◃◃◃◃◂", "◃◃◃◂◃", "◃◃◂◃◃", "◃◂◃◃◃", "◂◃◃◃◃", "◃◃◃◃◃"] }
     : "arrow3";
   let mount = await waitForDrive(`${keyboard} ${c(sideColor, side)}`, sideSpinner);
   if (!skip) {
