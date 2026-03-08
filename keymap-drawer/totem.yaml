@@ -90,10 +90,10 @@ layers:
   - +
   - _
   - '*'
-  - '{'
-  - '}'
-  - '#'
+  - '['
+  - ']'
   - $
+  - {t: '@', h: LGUI}
   - PG UP
   - LEFT
   - DOWN
@@ -101,9 +101,9 @@ layers:
   - RIGHT
   - {t: ▽, type: trans}
   - ^
-  - '['
-  - ']'
-  - {t: '@', h: LGUI}
+  - '{'
+  - '}'
+  - '#'
   - {t: '%', h: NumSym}
   - PG DN
   - HOME

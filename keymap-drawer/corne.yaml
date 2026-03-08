@@ -101,10 +101,10 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '*'
-  - '{'
-  - '}'
-  - '#'
+  - '['
+  - ']'
   - $
+  - {t: '@', h: LGUI}
   - PG UP
   - LEFT
   - DOWN
@@ -113,9 +113,9 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - ^
-  - '['
-  - ']'
-  - {t: '@', h: LGUI}
+  - '{'
+  - '}'
+  - '#'
   - {t: '%', h: NumSym}
   - PG DN
   - HOME

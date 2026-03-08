@@ -388,19 +388,20 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(140, 118) rotate(-4.0)" class="key keypos-11">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">{</text>
+<text x="0" y="2" class="key tap">[</text>
 </g>
 <g transform="translate(200, 84)" class="key keypos-12">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">}</text>
+<text x="0" y="2" class="key tap">]</text>
 </g>
 <g transform="translate(256, 112)" class="key keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">#</text>
+<text x="0" y="2" class="key tap">$</text>
 </g>
 <g transform="translate(312, 121)" class="key keypos-14">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">$</text>
+<text x="0" y="2" class="key tap">@</text>
+<text x="0" y="14" class="key hold">LGUI</text>
 </g>
 <g transform="translate(584, 121)" class="key keypos-15">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -434,16 +435,15 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(144, 174) rotate(-4.0)" class="key keypos-22">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">[</text>
+<text x="0" y="2" class="key tap">{</text>
 </g>
 <g transform="translate(200, 140)" class="key keypos-23">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">]</text>
+<text x="0" y="2" class="key tap">}</text>
 </g>
 <g transform="translate(256, 168)" class="key keypos-24">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">@</text>
-<text x="0" y="14" class="key hold">LGUI</text>
+<text x="0" y="2" class="key tap">#</text>
 </g>
 <g transform="translate(312, 177)" class="key keypos-25">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
