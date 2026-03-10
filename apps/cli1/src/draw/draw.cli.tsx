@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useApp, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
 import { useAsyncEffect } from "ahooks";
-import { useService } from "../../lib/context.tsx";
+import { AppContext, useService } from "../../lib/context.tsx";
 import { DrawSchema } from "./draw.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
 
@@ -13,6 +13,8 @@ export { DrawSchema as schema };
 
 export default function Draw({ keyboard }: { keyboard: string }) {
   const { exit } = useApp();
+  const app = useContext(AppContext);
+  const root = app.get("root");
   const { call } = useService("draw");
   const [stage, setStage] = useState<ServiceEvent>();
   const [error, setError] = useState<Error>();
@@ -32,11 +34,11 @@ export default function Draw({ keyboard }: { keyboard: string }) {
   }, []);
 
   if (error) return <Text color="red">Error: {error.message}</Text>;
-  if (!stage) return <Spinner label={`preparing ${keyboard}...`} />;
+  if (!stage) return <Spinner label={`drawing ${keyboard}...`} />;
 
   if (stage.stage === "done") {
-    const { svg } = stage.data;
-    return <Text color="green">wrote {svg}</Text>;
+    const rel = stage.data.svg.replace(`${root}/`, "");
+    return <Text color="green">draw {rel}</Text>;
   }
   return <Spinner label={stage.message ?? stage.stage} />;
 }

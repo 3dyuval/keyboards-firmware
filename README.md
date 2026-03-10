@@ -14,6 +14,12 @@ bun run flash-eyelash
 bun run flash-corne
 ```
 
+## Iris
+
+Split ergonomic, QMK, Keebio Iris LM.
+
+![Iris Keymap](keymap-drawer/iris.svg)
+
 ## Totem
 
 38-key split, Seeeduino XIAO BLE, ZMK Studio enabled.
