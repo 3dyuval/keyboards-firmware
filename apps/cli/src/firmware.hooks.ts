@@ -16,7 +16,7 @@ export function checkGithubAuth(context: HookContext) {
   }
 }
 
-export function resolveKeyboard(context: HookContext) {
+export function resolveConfig(context: HookContext) {
   const github = context.app.get("github") as { owner: string; repo: string };
   const keyboards = context.app.get("keyboards") as Record<string, KeyboardConfig>;
   const cacheDir = context.app.get("cacheDir") as string;
@@ -24,14 +24,15 @@ export function resolveKeyboard(context: HookContext) {
   context.params.github = github;
   context.params.cacheDir = cacheDir;
 
-  // For find, resolve all workflows
+  // find — resolve all workflows, no keyboard needed
   if (context.method === "find") {
     context.params.workflows = [...new Set(Object.values(keyboards).map((k) => k.workflow))];
     return;
   }
 
-  // Resolve keyboard from route param, id, or data
+  // get/create/patch — resolve keyboard config
   const kb = String(
+    context.params.keyboard ??
     context.params.route?.keyboardId ??
     context.id ??
     context.data?.keyboard
@@ -75,24 +76,13 @@ export function writeCache(context: HookContext) {
 
 export const firmwareHooks = {
   before: {
-    all: [checkGithubAuth, resolveKeyboard, validateKeyboard, resolveRunId],
-    get: [checkCache],
+    all: [checkGithubAuth, resolveConfig],
+    find: [],
+    get: [validateKeyboard],
+    create: [validateKeyboard, resolveRunId, checkCache],
+    patch: [validateKeyboard],
   },
   after: {
     create: [writeCache],
-  },
-};
-
-export const flashHooks = {
-  before: {
-    create: [checkGithubAuth, resolveKeyboard, validateKeyboard, resolveRunId],
-  },
-};
-
-export const statusHooks = {
-  before: {
-    all: [checkGithubAuth, resolveKeyboard],
-    get: [validateKeyboard],
-    find: [],
   },
 };

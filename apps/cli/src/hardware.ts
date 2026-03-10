@@ -105,7 +105,6 @@ export async function flashQmk(cacheDir: string) {
     }
   }
 
-  const flashSpin = ora({ discardStdin: false, text: `flashing ${c("cyan", firmware)}...`, spinner: "arc" }).start();
   const dfuUtil = Bun.which("dfu-util");
   if (!dfuUtil) {
     console.error("\n  dfu-util is required to flash QMK firmware over USB DFU.\n");
@@ -116,13 +115,15 @@ export async function flashQmk(cacheDir: string) {
     console.error("    win:    choco install dfu-util\n");
     throw new Error("dfu-util not installed");
   }
+  const flashSpin = ora({ discardStdin: false, text: `flashing ${c("cyan", firmware)}...`, spinner: "arc" }).start();
   const proc = Bun.spawn([dfuUtil, "-a", "0", "-d", "0483:df11", "-s", "0x08000000:leave", "-D", firmware], {
-    stdin: "inherit", stdout: "inherit", stderr: "inherit",
+    stdin: "pipe", stdout: "pipe", stderr: "pipe",
   });
   const exitCode = await proc.exited;
   if (exitCode !== 0 && exitCode !== 74) {
     flashSpin.fail(`dfu-util failed with exit code ${exitCode}`);
-    throw new Error(`dfu-util failed with exit code ${exitCode}`);
+    const stderr = await new Response(proc.stderr).text();
+    throw new Error(`dfu-util failed (exit ${exitCode}): ${stderr}`);
   }
   flashSpin.succeed(c("green", "iris flashed"));
   return { keyboard: "iris", firmware };

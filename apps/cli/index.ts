@@ -12,9 +12,7 @@ import { ParseService } from "./src/parse.ts";
 import { parseHooks } from "./src/parse.hooks.ts";
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
-import { FlashService } from "./src/flash.ts";
-import { StatusService } from "./src/status.ts";
-import { firmwareHooks, flashHooks, statusHooks } from "./src/firmware.hooks.ts";
+import { firmwareHooks } from "./src/firmware.hooks.ts";
 import { KeyboardsService } from "./src/keyboards.ts";
 import { resolveKeyboardFromRoute } from "./src/keyboards.hooks.ts";
 import { LogService } from "./src/log.ts";
@@ -48,16 +46,12 @@ app.use("log", new LogService(DB_PATH, app));
 app.use("keyboards", new KeyboardsService(app));
 app.use("keyboards/:keyboardId/draw", new DrawService(ROOT, app));
 app.use("firmware", new FirmwareService(app));
-app.use("flash", new FlashService(app));
-app.use("status", new StatusService(app));
 
 app.service("parse").hooks(parseHooks);
 app.service("keyboards/:keyboardId/draw").hooks({
   before: { all: [resolveKeyboardFromRoute] },
 });
 app.service("firmware").hooks(firmwareHooks);
-app.service("flash").hooks(flashHooks);
-app.service("status").hooks(statusHooks);
 app.service("keyboards").hooks({
   after: {
     find: [
@@ -67,7 +61,7 @@ app.service("keyboards").hooks({
         const rows = logService.db.prepare(
           `SELECT json_extract(data, '$.keyboard') as keyboard, MAX(timestamp) as last_flashed
            FROM event_log
-           WHERE service = 'flash' AND method = 'create' AND phase = 'after' AND error IS NULL
+           WHERE service = 'firmware' AND method = 'patch' AND phase = 'after' AND error IS NULL
            GROUP BY keyboard`
         ).all() as { keyboard: string; last_flashed: string }[];
 
@@ -166,7 +160,7 @@ if (import.meta.path === Bun.main) {
   );
 
   const [cmd, ...rest] = cli.input;
-  const interactive = !cmd || ["list", "l", "status", "s", "flash", "f"].includes(cmd);
+  const interactive = !cmd || ["list", "l", "status", "s", "flash", "f", "get", "g"].includes(cmd);
   const allKeyboards = await app.service("keyboards").find({ interactive } as any) as Record<string, any>;
   const keyboardNames = Object.keys(allKeyboards).sort();
 
@@ -208,10 +202,10 @@ if (import.meta.path === Bun.main) {
     case "s": {
       const [keyboard] = rest;
       if (keyboard) {
-        const result = await app.service("status").get(keyboard, {});
+        const result = await app.service("firmware").get(keyboard, { keyboard } as any);
         renderStatus(keyboard, result);
       } else {
-        const statuses = await app.service("status").find({});
+        const statuses = await app.service("firmware").find({});
         const labels = Object.keys(statuses);
         for (let i = 0; i < labels.length; i++) {
           if (i > 0) console.log();
@@ -251,8 +245,8 @@ if (import.meta.path === Bun.main) {
         process.exit(1);
       }
       await app
-        .service("flash")
-        .create({ side, reset: cli.flags.reset, yes: cli.flags.yes }, { keyboard } as any);
+        .service("firmware")
+        .patch(keyboard, { side, reset: cli.flags.reset, yes: cli.flags.yes }, { keyboard } as any);
       break;
     }
 
