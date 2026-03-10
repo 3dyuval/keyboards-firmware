@@ -8,7 +8,7 @@ import configuration from "@feathersjs/configuration";
 import { join } from "path";
 import { mkdirSync } from "fs";
 
-import { ParseService } from "./src/parse.ts";
+import { ParseService, parseHooks } from "./src/parse.ts";
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
 import { firmwareHooks } from "./src/firmware.hooks.ts";
@@ -52,6 +52,7 @@ app.use("firmware", new FirmwareService(app));
 app.use("keyboards", new KeyboardsService(app));
 
 app.service("firmware").hooks(firmwareHooks);
+app.service("parse").hooks(parseHooks);
 
 // ── global event-log hooks ───────────────────────────────────────────
 
@@ -258,7 +259,7 @@ if (import.meta.path === Bun.main) {
       }
       await app
         .service("firmware")
-        .create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes });
+        .create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes }, {});
       break;
     }
 
@@ -281,7 +282,7 @@ if (import.meta.path === Bun.main) {
         process.exit(1);
       }
       const filePath = file.startsWith("/") ? file : join(ROOT, file);
-      const result = await app.service("parse").create({ file: filePath });
+      const result = await app.service("parse").create({ file: filePath }, {});
       console.log(JSON.stringify(result, null, 2));
       break;
     }
