@@ -28,7 +28,8 @@ export async function status(owner: string, repo: string, workflow: string) {
   const result: any = { workflow, inProgress: null, completed: null };
 
   if (inProgressRuns.workflow_runs.length) {
-    result.inProgress = { id: inProgressRuns.workflow_runs[0].id };
+    const run = inProgressRuns.workflow_runs[0];
+    result.inProgress = { id: run.id, created_at: run.created_at };
   }
 
   if (completedRuns.workflow_runs.length) {
@@ -37,7 +38,7 @@ export async function status(owner: string, repo: string, workflow: string) {
       owner, repo, run_id: run.id,
     });
     const jobs = jobsData.jobs.map((j) => `${j.conclusion}\t${j.name}`).join("\n");
-    result.completed = { id: run.id, conclusion: run.conclusion, jobs };
+    result.completed = { id: run.id, conclusion: run.conclusion, jobs, created_at: run.created_at };
   }
 
   return result;

@@ -12,6 +12,7 @@ import { ParseService } from "./src/parse.ts";
 import { parseHooks } from "./src/parse.hooks.ts";
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
+import * as gh from "./src/gh.ts";
 import { firmwareHooks } from "./src/firmware.hooks.ts";
 import { KeyboardsService } from "./src/keyboards.ts";
 import { resolveKeyboardFromRoute } from "./src/keyboards.hooks.ts";
@@ -56,20 +57,23 @@ app.service("keyboards").hooks({
   after: {
     find: [
       async (context: HookContext) => {
-        // Enrich with last flash timestamp from log
+        // Enrich with last event (flash or build) from log
         const logService = app.service("log") as any;
         const rows = logService.db.prepare(
-          `SELECT json_extract(data, '$.keyboard') as keyboard, MAX(timestamp) as last_flashed
+          `SELECT json_extract(data, '$.keyboard') as keyboard,
+                  method, MAX(timestamp) as ts
            FROM event_log
-           WHERE service = 'firmware' AND method = 'patch' AND phase = 'after' AND error IS NULL
+           WHERE service = 'firmware' AND phase = 'after' AND error IS NULL
            GROUP BY keyboard`
-        ).all() as { keyboard: string; last_flashed: string }[];
+        ).all() as { keyboard: string; method: string; ts: string }[];
 
-        const lastFlashed: Record<string, string> = {};
-        for (const r of rows) lastFlashed[r.keyboard] = r.last_flashed;
+        const lastEvent: Record<string, { method: string; ts: string }> = {};
+        for (const r of rows) lastEvent[r.keyboard] = { method: r.method, ts: r.ts };
 
         for (const [name, config] of Object.entries(context.result as Record<string, any>)) {
-          config.last_flashed = lastFlashed[name] ?? "";
+          const ev = lastEvent[name];
+          const type = ev?.method === "patch" ? "flash" : ev?.method === "create" ? "build" : "";
+          config.details = ev ? `${type} ${ev.ts}` : "";
         }
       },
       async (context: HookContext) => {
@@ -166,17 +170,6 @@ if (import.meta.path === Bun.main) {
 
   // ── render helpers ─────────────────────────────────────────────────
 
-  function renderStatus(label: string, wf: any) {
-    console.log(`${label}:`);
-    if (wf.inProgress) console.log(`  run ${wf.inProgress.id}: in progress`);
-    if (wf.completed) {
-      console.log(`  run ${wf.completed.id}: ${wf.completed.conclusion}`);
-      console.log(wf.completed.jobs);
-    } else if (!wf.inProgress) {
-      console.log("  no runs found");
-    }
-  }
-
   function renderLog(rows: any[]) {
     if (!rows.length) {
       console.log("no events logged yet");
@@ -201,17 +194,38 @@ if (import.meta.path === Bun.main) {
     case "status":
     case "s": {
       const [keyboard] = rest;
-      if (keyboard) {
-        const result = await app.service("firmware").get(keyboard, { keyboard } as any);
-        renderStatus(keyboard, result);
-      } else {
-        const statuses = await app.service("firmware").find({});
-        const labels = Object.keys(statuses);
-        for (let i = 0; i < labels.length; i++) {
-          if (i > 0) console.log();
-          renderStatus(labels[i], statuses[labels[i]]);
-        }
+      const targets = keyboard ? [keyboard] : keyboardNames;
+      const { github: { owner, repo } } = { github: app.get("github") as { owner: string; repo: string } };
+
+      // Group keyboards by workflow to avoid duplicate API calls
+      const byWorkflow: Record<string, string[]> = {};
+      for (const name of targets) {
+        const wf = allKeyboards[name]?.workflow;
+        if (!wf) { console.log(`unknown keyboard: ${name}`); continue; }
+        (byWorkflow[wf] ??= []).push(name);
       }
+
+      const ciStatus: Record<string, any> = {};
+      for (const wf of Object.keys(byWorkflow)) {
+        ciStatus[wf] = await gh.status(owner, repo, wf);
+      }
+
+      const table: Record<string, any> = {};
+      for (const name of targets) {
+        const kb = allKeyboards[name];
+        if (!kb) continue;
+        const ci = ciStatus[kb.workflow];
+        const run = ci?.completed ?? ci?.inProgress;
+        const status = ci?.completed?.conclusion ?? (ci?.inProgress ? "in_progress" : "—");
+        const runDate = run ? new Date(run.created_at ?? run.run_started_at).toISOString().replace("T", " ").slice(0, 19) : "";
+        table[name] = {
+          type: kb.type,
+          status,
+          run: run?.id ?? "",
+          details: run ? `github ${runDate}` : kb.details || "",
+        };
+      }
+      console.table(table);
       break;
     }
 
