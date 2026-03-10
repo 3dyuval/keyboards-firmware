@@ -13,7 +13,7 @@ export const ConfigSchema = z.object({
   github: z.object({
     owner: z.string(),
     repo: z.string(),
-  }),
+  }).optional(),
 
   logging: z.record(z.string(), z.array(z.string())),
 

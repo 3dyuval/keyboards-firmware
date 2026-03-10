@@ -24,7 +24,9 @@ function octo(app: App): Octokit {
 }
 
 export function github(app: App) {
-  const { owner, repo } = app.get("github");
+  const gh = app.get("github");
+  if (!gh) throw new Error("github config required — set owner/repo in config");
+  const { owner, repo } = gh;
   const ok = octo(app);
 
   return {
