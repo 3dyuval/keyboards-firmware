@@ -60,7 +60,7 @@ export default class FirmwareService extends BaseService {
     const gh = github(this.app);
 
     // hooks may have short-circuited with cached result
-    if (params._cached) {
+    if ((params as any)._cached) {
       yield { stage: "cached", message: `run ${runId} already cached`, data: { keyboard, runId, cached: true, cacheDir } };
       return;
     }

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useApp, Box, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
-import { useService } from "../context.tsx";
-import { Table } from "../utils/table.tsx";
+import { useService } from "../lib/context.tsx";
+import { Table } from "../lib/table.tsx";
 import type { KeyboardRow } from "./keyboards.service.ts";
 
-export const command = "list";
+export const aliases = ["l"];
 export const description = "List all configured keyboards";
 
-export function KeyboardList() {
+export default function KeyboardList() {
   const { exit } = useApp();
   const { call } = useService("keyboards");
   const [rows, setRows] = useState<KeyboardRow[] | null>(null);

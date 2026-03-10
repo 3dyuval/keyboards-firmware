@@ -11,12 +11,20 @@ export const useService = (path: string) => {
   const { exit } = useApp();
 
   const call = useCallback(
-    async (method: string, data?: any, params: Record<string, any> = {}) => {
+    async (method: string, ...args: any[]) => {
       try {
-        return await (app.service(path) as any)[method](data, {
-          ...params,
-          provider: "cli",
-        });
+        // Inject provider into the last params object
+        const svc = app.service(path) as any;
+        if (args.length === 0) {
+          return await svc[method]({ provider: "cli" });
+        }
+        const last = args[args.length - 1];
+        if (last && typeof last === "object" && !Array.isArray(last)) {
+          args[args.length - 1] = { ...last, provider: "cli" };
+        } else {
+          args.push({ provider: "cli" });
+        }
+        return await svc[method](...args);
       } catch (err) {
         if (isRoot) exit(err as Error);
         else throw err;

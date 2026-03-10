@@ -107,36 +107,31 @@ log                           GET     → show events (infrastructure)
 | `after` | `createLogHook("after")` | Log service call completion |
 | `error` | `createLogHook("error")` | Log service call failure |
 
-## CLI Routing
+## CLI Routing (done)
 
-Flat commands, not nested. The user types `keyb1 flash`, not `keyb1 firmware flash`.
+Flat commands, file-per-command. Filename IS the command.
 
-Each `*.cli.tsx` exports a `routes: Route[]` array (or legacy single `command` + component).
-Discovery normalizes both shapes into `expose.cli: Route[]`.
-
-```ts
-// src/route.ts
-interface Route {
-  command: string;
-  aliases?: string[];
-  description: string;
-  args?: { name: string; required?: boolean }[];
-  flags?: Record<string, { type: "boolean" | "string"; short?: string; default?: any }>;
-  schema?: ZodType;       // validates merged args+flags
-  component: FC<any>;
-}
+```
+firmware.status.cli.tsx  → command: "status"
+firmware.flash.cli.tsx   → command: "flash"
+firmware.get.cli.tsx     → command: "get"
+keyboards.list.cli.tsx   → command: "list"
 ```
 
-Argv parsing uses Node's built-in `util.parseArgs` — zero dependencies.
-Parsed args pass as props to the Ink component: `<Component {...parsedArgs} />`.
-Zod schema validates before render.
+Each file exports: `default` (component), `description`, `aliases?`, `args?`, `schema?`.
+No manual command strings — `deriveCommand(filename, base)` strips `{base}.` prefix and `.cli.tsx` suffix.
+
+Flags derived from Zod schema via `flagsFromSchema()` — shared primitive used by
+`parseArgs`, `routeUsage`, and `--discover`. Schema `.describe(option({...}))` carries
+alias and description metadata.
+
+`--discover` for human-readable, `--discover --json` for agent consumption.
 
 ### Command map
 
 ```
 keyb1 list                        → keyboards.find()
 keyb1 status                      → firmware.find()
-keyb1 status <kb>                 → firmware.get(kb)
 keyb1 get <kb>                    → firmware.create({keyboard})
 keyb1 flash <kb> [side] [-y] [-r] → firmware.patch(kb, {side, yes, reset})
 keyb1 draw <kb>                   → draw.create({keyboard})
@@ -146,15 +141,8 @@ keyb1 log [n]                     → log.find({$limit: n})
 
 ### useService.call signature
 
-Current `call(method, data?, params?)` maps to `service[method](data, params)`.
-Needs to support id-bearing methods: `call("patch", id, data, params)` for Feathers'
-`patch(id, data, params)` / `get(id, params)` signatures. Spread args through.
-
-### Multi-command per service
-
-firmware.cli.tsx exports `routes: Route[]` with 3 entries (status, flash, get).
-Each route maps to its own component + Feathers method.
-Single-command services (keyboards, log) keep the simple shape — discover normalizes.
+`call(method, ...args)` spreads args through to the Feathers service method.
+Injects `provider: "cli"` into the last object argument.
 
 ## Async Iterator Patterns (done)
 
@@ -169,8 +157,47 @@ Single-command services (keyboards, log) keep the simple shape — discover norm
 ## Infrastructure (done)
 
 - `github(app)` factory — Octokit singleton on app, reads owner/repo from config
-- `<Table>` component — `<Box width>` layout, per-row color functions, replaces pad()
-- Unknown command error feedback in index.tsx
+- `<Table>` component — `<Box width>` layout, per-row color functions
+- `option()` + `parseOption()` — schema metadata for aliases and descriptions
+- `flagsFromSchema()` — shared primitive: Zod shape → flag definitions
+- `--discover` / `--discover --json` — CLI self-documentation from route registry
+- `src/lib/` — register.ts, discover.ts, route.ts, context.tsx, table.tsx, option.ts
+
+## Caveats & Gotchas
+
+### Zod v4 differences
+- `.description` is a property on the instance, NOT on `._def.description`
+- `ZodEnum._def.values` is undefined — use `.options` (array) or `._def.entries` (object)
+- `.describe()` does not wrap in a new type — it sets `.description` on the same instance
+
+### Feathers + async generators
+- Feathers hooks run on the service method call, not on each yield. The generator
+  returned by the method IS `context.result`. Hooks see the generator object, not
+  individual events. After hooks that inspect `context.result` will see the generator.
+- `checkCache` sets `context.params._cached = true` instead of `context.result` —
+  the generator checks `params._cached` and short-circuits with a cached yield.
+
+### File-per-command naming
+- `{base}.cli.tsx` → command defaults to `base` (the folder name)
+- `{base}.{command}.cli.tsx` → command is `{command}`
+- All cli files MUST start with `{base}.` to be discovered (scanner filters by prefix)
+- Default export required — named exports are not picked up as the component
+
+### useService.call spread args
+- `call("find")` → `service.find({ provider: "cli" })`
+- `call("create", data, params)` → `service.create(data, { ...params, provider: "cli" })`
+- `call("patch", id, data, params)` → `service.patch(id, data, { ...params, provider: "cli" })`
+- Provider injection assumes the last argument is a params object. If the last arg
+  is a primitive or array, a new params object is appended instead.
+
+### .gitignore collision
+- Root `.gitignore` has `firmware` which matches `src/firmware/`. Must `git add -f`
+  to track firmware service files. Consider changing to `/firmware` (root only).
+
+### Missing config
+- `cacheDir` not in `config/default.json` — firmware hooks crash on `join(undefined, ...)`
+- `status <kb>` route not wired — `firmware.get` needs a separate CLI file if needed
+- `display.tabSize` config removed when pad() was deleted — no longer needed
 
 ## Migration Checklist
 
@@ -179,13 +206,16 @@ Single-command services (keyboards, log) keep the simple shape — discover norm
 - [x] firmware — `find`/`get` (status with stale-while-revalidate)
 - [x] firmware — `create` (download with progress)
 - [x] firmware — `patch` (flash with stage progression)
-- [ ] firmware — CLI components for flash + get (status done)
-- [ ] routing — Route type, parseArgs, multi-command discover
+- [x] firmware — CLI components: status, flash, get
+- [x] routing — file-per-command, parseArgs, flagsFromSchema, --discover
+- [x] move context.tsx, discover.ts, route.ts to src/lib/
+- [x] move resolveCommand from index.tsx to src/lib/route.ts
+- [ ] add `cacheDir` to config/default.json
+- [ ] fix .gitignore: `/firmware` instead of `firmware`
+- [ ] move base-service.ts into src/lib/ or src/app.ts
 - [ ] draw — service + CLI component
 - [ ] parse — service + tree-sitter hooks
 - [ ] log — service + SQLite + global hooks
 - [ ] global log hooks
 - [ ] MCP provider after hook
-- [ ] move context.tsx and discover.ts to src/utils/
-- [ ] move base-service.ts to src/app.ts (co-locate with app)
-- [ ] move resolveCommand from index.tsx to src/utils/
+- [ ] replace `parseArgs` with Commander via `buildCommand` (Pastel pattern)
