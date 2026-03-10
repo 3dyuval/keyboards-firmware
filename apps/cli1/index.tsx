@@ -29,6 +29,9 @@ function resolveCommand(command?: string) {
 const Component = resolveCommand(cmd);
 
 if (!Component) {
+  if (cmd) {
+    console.error(`Unknown command: ${cmd}\n`);
+  }
   console.log("Usage: keyb1 <command>\n");
   console.log("Commands:");
   for (const path of Object.keys(app.services)) {
