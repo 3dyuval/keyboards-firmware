@@ -3,8 +3,6 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { github } from "./gh.ts";
 
-const dataHome = Bun.env.XDG_DATA_HOME ?? join(Bun.env.HOME!, ".local/share");
-
 interface KeyboardConfig {
   workflow: string;
   artifact: string;
@@ -16,7 +14,7 @@ export function resolveConfig(context: HookContext) {
     string,
     KeyboardConfig
   >;
-  const cacheDir = join(dataHome, context.app.get("cacheDir") as string);
+  const cacheDir = context.app.get("cacheDir") as string;
 
   context.params.cacheDir = cacheDir;
 

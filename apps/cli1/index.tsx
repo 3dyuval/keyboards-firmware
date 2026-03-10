@@ -1,19 +1,13 @@
 #!/usr/bin/env bun
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
-
-// Config dir must be set before node-config initializes via @feathersjs/configuration
-const __dir = dirname(fileURLToPath(import.meta.url));
-process.env.NODE_CONFIG_DIR ??= join(__dir, "config");
-
-const { app } = await import("./src/app.ts");
-const { registerServices } = await import("./lib/register.ts");
-const { AppContext, RootContext } = await import("./lib/context.tsx");
-const { resolveCommand, allRoutes, parseArgs, routeUsage } = await import("./lib/route.ts");
-const { discover } = await import("./lib/discover.ts");
-const { mcpPresenter, mcpErrorHandler, startMcpServer } = await import("./lib/mcp.ts");
-const React = (await import("react")).default;
-const { render } = await import("ink");
+import React from "react";
+import { render } from "ink";
+import { join } from "path";
+import { app } from "./src/app.ts";
+import { registerServices } from "./lib/register.ts";
+import { AppContext, RootContext } from "./lib/context.tsx";
+import { resolveCommand, allRoutes, parseArgs, routeUsage } from "./lib/route.ts";
+import { discover } from "./lib/discover.ts";
+import { mcpPresenter, mcpErrorHandler, startMcpServer } from "./lib/mcp.ts";
 
 // ── bootstrap (shared across all modes) ─────────────────────────────
 

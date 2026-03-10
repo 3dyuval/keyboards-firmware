@@ -3,4 +3,4 @@ node_modules
 /Firmware
 /firmware
 .env
-**/config/local.json
+**/config/local.*

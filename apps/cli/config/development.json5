@@ -1,0 +1,36 @@
+{
+  github: {
+    owner: "3dyuval",
+    repo: "keyboards-firmware",
+  },
+
+  // Keyboard definitions — each key is the name used in CLI commands
+  // workflow  — GitHub Actions workflow file
+  // artifact  — name of the build artifact to download
+  // type      — firmware type (zmk or qmk), determines flash method
+  // keymap    — path to keymap file (optional, for draw/parse)
+  keyboards: {
+    iris: {
+      workflow: "build-qmk.yml",
+      artifact: "Firmware",
+      type: "qmk",
+      keymap: "keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.c",
+    },
+    corne: {
+      workflow: "build-zmk.yml",
+      artifact: "firmware",
+      type: "zmk",
+    },
+    eyelash: {
+      workflow: "build-zmk.yml",
+      artifact: "firmware",
+      type: "zmk",
+      keymap: "config/eyelash_corne.keymap",
+    },
+    totem: {
+      workflow: "build-zmk.yml",
+      artifact: "firmware",
+      type: "zmk",
+    },
+  },
+}
