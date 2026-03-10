@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export default {
-  tool: "list_keyboards",
+  tool: "List Keyboards",
   description: "List all configured keyboards with their type and workflow",
   resolves: "find",
   schema: z.object({
