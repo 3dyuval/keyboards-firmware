@@ -8,12 +8,17 @@ import configuration from "@feathersjs/configuration";
 import { join } from "path";
 import { mkdirSync } from "fs";
 
-import { ParseService, parseHooks } from "./src/parse.ts";
+import { ParseService } from "./src/parse.ts";
+import { parseHooks } from "./src/parse.hooks.ts";
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
-import { firmwareHooks } from "./src/firmware.hooks.ts";
+import { FlashService } from "./src/flash.ts";
+import { StatusService } from "./src/status.ts";
+import { firmwareHooks, flashHooks, statusHooks } from "./src/firmware.hooks.ts";
 import { KeyboardsService } from "./src/keyboards.ts";
+import { resolveKeyboardFromRoute } from "./src/keyboards.hooks.ts";
 import { LogService } from "./src/log.ts";
+import { createLogHook } from "./src/log.hooks.ts";
 
 // ── suppress debug logs in production ────────────────────────────────
 if (process.env.NODE_ENV !== "development") {
@@ -33,82 +38,67 @@ mkdirSync(join(ROOT, ".cache"), { recursive: true });
 
 // ── app ──────────────────────────────────────────────────────────────
 
-type Services = {
-  parse: ParseService;
-  draw: DrawService;
-  firmware: FirmwareService;
-  keyboards: KeyboardsService;
-  log: LogService;
-};
-
-const app = feathers<Services>().configure(configuration());
+const app = feathers().configure(configuration());
 
 app.set("cacheDir", CACHE);
+app.set("root", ROOT);
 
 app.use("parse", new ParseService(app));
 app.use("log", new LogService(DB_PATH, app));
-app.use("draw", new DrawService(ROOT, app));
-app.use("firmware", new FirmwareService(app));
 app.use("keyboards", new KeyboardsService(app));
+app.use("keyboards/:keyboardId/draw", new DrawService(ROOT, app));
+app.use("firmware", new FirmwareService(app));
+app.use("flash", new FlashService(app));
+app.use("status", new StatusService(app));
 
-app.service("firmware").hooks(firmwareHooks);
 app.service("parse").hooks(parseHooks);
+app.service("keyboards/:keyboardId/draw").hooks({
+  before: { all: [resolveKeyboardFromRoute] },
+});
+app.service("firmware").hooks(firmwareHooks);
+app.service("flash").hooks(flashHooks);
+app.service("status").hooks(statusHooks);
+app.service("keyboards").hooks({
+  after: {
+    find: [
+      async (context: HookContext) => {
+        // Enrich with last flash timestamp from log
+        const logService = app.service("log") as any;
+        const rows = logService.db.prepare(
+          `SELECT json_extract(data, '$.keyboard') as keyboard, MAX(timestamp) as last_flashed
+           FROM event_log
+           WHERE service = 'flash' AND method = 'create' AND phase = 'after' AND error IS NULL
+           GROUP BY keyboard`
+        ).all() as { keyboard: string; last_flashed: string }[];
+
+        const lastFlashed: Record<string, string> = {};
+        for (const r of rows) lastFlashed[r.keyboard] = r.last_flashed;
+
+        for (const [name, config] of Object.entries(context.result as Record<string, any>)) {
+          config.last_flashed = lastFlashed[name] ?? "";
+        }
+      },
+      async (context: HookContext) => {
+        if (!context.params.interactive) return;
+        const { default: ora } = await import("ora");
+        const names = Object.keys(context.result).sort();
+        const spin = ora({ discardStdin: false, text: "loading configs..." }).start();
+        for (const name of names) {
+          spin.text = name;
+          await Bun.sleep(80);
+        }
+        spin.succeed(`${names.length} keyboards: ${names.join(", ")}`);
+      },
+    ],
+  },
+});
 
 // ── global event-log hooks ───────────────────────────────────────────
 
-function contextMeta(context: HookContext) {
-  const data = context.data ?? {};
-  const result = context.result ?? {};
-  return {
-    service: context.path,
-    method: context.method,
-    keyboard: data.keyboard ?? result.keyboard ?? result.name,
-    side: data.side ?? result.side,
-    runId: result.runId,
-    workflow:
-      data.workflow ?? result.workflow ?? context.params?.query?.workflow,
-    detail:
-      result.cached != null
-        ? result.cached
-          ? "cache-hit"
-          : "cache-miss"
-        : (result.artifact ?? result.firmware ?? result.svg),
-  };
-}
-
 app.hooks({
-  before: {
-    all: [
-      async (context: HookContext) => {
-        if (context.path === "log") return;
-        await app
-          .service("log")
-          .create({ phase: "before", ...contextMeta(context) });
-      },
-    ],
-  },
-  after: {
-    all: [
-      async (context: HookContext) => {
-        if (context.path === "log") return;
-        await app
-          .service("log")
-          .create({ phase: "after", ...contextMeta(context) });
-      },
-    ],
-  },
-  error: {
-    all: [
-      async (context: HookContext) => {
-        if (context.path === "log") return;
-        await app.service("log").create({
-          phase: "error",
-          ...contextMeta(context),
-          error: context.error?.message ?? String(context.error),
-        });
-      },
-    ],
-  },
+  before: { all: [createLogHook("before")] },
+  after: { all: [createLogHook("after")] },
+  error: { all: [createLogHook("error")] },
 });
 
 // ── export app for programmatic use ──────────────────────────────────
@@ -121,40 +111,33 @@ if (import.meta.path === Bun.main) {
   const { default: meow } = await import("meow");
   const { default: ora } = await import("ora");
 
-  const allKeyboards = await app.service("keyboards").find({});
-  const keyboardNames = Object.keys(allKeyboards).sort();
-  const spin = ora({ discardStdin: false, text: "loading configs..." }).start();
-  for (const name of keyboardNames) {
-    spin.text = name;
-    await Bun.sleep(80);
-  }
-  spin.succeed(`${keyboardNames.length} keyboards: ${keyboardNames.join(", ")}`);
-
   const cli = meow(
     `
     Usage
-      $ keyboards-firmware <command> [options]
+      $ keyb <command> [options]
 
     Commands
-      status, s                          Show last CI build results
+      status, s  [keyboard]              Show CI build status
       get, g     <keyboard>              Download firmware
       flash, f   <keyboard> [side] [-r]  Download and flash firmware
-      parse, p   <file> [-kb] [-km]       Parse keymap.c to JSON
+      parse, p   <file>                  Parse keymap.c to JSON
       draw, d    [keyboard]              Draw keymap visualizations
-      list, l    [--full]                 List keyboards (--full for config table)
+      list, l    [--short]               List keyboards (--short for names only)
       log [n]                            Show last n events (default 20)
 
     Options
       --reset, -r   Flash settings reset before firmware (flash only)
+      --yes, -y     Skip confirmation prompts
       --limit, -n   Number of log entries to show (log only)
+      --short       Show short list (list only)
 
     Examples
-      $ keyboards-firmware status
-      $ keyboards-firmware get totem
-      $ keyboards-firmware flash totem left -r
-      $ keyboards-firmware draw
-      $ keyboards-firmware draw totem
-      $ keyboards-firmware log 50
+      $ keyb status
+      $ keyb get totem
+      $ keyb flash totem left -r
+      $ keyb draw
+      $ keyb draw totem
+      $ keyb log 50
   `,
     {
       importMeta: import.meta,
@@ -174,7 +157,7 @@ if (import.meta.path === Bun.main) {
           shortFlag: "n",
           default: 20,
         },
-        full: {
+        short: {
           type: "boolean",
           default: false,
         },
@@ -183,6 +166,9 @@ if (import.meta.path === Bun.main) {
   );
 
   const [cmd, ...rest] = cli.input;
+  const interactive = !cmd || ["list", "l", "status", "s", "flash", "f"].includes(cmd);
+  const allKeyboards = await app.service("keyboards").find({ interactive } as any) as Record<string, any>;
+  const keyboardNames = Object.keys(allKeyboards).sort();
 
   // ── render helpers ─────────────────────────────────────────────────
 
@@ -203,12 +189,13 @@ if (import.meta.path === Bun.main) {
       return;
     }
     for (const r of rows) {
-      const parts = [r.timestamp, r.env, r.phase, r.service, r.method];
-      if (r.keyboard) parts.push(r.keyboard);
-      if (r.side) parts.push(r.side);
-      if (r.run_id) parts.push(`run:${r.run_id}`);
-      if (r.workflow) parts.push(r.workflow);
-      if (r.detail) parts.push(r.detail);
+      const parts = [r.timestamp, r.phase, r.service, r.method];
+      if (r.data) {
+        const d = JSON.parse(r.data);
+        for (const [k, v] of Object.entries(d)) {
+          if (v != null && v !== "") parts.push(`${k}:${v}`);
+        }
+      }
       if (r.error) parts.push(`ERR: ${r.error}`);
       console.log(parts.join("  "));
     }
@@ -219,11 +206,17 @@ if (import.meta.path === Bun.main) {
   switch (cmd) {
     case "status":
     case "s": {
-      const statuses = await app.service("firmware").find({});
-      const labels = Object.keys(statuses);
-      for (let i = 0; i < labels.length; i++) {
-        if (i > 0) console.log();
-        renderStatus(labels[i], statuses[labels[i]]);
+      const [keyboard] = rest;
+      if (keyboard) {
+        const result = await app.service("status").get(keyboard, {});
+        renderStatus(keyboard, result);
+      } else {
+        const statuses = await app.service("status").find({});
+        const labels = Object.keys(statuses);
+        for (let i = 0; i < labels.length; i++) {
+          if (i > 0) console.log();
+          renderStatus(labels[i], statuses[labels[i]]);
+        }
       }
       break;
     }
@@ -232,10 +225,10 @@ if (import.meta.path === Bun.main) {
     case "g": {
       const [keyboard] = rest;
       if (!keyboard) {
-        console.log("usage: keyboards-firmware get <keyboard>");
+        console.log("usage: keyb get <keyboard>");
         process.exit(1);
       }
-      const result = await app.service("firmware").get(keyboard, {});
+      const result = await app.service("firmware").create({}, { keyboard } as any);
       console.log(
         `firmware for ${result.keyboard} downloaded to ${result.cacheDir}`,
       );
@@ -246,30 +239,31 @@ if (import.meta.path === Bun.main) {
     case "f": {
       const [keyboard, side] = rest;
       if (!keyboard) {
-        console.log("usage: keyboards-firmware flash <keyboard> [side] [-r]\n");
+        console.log("usage: keyb flash <keyboard> [side] [-r]\n");
         console.log("keyboards:");
         keyboardNames.forEach((k: string) => console.log(`  ${k}`));
         process.exit(1);
       }
       if (keyboard !== "iris" && !side) {
         console.log(
-          `usage: keyboards-firmware flash ${keyboard} <left|right> [-r]`,
+          `usage: keyb flash ${keyboard} <left|right> [-r]`,
         );
         process.exit(1);
       }
       await app
-        .service("firmware")
-        .create({ keyboard, side, reset: cli.flags.reset, yes: cli.flags.yes }, {});
+        .service("flash")
+        .create({ side, reset: cli.flags.reset, yes: cli.flags.yes }, { keyboard } as any);
       break;
     }
 
     case "draw":
     case "d": {
       const [keyboard] = rest;
-      if (keyboard) {
-        await app.service("draw").get(keyboard, {});
-      } else {
-        await app.service("draw").create({}, {});
+      const targets = keyboard ? [keyboard] : keyboardNames;
+      for (const kb of targets) {
+        await app.service("keyboards/:keyboardId/draw").create({}, {
+          route: { keyboardId: kb },
+        } as any);
       }
       break;
     }
@@ -278,7 +272,7 @@ if (import.meta.path === Bun.main) {
     case "p": {
       const [file] = rest;
       if (!file) {
-        console.log("usage: keyboards-firmware parse <keymap.c>");
+        console.log("usage: keyb parse <keymap.c>");
         process.exit(1);
       }
       const filePath = file.startsWith("/") ? file : join(ROOT, file);
@@ -289,13 +283,13 @@ if (import.meta.path === Bun.main) {
 
     case "list":
     case "l": {
-      if (cli.flags.full) {
-        console.table(allKeyboards);
-      } else {
+      if (cli.flags.short) {
         for (const name of keyboardNames) {
           const kb = allKeyboards[name];
           console.log(`  ${name}  (${kb.type})`);
         }
+      } else {
+        console.table(allKeyboards);
       }
       break;
     }
@@ -312,5 +306,5 @@ if (import.meta.path === Bun.main) {
     }
   }
 
-  app.service("log").close();
+  (app.service("log") as any).close();
 }

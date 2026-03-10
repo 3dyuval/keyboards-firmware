@@ -9,6 +9,12 @@
     "flash-eyelash": "bun --cwd apps/cli index.ts flash eyelash left -y && bun --cwd apps/cli index.ts flash eyelash right -y",
     "flash-corne": "bun --cwd apps/cli index.ts flash corne left -y && bun --cwd apps/cli index.ts flash corne right -y",
     "flash-iris": "bun --cwd apps/cli index.ts flash iris -y",
+    "draw-iris": "bun --cwd apps/cli index.ts draw iris",
+    "draw-corne": "bun --cwd apps/cli index.ts draw corne",
+    "draw-eyelash": "bun --cwd apps/cli index.ts draw eyelash",
+    "draw-totem": "bun --cwd apps/cli index.ts draw totem",
+    "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
+    "draw": "bun --cwd apps/cli index.ts draw --",
     "mcp": "bun run --filter keyboards-mcp serve",
     "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
   },

@@ -1,4 +1,4 @@
-import type { Application, Id, Params } from "@feathersjs/feathers";
+import type { Application, Params } from "@feathersjs/feathers";
 import { existsSync, mkdirSync } from "fs";
 import { join, basename } from "path";
 
@@ -12,7 +12,7 @@ export class DrawService {
   }
 
   private cfg() {
-    return this.app.get("draw") as { outputDir: string; config: string; qmkKeymap: string };
+    return this.app.get("draw") as { outputDir: string; config: string };
   }
 
   private venvDir() { return join(this.root, ".venv"); }
@@ -39,85 +39,55 @@ export class DrawService {
     return r.stdout.toString();
   }
 
-  private async drawZmk(kmap: string, bin: string, outDir: string, configPath: string) {
-    const name = basename(kmap, ".keymap");
-    console.debug(`  ${name}`);
-    const yaml = this.keymap(bin, "-c", configPath, "parse", "-z", kmap);
-    const yamlPath = join(outDir, `${name}.yaml`);
+  private async drawZmk(keymapFile: string, kb: string, bin: string, outDir: string, configPath: string) {
+    console.debug(`  ${kb}`);
+    const yaml = this.keymap(bin, "-c", configPath, "parse", "-z", keymapFile);
+    const yamlPath = join(outDir, `${kb}.yaml`);
     await Bun.write(yamlPath, yaml);
     const svg = this.keymap(bin, "-c", configPath, "draw", yamlPath);
-    const svgPath = join(outDir, `${name}.svg`);
+    const svgPath = join(outDir, `${kb}.svg`);
     await Bun.write(svgPath, svg);
-    return { name, yaml: yamlPath, svg: svgPath };
+    return { name: kb, yaml: yamlPath, svg: svgPath };
   }
 
-  private async drawQmk(bin: string, outDir: string, configPath: string, qmkPath: string) {
-    console.debug("  iris");
-    const yaml = this.keymap(bin, "-c", configPath, "parse", "-q", qmkPath);
-    const yamlPath = join(outDir, "iris.yaml");
+  private async drawQmk(keymapFile: string, kb: string, bin: string, outDir: string, configPath: string) {
+    console.debug(`  ${kb}`);
+
+    let jsonPath = keymapFile;
+    if (keymapFile.endsWith(".c")) {
+      const result = await this.app.service("parse").create({ file: keymapFile }, {});
+      jsonPath = join(outDir, `${kb}.json`);
+      await Bun.write(jsonPath, JSON.stringify(result));
+    }
+
+    const yaml = this.keymap(bin, "-c", configPath, "parse", "-q", jsonPath);
+    const yamlPath = join(outDir, `${kb}.yaml`);
     await Bun.write(yamlPath, yaml);
     const svg = this.keymap(bin, "-c", configPath, "draw", yamlPath);
-    const svgPath = join(outDir, "iris.svg");
+    const svgPath = join(outDir, `${kb}.svg`);
     await Bun.write(svgPath, svg);
-    return { name: "iris", yaml: yamlPath, svg: svgPath };
+    return { name: kb, yaml: yamlPath, svg: svgPath };
   }
 
-  // GET /draw — list what would be drawn
-  async find(params: Params) {
-    const glob = new Bun.Glob("*.keymap");
-    const names: string[] = [];
-    for (const file of glob.scanSync(join(this.root, "config"))) {
-      names.push(file.replace(/\.keymap$/, ""));
-    }
-    const { qmkKeymap } = this.cfg();
-    if (existsSync(join(this.root, qmkKeymap))) names.push("iris");
-    return names.sort();
-  }
-
-  // GET /draw/:keyboard — draw a single keyboard
-  async get(keyboard: Id, params: Params) {
-    const kb = String(keyboard);
-    const { outputDir, config: configFile, qmkKeymap } = this.cfg();
-    const outDir = join(this.root, outputDir);
-    const configPath = join(this.root, configFile);
-    mkdirSync(outDir, { recursive: true });
-    const bin = this.ensureVenv();
-
-    if (kb === "iris") {
-      const qmkPath = join(this.root, qmkKeymap);
-      if (!existsSync(qmkPath)) throw new Error(`QMK keymap not found: ${qmkPath}`);
-      console.debug("Drawing QMK keymaps...");
-      return this.drawQmk(bin, outDir, configPath, qmkPath);
-    }
-
-    const kmap = join(this.root, "config", `${kb}.keymap`);
-    if (!existsSync(kmap)) throw new Error(`keymap not found: ${kmap}`);
-    console.debug("Drawing ZMK keymaps...");
-    return this.drawZmk(kmap, bin, outDir, configPath);
-  }
-
-  // POST /draw — draw all keyboards
+  // POST /keyboards/:keyboardId/draw — draw a single keyboard
   async create(data: any, params: Params) {
-    const { outputDir, config: configFile, qmkKeymap } = this.cfg();
+    const { keyboard, keyboardConfig } = params as any;
+    const { keymapPath } = keyboardConfig;
+
+    if (!existsSync(keymapPath)) throw new Error(`keymap not found: ${keymapPath}`);
+
+    const { outputDir, config: configFile } = this.cfg();
     const outDir = join(this.root, outputDir);
     const configPath = join(this.root, configFile);
     mkdirSync(outDir, { recursive: true });
     const bin = this.ensureVenv();
-    const results: any[] = [];
+
+    if (keyboardConfig.type === "qmk") {
+      console.debug("Drawing QMK keymaps...");
+      return this.drawQmk(keymapPath, keyboard, bin, outDir, configPath);
+    }
 
     console.debug("Drawing ZMK keymaps...");
-    const glob = new Bun.Glob("*.keymap");
-    for (const file of glob.scanSync(join(this.root, "config"))) {
-      results.push(await this.drawZmk(join(this.root, "config", file), bin, outDir, configPath));
-    }
-
-    const qmkPath = join(this.root, qmkKeymap);
-    if (existsSync(qmkPath)) {
-      console.debug("Drawing QMK keymaps...");
-      results.push(await this.drawQmk(bin, outDir, configPath, qmkPath));
-    }
-
-    console.debug(`Done! Output in ${outDir}`);
-    return results;
+    return this.drawZmk(keymapPath, keyboard, bin, outDir, configPath);
   }
 }
