@@ -99,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
         _______, KC_EXLM, KC_LPRN, KC_RPRN, KC_AMPR, KC_GRV,                   KC_COLN, KC_EQL,  KC_MINS, KC_PLUS, KC_UNDS, _______,
         _______, KC_ASTR, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, KC_CIRC, KC_LCBR, KC_RCBR, LGUI_T(KC_AT), KC_PERC, KC_NO, KC_NO, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
+        _______, KC_CIRC, KC_LCBR, KC_RCBR, LGUI_T(KC_AT), LT(_NUM,KC_PERC), KC_NO, KC_NO, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
                                    KC_LCTL, _______, _______,                  _______, KC_DEL,  _______
     ),
 
@@ -121,6 +121,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                    _______, _______, _______,                  _______, _______, _______
     ),
 };
+
+// ── Hold-on-other-key-press (per key) ───────────────────────────────
+// LGUI_T(KC_AT) should trigger hold (LGUI) as soon as another key is
+// pressed while it is held, matching ZMK "balanced" flavor.
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LGUI_T(KC_AT):
+        case LCTL_T(KC_ESC):
+        case LT(_NUM, KC_PERC):
+            return true;
+        default:
+            return false;
+    }
+}
 
 // ── Layer RGB indicator ─────────────────────────────────────────────
 
