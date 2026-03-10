@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "keyb": {
+    "keyb-stdio": {
       "command": "bun",
       "args": ["/home/yuv/keyboards-firmware/apps/cli1/index.tsx", "--mcp"]
     }

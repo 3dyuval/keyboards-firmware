@@ -8,7 +8,7 @@ import { feathers } from "@feathersjs/feathers";
 import type { AppSettings } from "./types.d.ts";
 import type { App } from "./src/app.ts";
 import { BaseService } from "./src/app.ts";
-import { mcpPresenter, mcpErrorHandler, startMcpServer } from "./lib/mcp.ts";
+import { mcpPresenter, mcpErrorHandler, startMcpServer, startMcpHttpServer } from "./lib/mcp.ts";
 
 // ── minimal app (no config files) ──────────────────────────────────
 
@@ -45,4 +45,14 @@ app.hooks({
 
 // ── start ──────────────────────────────────────────────────────────
 
-await startMcpServer(app);
+const useHttp = process.argv.includes("--http");
+const port = (() => {
+  const i = process.argv.indexOf("--port");
+  return i !== -1 ? Number(process.argv[i + 1]) : 3001;
+})();
+
+if (useHttp) {
+  await startMcpHttpServer(app, port);
+} else {
+  await startMcpServer(app);
+}

@@ -7,7 +7,7 @@ import { registerServices } from "./lib/register.ts";
 import { AppContext, RootContext } from "./lib/context.tsx";
 import { resolveCommand, allRoutes, parseArgs, routeUsage } from "./lib/route.ts";
 import { discover } from "./lib/discover.ts";
-import { mcpPresenter, mcpErrorHandler, startMcpServer } from "./lib/mcp.ts";
+import { mcpPresenter, mcpErrorHandler, startMcpServer, startMcpHttpServer } from "./lib/mcp.ts";
 
 // ── bootstrap (shared across all modes) ─────────────────────────────
 
@@ -24,6 +24,10 @@ const [, , cmd, ...rest] = process.argv;
 
 if (cmd === "--mcp") {
   await startMcpServer(app);
+} else if (cmd === "--mcp-http") {
+  const portIdx = rest.indexOf("--port");
+  const port = portIdx !== -1 ? Number(rest[portIdx + 1]) : 3001;
+  await startMcpHttpServer(app, port);
 } else if (cmd === "--rest") {
   console.error("REST mode not yet implemented");
   process.exit(1);

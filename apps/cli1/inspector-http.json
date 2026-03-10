@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "keyb-http": {
+      "url": "http://localhost:3001/mcp"
+    }
+  }
+}

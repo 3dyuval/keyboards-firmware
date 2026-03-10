@@ -1,6 +1,7 @@
 import type { App, Hook } from "../src/app.ts";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import {
   ListToolsRequestSchema,
   CallToolRequestSchema,
@@ -67,7 +68,7 @@ function collectMcpTools(app: App): Map<string, ResolvedTool> {
   return tools;
 }
 
-export async function startMcpServer(app: App) {
+function createMcpServer(app: App) {
   const tools = collectMcpTools(app);
 
   const server = new Server(
@@ -97,8 +98,6 @@ export async function startMcpServer(app: App) {
     }
 
     try {
-      // mcpPresenter after hook consumes generators → result is plain data
-      // find/get take (params), create/patch/update take (data, params)
       const args = request.params.arguments ?? {};
       const method = def.resolves;
       const isQuery = method === "find" || method === "get";
@@ -106,7 +105,6 @@ export async function startMcpServer(app: App) {
         ? await def.service[method]({ ...args, provider: "mcp" })
         : await def.service[method](args, { provider: "mcp" });
 
-      // File result
       if (result?.filePath && result?.mimeType) {
         const blob = Buffer.from(
           await Bun.file(result.filePath).arrayBuffer(),
@@ -125,7 +123,6 @@ export async function startMcpServer(app: App) {
         };
       }
 
-      // Structured data — structuredContent must be a record, not array
       const text = JSON.stringify(result, null, 2);
       if (result && typeof result === "object" && !Array.isArray(result)) {
         return {
@@ -146,6 +143,50 @@ export async function startMcpServer(app: App) {
     }
   });
 
+  return server;
+}
+
+export async function startMcpServer(app: App) {
+  const server = createMcpServer(app);
   const transport = new StdioServerTransport();
   await server.connect(transport);
+}
+
+export async function startMcpHttpServer(app: App, port = 3001) {
+  const sessions = new Map<string, WebStandardStreamableHTTPServerTransport>();
+
+  Bun.serve({
+    port,
+    async fetch(req) {
+      const url = new URL(req.url);
+      if (url.pathname !== "/mcp") {
+        return new Response("Not found", { status: 404 });
+      }
+
+      // Route to existing session
+      const sessionId = req.headers.get("mcp-session-id");
+      if (sessionId && sessions.has(sessionId)) {
+        return sessions.get(sessionId)!.handleRequest(req);
+      }
+
+      // New session — create transport + server
+      const transport = new WebStandardStreamableHTTPServerTransport({
+        sessionIdGenerator: () => crypto.randomUUID(),
+        onsessioninitialized: (id) => {
+          sessions.set(id, transport);
+        },
+      });
+
+      transport.onclose = () => {
+        if (transport.sessionId) sessions.delete(transport.sessionId);
+      };
+
+      const server = createMcpServer(app);
+      await server.connect(transport);
+
+      return transport.handleRequest(req);
+    },
+  });
+
+  console.log(`MCP HTTP server listening on http://localhost:${port}/mcp`);
 }

@@ -17,9 +17,11 @@
     "draw": "NODE_ENV=development bun --cwd apps/cli1 index.tsx draw --",
     "mcp": "bun run --filter keyboards-mcp serve",
     "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards",
-    "jam1": "cd apps/cli1 && inspector --config inspector.json --server keyb"
+    "jam-stdio": "cd apps/cli1 && inspector --port 6275 -- bun /home/yuv/keyboards-firmware/apps/cli1/index.tsx --mcp",
+    "mcp-http": "NODE_ENV=development bun --cwd apps/cli1 index.tsx --mcp-http",
+    "jam-http": "inspector --url http://localhost:3001/mcp --name keyb-http"
   },
   "dependencies": {
-    "@mcpjam/inspector": "^1.5.12"
+    "@mcpjam/inspector": "^2.0.5"
   }
 }
