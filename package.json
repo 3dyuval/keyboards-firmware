@@ -5,10 +5,10 @@
   ],
   "scripts": {
     "cli": "bun run --filter keyb dev",
-    "flash-totem": "bun --cwd apps/cli index.ts flash totem left -y && bun --cwd apps/cli index.ts flash totem right -y",
-    "flash-eyelash": "bun --cwd apps/cli index.ts flash eyelash left -y && bun --cwd apps/cli index.ts flash eyelash right -y",
-    "flash-corne": "bun --cwd apps/cli index.ts flash corne left -y && bun --cwd apps/cli index.ts flash corne right -y",
-    "flash-iris": "bun --cwd apps/cli index.ts flash iris -y",
+    "flash-totem": "bun --cwd apps/cli1 index.tsx flash totem left -y && bun --cwd apps/cli1 index.tsx flash totem right -y",
+    "flash-eyelash": "bun --cwd apps/cli1 index.tsx flash eyelash left -y && bun --cwd apps/cli1 index.tsx flash eyelash right -y",
+    "flash-corne": "bun --cwd apps/cli1 index.tsx flash corne left -y && bun --cwd apps/cli1 index.tsx flash corne right -y",
+    "flash-iris": "bun --cwd apps/cli1 index.tsx flash iris -y",
     "draw-iris": "bun --cwd apps/cli index.ts draw iris",
     "draw-corne": "bun --cwd apps/cli index.ts draw corne",
     "draw-eyelash": "bun --cwd apps/cli index.ts draw eyelash",
@@ -16,7 +16,8 @@
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "bun --cwd apps/cli index.ts draw --",
     "mcp": "bun run --filter keyboards-mcp serve",
-    "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
+    "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards",
+    "jam1": "cd apps/cli1 && inspector --config inspector.json --server keyb"
   },
   "dependencies": {
     "@mcpjam/inspector": "^1.5.12"
