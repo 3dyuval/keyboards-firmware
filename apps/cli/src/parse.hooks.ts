@@ -10,7 +10,8 @@ export async function initParser(context: HookContext) {
   }
   await Parser.init();
   const parser = new Parser();
-  const wasmPath = join(import.meta.dir, "..", "tree-sitter-c.wasm");
+  const root = context.app.get("root") as string;
+  const wasmPath = join(root, "tree-sitter-c.wasm");
   const lang = await Language.load(wasmPath);
   parser.setLanguage(lang);
   context.app.set("c-parser", parser);

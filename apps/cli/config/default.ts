@@ -5,8 +5,15 @@ const dataHome =
 
 const dir = (rel: string) => join(dataHome, "keyb", rel);
 
+const root =
+  Bun.spawnSync(["git", "rev-parse", "--show-toplevel"])
+    .stdout.toString()
+    .trim() || ".";
+
 export default function ({ defer }: any) {
   return {
+    root,
+
     // Resolved under $XDG_DATA_HOME/keyb/
     // Override in local.ts to change the relative path
     cachePath: "firmware",
@@ -14,9 +21,8 @@ export default function ({ defer }: any) {
 
     // Keymap drawer settings for SVG generation
     draw: {
-      outputPath: "draw",
-      outputDir: defer((cfg: any) => dir(cfg.draw.outputPath)),
-      config: "keymap-drawer/config.yaml",
+      outputDir: defer((cfg: any) => join(cfg.root, "keymap-drawer")),
+      config: defer((cfg: any) => join(cfg.root, "keymap-drawer/config.yaml")),
     },
 
     // GitHub repository for CI workflow lookups
