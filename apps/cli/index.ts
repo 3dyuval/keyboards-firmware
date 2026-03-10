@@ -46,7 +46,7 @@ app.set("cacheDir", CACHE);
 app.use("log", new LogService(DB_PATH, app));
 app.use("draw", new DrawService(ROOT, app));
 app.use("firmware", new FirmwareService(app));
-app.use("keyboards", new KeyboardsService(ROOT));
+app.use("keyboards", new KeyboardsService(app));
 
 app.service("firmware").hooks(firmwareHooks);
 
@@ -117,13 +117,14 @@ if (import.meta.path === Bun.main) {
   const { default: meow } = await import("meow");
   const { default: ora } = await import("ora");
 
-  const keyboards = await app.service("keyboards").find({});
+  const allKeyboards = await app.service("keyboards").find({});
+  const keyboardNames = Object.keys(allKeyboards).sort();
   const spin = ora({ discardStdin: false, text: "loading configs..." }).start();
-  for (const name of keyboards) {
+  for (const name of keyboardNames) {
     spin.text = name;
     await Bun.sleep(80);
   }
-  spin.succeed(`${keyboards.length} keyboards: ${keyboards.join(", ")}`);
+  spin.succeed(`${keyboardNames.length} keyboards: ${keyboardNames.join(", ")}`);
 
   const cli = meow(
     `
@@ -135,7 +136,7 @@ if (import.meta.path === Bun.main) {
       get, g     <keyboard>              Download firmware
       flash, f   <keyboard> [side] [-r]  Download and flash firmware
       draw, d    [keyboard]              Draw keymap visualizations
-      list, l                            List available keyboards
+      list, l    [--full]                 List keyboards (--full for config table)
       log [n]                            Show last n events (default 20)
 
     Options
@@ -167,6 +168,10 @@ if (import.meta.path === Bun.main) {
           type: "number",
           shortFlag: "n",
           default: 20,
+        },
+        full: {
+          type: "boolean",
+          default: false,
         },
       },
     },
@@ -238,7 +243,7 @@ if (import.meta.path === Bun.main) {
       if (!keyboard) {
         console.log("usage: keyboards-firmware flash <keyboard> [side] [-r]\n");
         console.log("keyboards:");
-        keyboards.forEach((k: string) => console.log(`  ${k}`));
+        keyboardNames.forEach((k: string) => console.log(`  ${k}`));
         process.exit(1);
       }
       if (keyboard !== "iris" && !side) {
@@ -266,7 +271,14 @@ if (import.meta.path === Bun.main) {
 
     case "list":
     case "l": {
-      keyboards.forEach((k: string) => console.log(k));
+      if (cli.flags.full) {
+        console.table(allKeyboards);
+      } else {
+        for (const name of keyboardNames) {
+          const kb = allKeyboards[name];
+          console.log(`  ${name}  (${kb.type})`);
+        }
+      }
       break;
     }
 

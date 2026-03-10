@@ -1,19 +1,20 @@
-import { join } from "path";
-import type { Params } from "@feathersjs/feathers";
+import type { Application, Id, Params } from "@feathersjs/feathers";
 
 export class KeyboardsService {
-  private root: string;
+  private app: Application;
 
-  constructor(root: string) {
-    this.root = root;
+  constructor(app: Application) {
+    this.app = app;
   }
 
   async find(params: Params) {
-    const glob = new Bun.Glob("*.keymap");
-    const names: string[] = [];
-    for (const file of glob.scanSync(join(this.root, "config"))) {
-      names.push(file.replace(/\.keymap$/, ""));
-    }
-    return names.sort();
+    return this.app.get("keyboards") as Record<string, any>;
+  }
+
+  async get(id: Id, params: Params) {
+    const keyboards = this.app.get("keyboards") as Record<string, any>;
+    const config = keyboards[id as string];
+    if (!config) throw new Error(`unknown keyboard: ${id}`);
+    return { name: id, ...config };
   }
 }
