@@ -8,6 +8,7 @@ import configuration from "@feathersjs/configuration";
 import { join } from "path";
 import { mkdirSync } from "fs";
 
+import { ParseService } from "./src/parse.ts";
 import { DrawService } from "./src/draw.ts";
 import { FirmwareService } from "./src/firmware.ts";
 import { firmwareHooks } from "./src/firmware.hooks.ts";
@@ -33,6 +34,7 @@ mkdirSync(join(ROOT, ".cache"), { recursive: true });
 // ── app ──────────────────────────────────────────────────────────────
 
 type Services = {
+  parse: ParseService;
   draw: DrawService;
   firmware: FirmwareService;
   keyboards: KeyboardsService;
@@ -43,6 +45,7 @@ const app = feathers<Services>().configure(configuration());
 
 app.set("cacheDir", CACHE);
 
+app.use("parse", new ParseService(app));
 app.use("log", new LogService(DB_PATH, app));
 app.use("draw", new DrawService(ROOT, app));
 app.use("firmware", new FirmwareService(app));
@@ -135,6 +138,7 @@ if (import.meta.path === Bun.main) {
       status, s                          Show last CI build results
       get, g     <keyboard>              Download firmware
       flash, f   <keyboard> [side] [-r]  Download and flash firmware
+      parse, p   <file> [-kb] [-km]       Parse keymap.c to JSON
       draw, d    [keyboard]              Draw keymap visualizations
       list, l    [--full]                 List keyboards (--full for config table)
       log [n]                            Show last n events (default 20)
@@ -266,6 +270,19 @@ if (import.meta.path === Bun.main) {
       } else {
         await app.service("draw").create({}, {});
       }
+      break;
+    }
+
+    case "parse":
+    case "p": {
+      const [file] = rest;
+      if (!file) {
+        console.log("usage: keyboards-firmware parse <keymap.c>");
+        process.exit(1);
+      }
+      const filePath = file.startsWith("/") ? file : join(ROOT, file);
+      const result = await app.service("parse").create({ file: filePath });
+      console.log(JSON.stringify(result, null, 2));
       break;
     }
 

@@ -11,7 +11,7 @@
       "name": "keyb",
       "version": "1.0.0",
       "bin": {
-        "keyb": "fw.ts",
+        "keyb": "index.ts",
       },
       "dependencies": {
         "@feathersjs/configuration": "^5.0.42",
@@ -20,6 +20,7 @@
         "meow": "^13.0.0",
         "octokit": "^5.0.5",
         "ora": "^9.0.0",
+        "web-tree-sitter": "0.25.3",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -1834,6 +1835,8 @@
     "vue": ["vue@3.5.27", "", { "dependencies": { "@vue/compiler-dom": "3.5.27", "@vue/compiler-sfc": "3.5.27", "@vue/runtime-dom": "3.5.27", "@vue/server-renderer": "3.5.27", "@vue/shared": "3.5.27" }, "peerDependencies": { "typescript": "*" }, "optionalPeers": ["typescript"] }, "sha512-aJ/UtoEyFySPBGarREmN4z6qNKpbEguYHMmXSiOGk69czc+zhs0NF6tEFrY8TZKAl8N/LYAkd4JHVd5E/AsSmw=="],
 
     "web-namespaces": ["web-namespaces@2.0.1", "", {}, "sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ=="],
+
+    "web-tree-sitter": ["web-tree-sitter@0.25.3", "", {}, "sha512-e0hdXG+nJ18Zd/QJFhSx0DNTSMz7miwUjKyJ/lglTnZo6ke08++BQzXkaeaqnGJFi9qq+nPJg2L8hYAjduToHQ=="],
 
     "web-vitals": ["web-vitals@5.1.0", "", {}, "sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg=="],
 
