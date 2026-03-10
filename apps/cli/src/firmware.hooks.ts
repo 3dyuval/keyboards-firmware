@@ -16,7 +16,7 @@ export function checkGithubAuth(context: HookContext) {
   }
 }
 
-export function resolveConfig(context: HookContext) {
+export function resolveKeyboard(context: HookContext) {
   const github = context.app.get("github") as { owner: string; repo: string };
   const keyboards = context.app.get("keyboards") as Record<string, KeyboardConfig>;
   const cacheDir = context.app.get("cacheDir") as string;
@@ -24,12 +24,18 @@ export function resolveConfig(context: HookContext) {
   context.params.github = github;
   context.params.cacheDir = cacheDir;
 
+  // For find, resolve all workflows
   if (context.method === "find") {
     context.params.workflows = [...new Set(Object.values(keyboards).map((k) => k.workflow))];
     return;
   }
 
-  const kb = String(context.id ?? context.data?.keyboard);
+  // Resolve keyboard from route param, id, or data
+  const kb = String(
+    context.params.route?.keyboardId ??
+    context.id ??
+    context.data?.keyboard
+  );
   context.params.keyboard = kb;
   context.params.keyboardConfig = keyboards[kb];
 }
@@ -40,16 +46,23 @@ export function validateKeyboard(context: HookContext) {
   }
 }
 
-export async function checkCache(context: HookContext) {
-  const { github: { owner, repo }, keyboardConfig, keyboard, cacheDir } = context.params as any;
-  const { workflow, artifact } = keyboardConfig;
-
-  const runId = await gh.waitAndResolve(owner, repo, workflow);
+export async function resolveRunId(context: HookContext) {
+  const { github: { owner, repo }, keyboardConfig } = context.params as any;
+  const runId = await gh.waitAndResolve(owner, repo, keyboardConfig.workflow);
   context.params.runId = runId;
+}
 
+export async function checkCache(context: HookContext) {
+  const { keyboard, runId, cacheDir, keyboardConfig } = context.params as any;
   const stampFile = join(cacheDir, ".run-id");
   if (existsSync(stampFile) && readFileSync(stampFile, "utf-8").trim() === runId) {
-    context.result = { keyboard, runId, workflow, artifact, cached: true, cacheDir };
+    context.result = {
+      keyboard, runId,
+      workflow: keyboardConfig.workflow,
+      artifact: keyboardConfig.artifact,
+      cached: true,
+      cacheDir,
+    };
   }
 }
 
@@ -62,12 +75,24 @@ export function writeCache(context: HookContext) {
 
 export const firmwareHooks = {
   before: {
-    all: [checkGithubAuth],
-    find: [resolveConfig],
-    get: [resolveConfig, validateKeyboard, checkCache],
-    create: [resolveConfig, validateKeyboard],
+    all: [checkGithubAuth, resolveKeyboard, validateKeyboard, resolveRunId],
+    get: [checkCache],
   },
   after: {
-    get: [writeCache],
+    create: [writeCache],
+  },
+};
+
+export const flashHooks = {
+  before: {
+    create: [checkGithubAuth, resolveKeyboard, validateKeyboard, resolveRunId],
+  },
+};
+
+export const statusHooks = {
+  before: {
+    all: [checkGithubAuth, resolveKeyboard],
+    get: [validateKeyboard],
+    find: [],
   },
 };
