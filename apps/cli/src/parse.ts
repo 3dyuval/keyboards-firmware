@@ -1,23 +1,5 @@
-import { Parser, Language } from "web-tree-sitter";
-import { join } from "path";
-import type { Application, HookContext, Params } from "@feathersjs/feathers";
-
-// ── Parser init hook ───────────────────────────────────────────────
-
-export async function initParser(context: HookContext) {
-  const cached = context.app.get("c-parser");
-  if (cached) {
-    context.params.parser = cached;
-    return;
-  }
-  await Parser.init();
-  const parser = new Parser();
-  const wasmPath = join(import.meta.dir, "..", "tree-sitter-c.wasm");
-  const lang = await Language.load(wasmPath);
-  parser.setLanguage(lang);
-  context.app.set("c-parser", parser);
-  context.params.parser = parser;
-}
+import { Parser } from "web-tree-sitter";
+import type { Application, Params } from "@feathersjs/feathers";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -167,9 +149,3 @@ export class ParseService {
     return names;
   }
 }
-
-export const parseHooks = {
-  before: {
-    create: [initParser],
-  },
-};
