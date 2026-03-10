@@ -88,8 +88,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ── Base (Graphite) ─────────────────────────────────────────────
     [_BASE] = LAYOUT(
         KC_F1,          KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,             KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-        LGUI_T(KC_ESC), LT(_SYS,KC_B), KC_L, KC_D,  KC_W,    KC_Z,             KC_SCLN, KC_F,    KC_O,    KC_U,    KC_J,    KC_RSFT,
-        LT(_NUM,KC_TAB),KC_N,    KC_R,    KC_T,    KC_S,    KC_G,              KC_Y,    KC_H,    KC_A,    KC_E,    KC_I,    KC_QUOT,
+        MO(_NUM),       LT(_SYS,KC_B), KC_L, KC_D,  KC_W,    KC_Z,             KC_SCLN, KC_F,    KC_O,    KC_U,    KC_J,    KC_RSFT,
+        KC_LGUI,        KC_N,    KC_R,    KC_T,    KC_S,    KC_G,              KC_Y,    KC_H,    KC_A,    KC_E,    KC_I,    KC_QUOT,
         TD_LSFT,        KC_Q,    KC_X,    KC_M,    KC_C,    KC_V,    KC_NO,    KC_NO,   KC_K,    KC_P,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
                                           KC_LCTL, MO(_SYM),KC_SPC,           KC_ENT,  KC_BSPC, KC_LALT
     ),
