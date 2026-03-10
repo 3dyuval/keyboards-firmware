@@ -1,0 +1,18 @@
+{
+  "name": "keyb1",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@feathersjs/configuration": "^5.0.42",
+    "@feathersjs/feathers": "^5.0.42",
+    "@inkjs/ui": "^2.0.0",
+    "ink": "^6.8.0",
+    "react": "^19.2.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "latest"
+  }
+}
