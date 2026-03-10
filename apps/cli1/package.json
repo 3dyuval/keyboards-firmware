@@ -7,6 +7,7 @@
     "@feathersjs/configuration": "^5.0.42",
     "@feathersjs/feathers": "^5.0.42",
     "@inkjs/ui": "^2.0.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "ink": "^6.8.0",
     "octokit": "^5.0.5",
     "react": "^19.2.4",

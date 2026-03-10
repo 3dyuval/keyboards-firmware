@@ -43,9 +43,11 @@ export default function KeyboardList() {
 
   return (
     <Box flexDirection="column">
-      <Text color="green">
-        {rows.length} keyboards{enriching ? " (loading details...)" : ""}
-      </Text>
+      {enriching ? (
+        <Spinner label={`${rows.length} keyboards (loading details...)`} />
+      ) : (
+        <Text color="green">{rows.length} keyboards</Text>
+      )}
       <Box marginTop={1}>
         <Table
           data={tableData}
