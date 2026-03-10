@@ -76,18 +76,16 @@ export class DrawService {
 
     if (!existsSync(keymapPath)) throw new Error(`keymap not found: ${keymapPath}`);
 
-    const { outputDir, config: configFile } = this.cfg();
-    const outDir = join(this.root, outputDir);
-    const configPath = join(this.root, configFile);
-    mkdirSync(outDir, { recursive: true });
+    const { outputDir, config: configPath } = this.cfg();
+    mkdirSync(outputDir, { recursive: true });
     const bin = this.ensureVenv();
 
     if (keyboardConfig.type === "qmk") {
       console.debug("Drawing QMK keymaps...");
-      return this.drawQmk(keymapPath, keyboard, bin, outDir, configPath);
+      return this.drawQmk(keymapPath, keyboard, bin, outputDir, configPath);
     }
 
     console.debug("Drawing ZMK keymaps...");
-    return this.drawZmk(keymapPath, keyboard, bin, outDir, configPath);
+    return this.drawZmk(keymapPath, keyboard, bin, outputDir, configPath);
   }
 }

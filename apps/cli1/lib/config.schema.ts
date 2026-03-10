@@ -3,7 +3,6 @@ import { KeyboardSchema } from "../src/keyboards/keyboards.schema.ts";
 
 export const ConfigSchema = z.object({
   root: z.string(),
-  cachePath: z.string(),
   cacheDir: z.string(),
 
   draw: z.object({

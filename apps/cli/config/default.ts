@@ -1,10 +1,5 @@
 import { join } from "path";
 
-const dataHome =
-  Bun.env.XDG_DATA_HOME ?? join(Bun.env.HOME!, ".local/share");
-
-const dir = (rel: string) => join(dataHome, "keyb", rel);
-
 const root =
   Bun.spawnSync(["git", "rev-parse", "--show-toplevel"])
     .stdout.toString()
@@ -14,10 +9,7 @@ export default function ({ defer }: any) {
   return {
     root,
 
-    // Resolved under $XDG_DATA_HOME/keyb/
-    // Override in local.ts to change the relative path
-    cachePath: "firmware",
-    cacheDir: defer((cfg: any) => dir(cfg.cachePath)),
+    cacheDir: defer((cfg: any) => join(cfg.root, ".cache/firmware")),
 
     // Keymap drawer settings for SVG generation
     draw: {
