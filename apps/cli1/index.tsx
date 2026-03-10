@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import React from "react";
-import { render } from "ink";
+import { render, Text } from "ink";
 import { join } from "path";
 import { app } from "./src/app.ts";
 import { registerServices } from "./lib/register.ts";
@@ -63,10 +63,27 @@ if (cmd === "--mcp") {
 
   const Component = route.component;
 
+  class ErrorBoundary extends React.Component<
+    { children: React.ReactNode },
+    { error?: Error }
+  > {
+    state: { error?: Error } = {};
+    static getDerivedStateFromError(error: Error) {
+      return { error };
+    }
+    render() {
+      if (this.state.error)
+        return <Text color="red">Error: {this.state.error.message}</Text>;
+      return this.props.children;
+    }
+  }
+
   render(
     <AppContext.Provider value={app}>
       <RootContext.Provider value={true}>
-        <Component {...args} />
+        <ErrorBoundary>
+          <Component {...args} />
+        </ErrorBoundary>
       </RootContext.Provider>
     </AppContext.Provider>,
   );
