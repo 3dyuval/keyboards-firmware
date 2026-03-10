@@ -13,7 +13,7 @@ layers:
   - F10
   - F11
   - F12
-  - MO( NUM)
+  - ''
   - LT( SYS,B)
   - L
   - D
@@ -25,7 +25,7 @@ layers:
   - U
   - J
   - RSFT
-  - LGUI
+  - CAPS
   - N
   - R
   - T
@@ -98,8 +98,8 @@ layers:
   - ^
   - '{'
   - '}'
-  - {t: '@', h: LGUI}
-  - '%'
+  - '@'
+  - LT( NUM,PERC)
   - ''
   - ''
   - PGDN
