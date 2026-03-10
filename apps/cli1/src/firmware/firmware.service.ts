@@ -1,5 +1,5 @@
 import type { Id, Params } from "@feathersjs/feathers";
-import { BaseService } from "../base-service.ts";
+import { BaseService } from "../app.ts";
 import { FirmwareCreateSchema } from "./firmware.schema.ts";
 import { github } from "./gh.ts";
 import * as hw from "./hw.ts";
