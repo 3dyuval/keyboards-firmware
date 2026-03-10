@@ -1,19 +1,17 @@
-import type { Application } from "@feathersjs/feathers";
 import { Octokit } from "octokit";
 import { mkdirSync, rmSync } from "fs";
 import { join } from "path";
+import type { App } from "../app.ts";
 
-const APP_KEY = "_octokit";
-
-function octo(app: Application): Octokit {
-  const cached = app.get(APP_KEY) as Octokit | undefined;
+function octo(app: App): Octokit {
+  const cached = app.get("_octokit");
   if (cached) return cached;
 
   const token =
     process.env.GITHUB_TOKEN ||
     process.env.GH_TOKEN ||
     process.env.GITHUB_AUTH_TOKEN ||
-    (app.get("githubAuthToken") as string | undefined);
+    app.get("githubAuthToken");
   if (!token) {
     throw new Error(
       "Missing GitHub token — set GITHUB_TOKEN env var or githubAuthToken in local.json",
@@ -21,15 +19,12 @@ function octo(app: Application): Octokit {
   }
 
   const instance = new Octokit({ auth: token });
-  app.set(APP_KEY, instance);
+  app.set("_octokit", instance);
   return instance;
 }
 
-export function github(app: Application) {
-  const { owner, repo } = app.get("github") as {
-    owner: string;
-    repo: string;
-  };
+export function github(app: App) {
+  const { owner, repo } = app.get("github");
   const ok = octo(app);
 
   return {

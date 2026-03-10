@@ -1,7 +1,8 @@
 import { feathers } from "@feathersjs/feathers";
-import type { Application } from "@feathersjs/feathers";
+import type { Application, HookContext } from "@feathersjs/feathers";
 import { join } from "path";
 import type { ZodType } from "zod";
+import type { AppSettings } from "../types.d.ts";
 
 // ── suppress debug logs in production ────────────────────────────────
 if (process.env.NODE_ENV !== "development") {
@@ -10,11 +11,14 @@ if (process.env.NODE_ENV !== "development") {
 
 // ── base service ─────────────────────────────────────────────────────
 
+export type App = Application<any, AppSettings>;
+export type Hook = HookContext<App>;
+
 export abstract class BaseService {
-  app: Application;
+  app: App;
   schema?: ZodType;
 
-  constructor(app: Application) {
+  constructor(app: App) {
     this.app = app;
   }
 }
@@ -27,7 +31,8 @@ const { default: configuration } = await import("@feathersjs/configuration");
 
 import { configValidator } from "../lib/config.schema.ts";
 
-const app = feathers().configure(configuration(configValidator));
+const app: App = feathers<any, AppSettings>().configure(
+  configuration(configValidator),
+);
 
 export { app };
-export type App = typeof app;

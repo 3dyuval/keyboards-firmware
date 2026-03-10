@@ -2,11 +2,11 @@ import { z } from "zod";
 import { KeyboardSchema } from "../src/keyboards/keyboards.schema.ts";
 
 export const ConfigSchema = z.object({
+  root: z.string(),
   cachePath: z.string(),
   cacheDir: z.string(),
 
   draw: z.object({
-    outputPath: z.string(),
     outputDir: z.string(),
     config: z.string(),
   }),

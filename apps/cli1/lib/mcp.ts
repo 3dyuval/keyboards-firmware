@@ -1,4 +1,4 @@
-import type { Application, HookContext } from "@feathersjs/feathers";
+import type { App, Hook } from "../src/app.ts";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -9,7 +9,7 @@ import { z } from "zod";
 
 // ── MCP after hook — shapes context.dispatch for stdio transport ────
 
-export const mcpPresenter = async (context: HookContext) => {
+export const mcpPresenter = async (context: Hook) => {
   if (context.params.provider !== "mcp") return;
 
   const { result } = context;
@@ -27,7 +27,7 @@ export const mcpPresenter = async (context: HookContext) => {
 
 // ── MCP error hook — return isError shape, never rethrow ────────────
 
-export const mcpErrorHandler = async (context: HookContext) => {
+export const mcpErrorHandler = async (context: Hook) => {
   if (context.params.provider !== "mcp") return;
 
   context.result = {
@@ -45,31 +45,29 @@ export const mcpErrorHandler = async (context: HookContext) => {
 
 // ── MCP server — tools from expose.mcp declarations ─────────────────
 
-interface McpToolDef {
+import type { McpToolDef } from "./types.ts";
+
+interface ResolvedTool extends McpToolDef {
   name: string;
-  description: string;
-  resolves: string;
   service: any;
-  schema?: any;
 }
 
-function collectMcpTools(app: Application): Map<string, McpToolDef> {
-  const tools = new Map<string, McpToolDef>();
+function collectMcpTools(app: App): Map<string, ResolvedTool> {
+  const tools = new Map<string, ResolvedTool>();
   for (const [path, service] of Object.entries(app.services)) {
-    const mcp = (service as any).expose?.mcp;
+    const mcp = (service as any).expose?.mcp as McpToolDef | undefined;
     if (!mcp) continue;
     tools.set(mcp.tool, {
+      ...mcp,
       name: mcp.tool,
-      description: mcp.description,
       resolves: mcp.resolves ?? "create",
       service: app.service(path),
-      schema: mcp.schema, // tool input schema, not entity schema
     });
   }
   return tools;
 }
 
-export async function startMcpServer(app: Application) {
+export async function startMcpServer(app: App) {
   const tools = collectMcpTools(app);
 
   const server = new Server(

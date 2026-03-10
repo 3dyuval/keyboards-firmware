@@ -1,20 +1,17 @@
-import type { HookContext } from "@feathersjs/feathers";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import type { Hook } from "../app.ts";
+import {
+  resolveKeyboard,
+  validateKeyboard,
+} from "../../lib/keyboard-hooks.ts";
 import { github } from "./gh.ts";
 
-interface KeyboardConfig {
-  workflow: string;
-  artifact: string;
-  type: "zmk" | "qmk";
-}
+export { validateKeyboard };
 
-export function resolveConfig(context: HookContext) {
-  const keyboards = context.app.get("keyboards") as Record<
-    string,
-    KeyboardConfig
-  >;
-  const cacheDir = context.app.get("cacheDir") as string;
+export function resolveConfig(context: Hook) {
+  const keyboards = context.app.get("keyboards");
+  const cacheDir = context.app.get("cacheDir");
 
   context.params.cacheDir = cacheDir;
 
@@ -26,32 +23,17 @@ export function resolveConfig(context: HookContext) {
     return;
   }
 
-  const kb = String(
-    context.params.keyboard ??
-      context.params.route?.keyboardId ??
-      context.id ??
-      context.data?.keyboard,
-  );
-  context.params.keyboard = kb;
-  context.params.keyboardConfig = keyboards[kb];
+  resolveKeyboard(context);
 }
 
-export function validateKeyboard(context: HookContext) {
-  if (!context.params.keyboardConfig) {
-    throw new Error(
-      `unknown keyboard "${context.params.keyboard}" — not in config`,
-    );
-  }
-}
-
-export async function resolveRunId(context: HookContext) {
+export async function resolveRunId(context: Hook) {
   const { keyboardConfig } = context.params as any;
   const gh = github(context.app);
   const runId = await gh.waitAndResolve(keyboardConfig.workflow);
   context.params.runId = runId;
 }
 
-export async function checkCache(context: HookContext) {
+export async function checkCache(context: Hook) {
   const { runId, cacheDir } = context.params as any;
   const stampFile = join(cacheDir, ".run-id");
   if (
@@ -62,7 +44,7 @@ export async function checkCache(context: HookContext) {
   }
 }
 
-export function writeCache(context: HookContext) {
+export function writeCache(context: Hook) {
   const { cacheDir, runId, _cached } = context.params as any;
   if (!_cached && cacheDir && runId) {
     mkdirSync(cacheDir, { recursive: true });

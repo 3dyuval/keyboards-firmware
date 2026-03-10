@@ -14,7 +14,7 @@ export default class KeyboardsService extends BaseService {
 
   // Progressive enrichment: yield names immediately, then enrich
   async *find(params: Params): AsyncGenerator<KeyboardRow[]> {
-    const keyboards = this.app.get("keyboards") as Record<string, Keyboard>;
+    const keyboards = this.app.get("keyboards");
     const names = Object.keys(keyboards).sort();
 
     // Phase 1 — yield keyboard configs immediately

@@ -4,7 +4,7 @@ import { Spinner } from "@inkjs/ui";
 import { useAsyncEffect } from "ahooks";
 import { useService } from "../../lib/context.tsx";
 import { FirmwareFlashSchema } from "./firmware.schema.ts";
-import type { ProgressEvent } from "./firmware.service.ts";
+import type { ServiceEvent } from "../../lib/types.ts";
 
 export const aliases = ["f"];
 export const description = "Download and flash firmware";
@@ -27,7 +27,7 @@ export default function FirmwareFlash({
 }) {
   const { exit } = useApp();
   const { call } = useService("firmware");
-  const [stage, setStage] = useState<ProgressEvent>();
+  const [stage, setStage] = useState<ServiceEvent>();
   const [error, setError] = useState<Error>();
 
   useAsyncEffect(async function* () {

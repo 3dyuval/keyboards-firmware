@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
 import { join } from "path";
-import type { ProgressEvent } from "./firmware.service.ts";
+import type { ServiceEvent } from "../../lib/types.ts";
 
 export function findMount(): string | null {
   const result = Bun.spawnSync([
@@ -47,7 +47,7 @@ export async function* flashZmk(
   reset: boolean,
   cacheDir: string,
   skip = false,
-): AsyncGenerator<ProgressEvent> {
+): AsyncGenerator<ServiceEvent> {
   const firmware = `${keyboard}-${side}.uf2`;
   const path = join(cacheDir, firmware);
   if (!existsSync(path)) {
@@ -95,7 +95,7 @@ export async function* flashZmk(
 
 export async function* flashQmk(
   cacheDir: string,
-): AsyncGenerator<ProgressEvent> {
+): AsyncGenerator<ServiceEvent> {
   const result = Bun.spawnSync(["find", cacheDir, "-name", "*.bin"]);
   const firmware = result.stdout.toString().trim().split("\n")[0];
   if (!firmware) throw new Error("no .bin firmware found");

@@ -1,4 +1,4 @@
-import type { Application } from "@feathersjs/feathers";
+import type { App } from "../src/app.ts";
 import { readdir } from "fs/promises";
 import { join } from "path";
 import type { Route } from "./route.ts";
@@ -70,7 +70,7 @@ async function* scan(srcDir: string): AsyncGenerator<DiscoveredService> {
 }
 
 export async function* registerServices(
-  app: Application,
+  app: App,
   srcDir: string,
 ): AsyncGenerator<RegistrationEvent> {
   const discovered = await Array.fromAsync(scan(srcDir));

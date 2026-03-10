@@ -1,15 +1,12 @@
 import { z } from "zod";
+import { keyboardField } from "../../lib/types.ts";
 
 export const FirmwareCreateSchema = z.object({
-  keyboard: z
-    .string()
-    .meta({ description: "Keyboard name" }),
+  keyboard: keyboardField,
 });
 
 export const FirmwareFlashSchema = z.object({
-  keyboard: z
-    .string()
-    .meta({ description: "Keyboard name" }),
+  keyboard: keyboardField,
   side: z
     .enum(["left", "right"])
     .optional()

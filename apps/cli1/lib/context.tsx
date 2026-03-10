@@ -1,8 +1,8 @@
 import { createContext, useContext, useCallback } from "react";
 import { useApp } from "ink";
-import type { Application } from "@feathersjs/feathers";
+import type { App } from "../src/app.ts";
 
-export const AppContext = createContext<Application>(null!);
+export const AppContext = createContext<App>(null!);
 export const RootContext = createContext<boolean>(false);
 
 export const useService = (path: string) => {
