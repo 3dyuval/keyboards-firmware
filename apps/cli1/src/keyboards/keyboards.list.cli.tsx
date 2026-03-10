@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useApp, Box, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
+import { useAsyncEffect } from "ahooks";
 import { useService } from "../../lib/context.tsx";
 import { Table } from "../components/table.tsx";
 import type { KeyboardRow } from "./keyboards.service.ts";
@@ -11,29 +12,27 @@ export const description = "List all configured keyboards";
 export default function KeyboardList() {
   const { exit } = useApp();
   const { call } = useService("keyboards");
-  const [rows, setRows] = useState<KeyboardRow[] | null>(null);
-  const [enriching, setEnriching] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [rows, setRows] = useState<KeyboardRow[]>();
+  const [error, setError] = useState<Error>();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const iter = await call("find");
-        for await (const batch of iter) {
-          setRows(batch);
-          setEnriching(batch.some((r: KeyboardRow) => r.enriching));
-        }
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setTimeout(exit, 0);
+  useAsyncEffect(async function* () {
+    try {
+      const iter = await call("find");
+      for await (const batch of iter) {
+        setRows(batch);
+        yield;
       }
-    })();
+    } catch (e: any) {
+      setError(e);
+    } finally {
+      setTimeout(exit, 0);
+    }
   }, []);
 
-  if (error) return <Text color="red">Error: {error}</Text>;
+  if (error) return <Text color="red">Error: {error.message}</Text>;
   if (!rows) return <Spinner label="loading keyboards..." />;
 
+  const enriching = rows.some((r) => r.enriching);
   const tableData = rows.map((r) => ({
     name: r.name,
     type: r.config.type,

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useApp, Box, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
+import { useAsyncEffect } from "ahooks";
 import { useService } from "../../lib/context.tsx";
 import { Table } from "../components/table.tsx";
 
@@ -10,33 +11,30 @@ export const description = "Show CI build status for all keyboards";
 export default function FirmwareStatus() {
   const { exit } = useApp();
   const { call } = useService("firmware");
-  const [data, setData] = useState<Record<string, any> | null>(null);
-  const [stale, setStale] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<{ data: Record<string, any>; stale?: boolean }>();
+  const [error, setError] = useState<Error>();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const iter = await call("find");
-        for await (const event of iter) {
-          setData(event.data);
-          setStale(event.stale ?? false);
-        }
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setTimeout(exit, 0);
+  useAsyncEffect(async function* () {
+    try {
+      const iter = await call("find");
+      for await (const event of iter) {
+        setData(event);
+        yield;
       }
-    })();
+    } catch (e: any) {
+      setError(e);
+    } finally {
+      setTimeout(exit, 0);
+    }
   }, []);
 
-  if (error) return <Text color="red">Error: {error}</Text>;
+  if (error) return <Text color="red">Error: {error.message}</Text>;
   if (!data) return <Spinner label="loading status..." />;
 
-  const tableData = Object.keys(data)
+  const tableData = Object.keys(data.data)
     .sort()
     .map((wf) => {
-      const s = data[wf];
+      const s = data.data[wf];
       const status = s.inProgress
         ? "in_progress"
         : (s.completed?.conclusion ?? "—");
@@ -48,7 +46,7 @@ export default function FirmwareStatus() {
 
   return (
     <Box flexDirection="column">
-      {stale && <Text dimColor>(stale — refreshing...)</Text>}
+      {data.stale && <Text dimColor>(stale — refreshing...)</Text>}
       <Table
         data={tableData}
         columns={[

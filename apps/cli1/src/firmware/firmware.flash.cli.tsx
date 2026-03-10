@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useApp, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
+import { useAsyncEffect } from "ahooks";
 import { useService } from "../../lib/context.tsx";
 import { FirmwareFlashSchema } from "./firmware.schema.ts";
 import type { ProgressEvent } from "./firmware.service.ts";
@@ -26,30 +27,29 @@ export default function FirmwareFlash({
 }) {
   const { exit } = useApp();
   const { call } = useService("firmware");
-  const [stage, setStage] = useState<ProgressEvent | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [stage, setStage] = useState<ProgressEvent>();
+  const [error, setError] = useState<Error>();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const iter = await call(
-          "patch",
-          keyboard,
-          { side, reset, yes },
-          { keyboard },
-        );
-        for await (const event of iter) {
-          setStage(event);
-        }
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setTimeout(exit, 0);
+  useAsyncEffect(async function* () {
+    try {
+      const iter = await call(
+        "patch",
+        keyboard,
+        { side, reset, yes },
+        { keyboard },
+      );
+      for await (const event of iter) {
+        setStage(event);
+        yield;
       }
-    })();
+    } catch (e: any) {
+      setError(e);
+    } finally {
+      setTimeout(exit, 0);
+    }
   }, []);
 
-  if (error) return <Text color="red">Error: {error}</Text>;
+  if (error) return <Text color="red">Error: {error.message}</Text>;
   if (!stage) return <Spinner label={`preparing ${keyboard}...`} />;
 
   if (stage.stage === "done")
