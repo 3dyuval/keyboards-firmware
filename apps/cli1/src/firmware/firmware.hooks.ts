@@ -1,7 +1,9 @@
 import type { HookContext } from "@feathersjs/feathers";
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { github } from "./gh.ts";
+
+const dataHome = Bun.env.XDG_DATA_HOME ?? join(Bun.env.HOME!, ".local/share");
 
 interface KeyboardConfig {
   workflow: string;
@@ -14,7 +16,7 @@ export function resolveConfig(context: HookContext) {
     string,
     KeyboardConfig
   >;
-  const cacheDir = context.app.get("cacheDir") as string;
+  const cacheDir = join(dataHome, context.app.get("cacheDir") as string);
 
   context.params.cacheDir = cacheDir;
 
@@ -65,6 +67,7 @@ export async function checkCache(context: HookContext) {
 export function writeCache(context: HookContext) {
   const { cacheDir, runId, _cached } = context.params as any;
   if (!_cached && cacheDir && runId) {
+    mkdirSync(cacheDir, { recursive: true });
     writeFileSync(join(cacheDir, ".run-id"), runId);
   }
 }
@@ -75,7 +78,7 @@ export default {
     find: [],
     get: [validateKeyboard],
     create: [validateKeyboard, resolveRunId, checkCache],
-    patch: [validateKeyboard],
+    patch: [validateKeyboard, resolveRunId, checkCache],
   },
   after: {
     create: [writeCache],

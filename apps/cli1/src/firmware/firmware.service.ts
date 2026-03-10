@@ -54,12 +54,10 @@ export default class FirmwareService extends BaseService {
     yield { stage: "status", stale: false, data: fresh };
   }
 
-  // create — download firmware with progress stages
-  async *create(data: any, params: Params): AsyncGenerator<ProgressEvent> {
+  private async *download(params: Params): AsyncGenerator<ProgressEvent> {
     const { keyboardConfig, keyboard, runId, cacheDir } = params as any;
     const gh = github(this.app);
 
-    // hooks may have short-circuited with cached result
     if ((params as any)._cached) {
       yield { stage: "cached", message: `run ${runId} already cached`, data: { keyboard, runId, cached: true, cacheDir } };
       return;
@@ -70,16 +68,18 @@ export default class FirmwareService extends BaseService {
     yield { stage: "downloaded", message: "download complete", data: { keyboard, runId, cached: false, cacheDir } };
   }
 
+  // create — download firmware with progress stages
+  async *create(data: any, params: Params): AsyncGenerator<ProgressEvent> {
+    yield* this.download(params);
+  }
+
   // patch — download + flash with full stage progression
   async *patch(id: Id, data: any, params: Params): AsyncGenerator<ProgressEvent> {
     const { keyboardConfig, cacheDir, keyboard } = params as any;
     const { side, reset, yes } = data;
 
     // download phase
-    yield { stage: "downloading", message: "ensuring firmware is downloaded..." };
-    for await (const event of this.create({}, params)) {
-      yield event;
-    }
+    yield* this.download(params);
 
     // flash phase
     if (keyboardConfig.type === "qmk") {

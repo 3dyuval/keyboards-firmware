@@ -1,4 +1,5 @@
 {
+  "cacheDir": "keyb/firmware",
   "draw": {
     "outputDir": "keymap-drawer",
     "config": "keymap-drawer/config.yaml"
