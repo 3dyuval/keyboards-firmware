@@ -7,11 +7,11 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 process.env.NODE_CONFIG_DIR ??= join(__dir, "config");
 
 const { app } = await import("./src/app.ts");
-const { registerServices } = await import("./src/lib/register.ts");
-const { AppContext, RootContext } = await import("./src/lib/context.tsx");
-const { resolveCommand, allRoutes, parseArgs, routeUsage } = await import("./src/lib/route.ts");
-const { discover } = await import("./src/lib/discover.ts");
-const { mcpPresenter, mcpErrorHandler, startMcpServer } = await import("./src/lib/mcp.ts");
+const { registerServices } = await import("./lib/register.ts");
+const { AppContext, RootContext } = await import("./lib/context.tsx");
+const { resolveCommand, allRoutes, parseArgs, routeUsage } = await import("./lib/route.ts");
+const { discover } = await import("./lib/discover.ts");
+const { mcpPresenter, mcpErrorHandler, startMcpServer } = await import("./lib/mcp.ts");
 const React = (await import("react")).default;
 const { render } = await import("ink");
 

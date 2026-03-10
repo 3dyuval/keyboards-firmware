@@ -122,8 +122,8 @@ Each file exports: `default` (component), `description`, `aliases?`, `args?`, `s
 No manual command strings — `deriveCommand(filename, base)` strips `{base}.` prefix and `.cli.tsx` suffix.
 
 Flags derived from Zod schema via `flagsFromSchema()` — shared primitive used by
-`parseArgs`, `routeUsage`, and `--discover`. Schema `.describe(option({...}))` carries
-alias and description metadata.
+`parseArgs`, `routeUsage`, and `--discover`. Schema `.meta({alias, description})` carries
+metadata via `z.globalRegistry`.
 
 `--discover` for human-readable, `--discover --json` for agent consumption.
 
@@ -158,17 +158,41 @@ Injects `provider: "cli"` into the last object argument.
 
 - `github(app)` factory — Octokit singleton on app, reads owner/repo from config
 - `<Table>` component — `<Box width>` layout, per-row color functions
-- `option()` + `parseOption()` — schema metadata for aliases and descriptions
-- `flagsFromSchema()` — shared primitive: Zod shape → flag definitions
+- `flagsFromSchema()` — shared primitive: Zod shape → flag definitions (uses `z.globalRegistry` + `.meta()`)
+- `unwrapToBase()` / `isOptionalOrDefaulted()` — recursive Zod v4 type unwrapping
 - `--discover` / `--discover --json` — CLI self-documentation from route registry
-- `src/lib/` — register.ts, discover.ts, route.ts, context.tsx, table.tsx, option.ts
+- MCP server mode (`--mcp`) — stdio transport, tools from `expose.mcp` declarations
+- `mcpPresenter` after hook — consumes async generators, shapes tool results
+- `z.toJSONSchema()` for MCP inputSchema (Zod v4 native, replaces zod-to-json-schema)
+- Config resolves relative to package via `NODE_CONFIG_DIR` (cwd-agnostic)
+
+### Directory layout
+
+```
+lib/                    — package-level plumbing (not domain)
+  context.tsx           — AppContext, RootContext, useService hook
+  discover.ts           — --discover flag output
+  mcp.ts                — MCP hooks + stdio server
+  register.ts           — service auto-discovery and registration
+  route.ts              — types, schema introspection, traversal, arg parsing
+src/
+  app.ts                — Feathers app instance + BaseService
+  components/
+    table.tsx           — <Table> component
+  firmware/             — firmware domain service
+  keyboards/            — keyboards domain service
+index.tsx               — entry point, mode dispatch
+```
 
 ## Caveats & Gotchas
 
 ### Zod v4 differences
-- `.description` is a property on the instance, NOT on `._def.description`
-- `ZodEnum._def.values` is undefined — use `.options` (array) or `._def.entries` (object)
-- `.describe()` does not wrap in a new type — it sets `.description` on the same instance
+- `._def` is deprecated — use `.unwrap()`, `.isOptional()`, `z.globalRegistry`
+- `.meta({...})` + `z.globalRegistry.get(field)` for schema metadata (replaces `.describe()` hack)
+- `z.toJSONSchema(schema)` built-in — replaces `zod-to-json-schema` (which doesn't support v4)
+- `ZodEnum.options` (array) instead of `._def.values`
+- `.unwrap()` returns `$ZodType` — cast to `z.ZodTypeAny` at call sites
+- `isOptionalOrDefaulted()` recursive check replaces deprecated `.isOptional()`
 
 ### Feathers + async generators
 - Feathers hooks run on the service method call, not on each yield. The generator
@@ -190,14 +214,9 @@ Injects `provider: "cli"` into the last object argument.
 - Provider injection assumes the last argument is a params object. If the last arg
   is a primitive or array, a new params object is appended instead.
 
-### .gitignore collision
-- Root `.gitignore` has `firmware` which matches `src/firmware/`. Must `git add -f`
-  to track firmware service files. Consider changing to `/firmware` (root only).
-
 ### Missing config
 - `cacheDir` not in `config/default.json` — firmware hooks crash on `join(undefined, ...)`
 - `status <kb>` route not wired — `firmware.get` needs a separate CLI file if needed
-- `display.tabSize` config removed when pad() was deleted — no longer needed
 
 ## Migration Checklist
 
@@ -211,11 +230,14 @@ Injects `provider: "cli"` into the last object argument.
 - [x] move context.tsx, discover.ts, route.ts to src/lib/
 - [x] move resolveCommand from index.tsx to src/lib/route.ts
 - [ ] add `cacheDir` to config/default.json
-- [ ] fix .gitignore: `/firmware` instead of `firmware`
-- [ ] move base-service.ts into src/lib/ or src/app.ts
+- [x] fix .gitignore: `/firmware` anchored to root, `**/config/local.json` ignored
+- [x] move BaseService into src/app.ts (deleted base-service.ts)
+- [x] move lib/ to package root (plumbing, not domain)
+- [x] move table.tsx to src/components/
+- [x] MCP provider after hook + stdio server (`--mcp` mode)
+- [x] MCP tool: list_keyboards with z.toJSONSchema input schema
 - [ ] draw — service + CLI component
 - [ ] parse — service + tree-sitter hooks
 - [ ] log — service + SQLite + global hooks
 - [ ] global log hooks
-- [ ] MCP provider after hook
 - [ ] replace `parseArgs` with Commander via `buildCommand` (Pastel pattern)

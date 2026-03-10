@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useApp, Box, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
-import { useService } from "../lib/context.tsx";
-import { Table } from "../lib/table.tsx";
+import { useService } from "../../lib/context.tsx";
+import { Table } from "../components/table.tsx";
 
 export const aliases = ["s"];
 export const description = "Show CI build status for all keyboards";

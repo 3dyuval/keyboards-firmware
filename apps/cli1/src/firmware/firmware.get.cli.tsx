@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useApp, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
-import { useService } from "../lib/context.tsx";
+import { useService } from "../../lib/context.tsx";
 import { FirmwareCreateSchema } from "./firmware.schema.ts";
 import type { ProgressEvent } from "./firmware.service.ts";
 
