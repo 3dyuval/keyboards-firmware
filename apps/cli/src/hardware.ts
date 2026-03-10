@@ -106,9 +106,9 @@ export async function flashQmk(cacheDir: string) {
   }
 
   const flashSpin = ora({ discardStdin: false, text: `flashing ${c("cyan", firmware)}...`, spinner: "arc" }).start();
-  Bun.spawnSync(["dfu-util", "-a", "0", "-d", "0483:df11", "-s", "0x08000000:leave", "-D", firmware], {
+  await Bun.spawn(["dfu-util", "-a", "0", "-d", "0483:df11", "-s", "0x08000000:leave", "-D", firmware], {
     stdin: "inherit", stdout: "inherit", stderr: "inherit",
-  });
+  }).exited;
   flashSpin.succeed(c("green", "iris flashed"));
   return { keyboard: "iris", firmware };
 }

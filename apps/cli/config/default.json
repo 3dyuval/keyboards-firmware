@@ -2,7 +2,7 @@
   "draw": {
     "outputDir": "keymap-drawer",
     "config": "keymap-drawer/config.yaml",
-    "qmkKeymap": "keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.json"
+    "qmkKeymap": "keyboards/keebio/iris_lm/k1/keymaps/graphite/keymap.c"
   },
   "github": {
     "owner": "3dyuval",

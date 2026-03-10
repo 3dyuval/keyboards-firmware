@@ -8,6 +8,7 @@
     "flash-totem": "bun --cwd apps/cli index.ts flash totem left -y && bun --cwd apps/cli index.ts flash totem right -y",
     "flash-eyelash": "bun --cwd apps/cli index.ts flash eyelash left -y && bun --cwd apps/cli index.ts flash eyelash right -y",
     "flash-corne": "bun --cwd apps/cli index.ts flash corne left -y && bun --cwd apps/cli index.ts flash corne right -y",
+    "flash-iris": "bun --cwd apps/cli index.ts flash iris -y",
     "mcp": "bun run --filter keyboards-mcp serve",
     "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards"
   },
