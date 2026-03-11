@@ -95,11 +95,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     // ── Symbols ─────────────────────────────────────────────────────
+    // TODO: find QMK-compatible hold behavior for SYM+C (LGUI) and SYM+V (NUM layer)
     [_SYM] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
         _______, KC_EXLM, KC_LPRN, KC_RPRN, KC_AMPR, KC_GRV,                   KC_COLN, KC_EQL,  KC_MINS, KC_PLUS, KC_UNDS, _______,
-        _______, KC_ASTR, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, KC_CIRC, KC_LCBR, KC_RCBR, KC_AT,  LT(_NUM,KC_PERC), KC_NO, KC_NO, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
+        _______, MO(_NUM),KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+        _______, KC_LGUI, KC_LCBR, KC_RCBR, KC_AT,   KC_PERC, KC_NO, KC_NO, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
                                    KC_LCTL, _______, _______,                  _______, KC_DEL,  _______
     ),
 
@@ -129,7 +130,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LCTL_T(KC_ESC):
-        case LT(_NUM, KC_PERC):
             return true;
         default:
             return false;
