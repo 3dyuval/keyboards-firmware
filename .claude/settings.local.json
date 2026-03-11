@@ -6,5 +6,18 @@
     "react-native-debugger-mcp",
     "vuetify-mcp",
     "discord-mcp"
-  ]
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | grep -q 'keymap.c' && cd /home/yuv/keyboards-firmware && bun draw-iris || true"
+          }
+        ]
+      }
+    ]
+  }
 }

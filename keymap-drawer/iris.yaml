@@ -25,7 +25,7 @@ layers:
   - U
   - J
   - RSFT
-  - CAPS
+  - LGUI
   - N
   - R
   - T
@@ -36,15 +36,15 @@ layers:
   - A
   - E
   - I
-  - ''''
+  - MO( NUM)
   - TD LSFT
   - Q
   - X
   - M
   - C
   - V
-  - ''
-  - ''
+  - VOLD
+  - VOLU
   - K
   - P
   - ','
@@ -99,9 +99,9 @@ layers:
   - '{'
   - '}'
   - '@'
-  - LT( NUM,PERC)
-  - ''
-  - ''
+  - '%'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - PGDN
   - HOME
   - END
@@ -128,10 +128,10 @@ layers:
   - F11
   - F12
   - {t: ▽, type: trans}
-  - HOME
-  - PGUP
-  - PGDN
-  - END
+  - {t: ▽, type: trans}
+  - '7'
+  - '8'
+  - '9'
   - {t: ▽, type: trans}
   - MM STAR
   - '7'
@@ -140,10 +140,10 @@ layers:
   - '-'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - LEFT
-  - UP
-  - DOWN
-  - RGHT
+  - {t: ▽, type: trans}
+  - '4'
+  - '5'
+  - '6'
   - {t: ▽, type: trans}
   - '='
   - '4'
@@ -152,13 +152,13 @@ layers:
   - +
   - {t: ▽, type: trans}
   - TAB
+  - '0'
+  - '1'
+  - '2'
+  - '3'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - ''
-  - ''
   - MM SLASH
   - '1'
   - '2'
@@ -168,8 +168,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - ENT
-  - RALT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   L3:
   - {t: ▽, type: trans}
@@ -214,8 +214,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - ''
-  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - ''
