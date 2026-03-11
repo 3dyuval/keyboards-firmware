@@ -15,13 +15,14 @@ export const mcpPresenter = async (context: Hook) => {
 
   const { result } = context;
 
-  // Async generator — consume fully, keep last yield
+  // Async generator — consume fully, extract value from last tuple
   if (result && typeof result[Symbol.asyncIterator] === "function") {
     let last: any;
     for await (const batch of result) {
       last = batch;
     }
-    context.result = last;
+    // ServiceEvent is [stage, message, value] — extract value for MCP
+    context.result = Array.isArray(last) ? last[2] : last;
     return;
   }
 };

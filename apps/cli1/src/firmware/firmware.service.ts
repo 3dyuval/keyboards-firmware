@@ -5,44 +5,57 @@ import type { ServiceEvent } from "../../lib/types.ts";
 import { github } from "./gh.ts";
 import * as hw from "./hw.ts";
 
+// ── status types ────────────────────────────────────────────────────
+
+export interface BuildRun {
+  id: number;
+  created_at: Date;
+  conclusion?: string | null;
+  jobs?: string;
+}
+
+export interface KeyboardStatus {
+  workflow: string;
+  inProgress: BuildRun | null;
+  completed: BuildRun | null;
+}
+
+export type StatusMap = Record<string, KeyboardStatus>;
+
 export default class FirmwareService extends BaseService {
   schema = FirmwareCreateSchema;
 
   // find — CI status for all keyboards (stale-while-revalidate)
-  async *find(params: Params): AsyncGenerator<ServiceEvent> {
+  async *find(params: Params): AsyncGenerator<ServiceEvent<StatusMap>> {
     const { keyboards } = params as any;
     const gh = github(this.app);
 
-    // yield cached/stale results immediately from last known state
-    const cached = this.app.get("_statusCache");
+    const cached = this.app.get("_statusCache") as StatusMap | undefined;
     if (cached) {
-      yield { stage: "status", stale: true, data: cached };
+      yield ["status", "cached", cached];
     }
 
-    // fetch fresh from GitHub, keyed by keyboard name
-    const results: Record<string, any> = {};
-    const fetched: Record<string, any> = {};
+    const results: StatusMap = {};
+    const fetched: Record<string, KeyboardStatus> = {};
     for (const [name, config] of Object.entries(keyboards) as [string, any][]) {
-      // dedupe: reuse result if workflow already fetched
       if (!fetched[config.workflow]) {
         fetched[config.workflow] = await gh.status(config.workflow);
       }
       results[name] = fetched[config.workflow];
-      yield { stage: "status", stale: false, data: { ...results } };
+      yield ["status", `fetched ${name}`, { ...results }];
     }
 
-    // cache for next call
     this.app.set("_statusCache", results);
   }
 
   // get — CI status for one keyboard (stale-while-revalidate)
-  async *get(id: Id, params: Params): AsyncGenerator<ServiceEvent> {
+  async *get(id: Id, params: Params): AsyncGenerator<ServiceEvent<KeyboardStatus>> {
     const { keyboardConfig, keyboard } = params as any;
     const gh = github(this.app);
 
-    const cached = this.app.get("_statusCache")?.[keyboard];
+    const cached = (this.app.get("_statusCache") as StatusMap)?.[keyboard];
     if (cached) {
-      yield { stage: "status", stale: true, data: cached };
+      yield ["status", "cached", cached];
     }
 
     const fresh = await gh.status(keyboardConfig.workflow);
@@ -50,7 +63,7 @@ export default class FirmwareService extends BaseService {
       ...this.app.get("_statusCache"),
       [keyboard]: fresh,
     });
-    yield { stage: "status", stale: false, data: fresh };
+    yield ["status", keyboard, fresh];
   }
 
   private async *download(params: Params): AsyncGenerator<ServiceEvent> {
@@ -58,13 +71,13 @@ export default class FirmwareService extends BaseService {
     const gh = github(this.app);
 
     if ((params as any)._cached) {
-      yield { stage: "cached", message: `run ${runId} already cached`, data: { keyboard, runId, cached: true, cacheDir } };
+      yield ["cached", `run ${runId} already cached`, { keyboard, runId, cached: true, cacheDir }];
       return;
     }
 
-    yield { stage: "downloading", message: `downloading run ${runId}...` };
+    yield ["downloading", `downloading run ${runId}...`, undefined];
     await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir);
-    yield { stage: "downloaded", message: "download complete", data: { keyboard, runId, cached: false, cacheDir } };
+    yield ["downloaded", "download complete", { keyboard, runId, cached: false, cacheDir }];
   }
 
   // create — download firmware with progress stages
@@ -77,15 +90,13 @@ export default class FirmwareService extends BaseService {
     const { keyboardConfig, cacheDir, keyboard } = params as any;
     const { side, reset, yes } = data;
 
-    // download phase
     yield* this.download(params);
 
-    // flash phase
     if (keyboardConfig.type === "qmk") {
       for await (const event of hw.flashQmk(cacheDir)) {
         yield event;
       }
-      yield { stage: "done", data: { keyboard, firmware: "qmk" } };
+      yield ["done", "flashed", { keyboard, firmware: "qmk" }];
       return;
     }
 
@@ -94,6 +105,6 @@ export default class FirmwareService extends BaseService {
     for await (const event of hw.flashZmk(keyboard, side, reset ?? false, cacheDir, yes ?? false)) {
       yield event;
     }
-    yield { stage: "done", data: { keyboard, side, reset } };
+    yield ["done", "flashed", { keyboard, side, reset }];
   }
 }

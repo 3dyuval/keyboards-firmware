@@ -2,23 +2,40 @@ import React, { useState } from "react";
 import { useApp, Box, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
 import { useAsyncEffect } from "ahooks";
+import { match, P } from "ts-pattern";
 import { useService } from "../../lib/context.tsx";
 import { Table } from "../components/table.tsx";
+import type { ServiceEvent } from "../../lib/types.ts";
+import type { StatusMap, KeyboardStatus } from "./firmware.service.ts";
 
 export const aliases = ["s"];
 export const description = "Show CI build status for all keyboards";
 
+function statusRow(name: string, s: KeyboardStatus) {
+  const status = s.inProgress
+    ? "in_progress"
+    : (s.completed?.conclusion ?? "—");
+
+  const detail = match(s)
+    .with({ completed: { created_at: P.instanceOf(Date) } }, ({ completed }) =>
+      `build ${completed!.created_at.toLocaleString()}`,
+    )
+    .otherwise(() => "—");
+
+  return { keyboard: name, status, details: detail };
+}
+
 export default function FirmwareStatus() {
   const { exit } = useApp();
   const { call } = useService("firmware");
-  const [data, setData] = useState<{ data: Record<string, any>; stale?: boolean }>();
+  const [event, setEvent] = useState<ServiceEvent<StatusMap>>();
   const [error, setError] = useState<Error>();
 
   useAsyncEffect(async function* () {
     try {
       const iter = await call("find");
-      for await (const event of iter) {
-        setData(event);
+      for await (const ev of iter) {
+        setEvent(ev);
         yield;
       }
     } catch (e: any) {
@@ -29,24 +46,18 @@ export default function FirmwareStatus() {
   }, []);
 
   if (error) return <Text color="red">Error: {error.message}</Text>;
-  if (!data) return <Spinner label="loading status..." />;
+  if (!event) return <Spinner label="loading status..." />;
 
-  const tableData = Object.keys(data.data)
-    .sort()
-    .map((kb) => {
-      const s = data.data[kb];
-      const status = s.inProgress
-        ? "in_progress"
-        : (s.completed?.conclusion ?? "—");
-      const detail = s.completed?.created_at
-        ? `build ${new Date(s.completed.created_at).toLocaleString()}`
-        : "—";
-      return { keyboard: kb, status, details: detail };
-    });
+  const [, message, data] = event;
+  const stale = message === "cached";
+
+  const tableData = Object.entries(data)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([name, s]) => statusRow(name, s));
 
   return (
     <Box flexDirection="column">
-      {data.stale && <Text dimColor>(stale — refreshing...)</Text>}
+      {stale && <Text dimColor>(stale — refreshing...)</Text>}
       <Table
         data={tableData}
         columns={[
@@ -55,11 +66,10 @@ export default function FirmwareStatus() {
             key: "status",
             width: 14,
             color: (row) =>
-              row.status === "success"
-                ? "green"
-                : row.status === "in_progress"
-                  ? "yellow"
-                  : "red",
+              match(row.status)
+                .with("success", () => "green" as const)
+                .with("in_progress", () => "yellow" as const)
+                .otherwise(() => "red" as const),
           },
           { key: "details", dimColor: true },
         ]}

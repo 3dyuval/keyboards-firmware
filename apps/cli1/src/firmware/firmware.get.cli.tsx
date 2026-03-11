@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useApp, Text } from "ink";
 import { Spinner } from "@inkjs/ui";
 import { useAsyncEffect } from "ahooks";
+import { match } from "ts-pattern";
 import { useService } from "../../lib/context.tsx";
 import { FirmwareCreateSchema } from "./firmware.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
@@ -14,14 +15,14 @@ export const schema = FirmwareCreateSchema;
 export default function FirmwareGet({ keyboard }: { keyboard: string }) {
   const { exit } = useApp();
   const { call } = useService("firmware");
-  const [stage, setStage] = useState<ServiceEvent>();
+  const [event, setEvent] = useState<ServiceEvent>();
   const [error, setError] = useState<Error>();
 
   useAsyncEffect(async function* () {
     try {
       const iter = await call("create", { keyboard }, { keyboard });
-      for await (const event of iter) {
-        setStage(event);
+      for await (const ev of iter) {
+        setEvent(ev);
         yield;
       }
     } catch (e: any) {
@@ -32,11 +33,12 @@ export default function FirmwareGet({ keyboard }: { keyboard: string }) {
   }, []);
 
   if (error) return <Text color="red">Error: {error.message}</Text>;
-  if (!stage) return <Spinner label={`downloading ${keyboard}...`} />;
+  if (!event) return <Spinner label={`downloading ${keyboard}...`} />;
 
-  if (stage.stage === "cached")
-    return <Text color="green">{stage.message}</Text>;
-  if (stage.stage === "downloaded")
-    return <Text color="green">{stage.message}</Text>;
-  return <Spinner label={stage.message ?? stage.stage} />;
+  const [stage, message] = event;
+
+  return match(stage)
+    .with("cached", () => <Text color="green">{message}</Text>)
+    .with("downloaded", () => <Text color="green">{message}</Text>)
+    .otherwise(() => <Spinner label={message} />);
 }

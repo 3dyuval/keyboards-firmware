@@ -14,17 +14,17 @@ export default class DrawService extends BaseService {
     const { outputDir, config: configPath } = this.app.get("draw");
     mkdirSync(outputDir, { recursive: true });
 
-    yield { stage: "venv", message: "ensuring python venv..." };
+    yield ["venv", "ensuring python venv...", undefined];
     const bin = this.ensureVenv();
 
     if (keyboardConfig.type === "qmk") {
-      yield { stage: "parsing", message: `parsing QMK keymap for ${keyboard}...` };
+      yield ["parsing", `parsing QMK keymap for ${keyboard}...`, undefined];
       const result = await this.drawQmk(keymapPath, keyboard, bin, outputDir, configPath);
-      yield { stage: "done", message: "done", data: result };
+      yield ["done", "done", result];
     } else {
-      yield { stage: "parsing", message: `parsing ZMK keymap for ${keyboard}...` };
+      yield ["parsing", `parsing ZMK keymap for ${keyboard}...`, undefined];
       const result = await this.drawZmk(keymapPath, keyboard, bin, outputDir, configPath);
-      yield { stage: "done", message: "done", data: result };
+      yield ["done", "done", result];
     }
   }
 

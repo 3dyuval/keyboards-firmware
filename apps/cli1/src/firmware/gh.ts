@@ -53,7 +53,7 @@ export function github(app: App) {
 
       if (inProgressRuns.workflow_runs.length) {
         const run = inProgressRuns.workflow_runs[0];
-        result.inProgress = { id: run.id, created_at: run.created_at };
+        result.inProgress = { id: run.id, created_at: new Date(run.created_at) };
       }
 
       if (completedRuns.workflow_runs.length) {
@@ -71,7 +71,7 @@ export function github(app: App) {
           id: run.id,
           conclusion: run.conclusion,
           jobs,
-          created_at: run.created_at,
+          created_at: new Date(run.created_at),
         };
       }
 
