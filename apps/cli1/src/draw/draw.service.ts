@@ -78,16 +78,20 @@ export default class DrawService extends BaseService {
     configPath: string,
   ) {
     let jsonPath = keymapFile;
+    let layerNames: string[] | undefined;
     if (keymapFile.endsWith(".c")) {
       const result = await (this.app.service("parse") as any).create(
         { file: keymapFile },
         {},
       );
       jsonPath = join(outputDir, `${kb}.json`);
+      layerNames = result.layer_names;
       await Bun.write(jsonPath, JSON.stringify(result));
     }
 
-    const yaml = this.keymap(bin, "-c", configPath, "parse", "-q", jsonPath);
+    const parseArgs = ["-c", configPath, "parse", "-q", jsonPath];
+    if (layerNames?.length) parseArgs.push("-l", ...layerNames);
+    const yaml = this.keymap(bin, ...parseArgs);
     const yamlPath = join(outputDir, `${kb}.yaml`);
     await Bun.write(yamlPath, yaml);
 

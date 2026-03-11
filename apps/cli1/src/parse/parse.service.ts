@@ -15,7 +15,7 @@ export interface KeymapJson {
   keymap: string;
   layout: string;
   layers: string[][];
-  layer_names?: string[];
+  layer_names: string[];
 }
 
 export default class ParseService extends BaseService {
