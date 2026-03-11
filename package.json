@@ -4,7 +4,7 @@
     "apps/*"
   ],
   "scripts": {
-    "cli": "bun run --filter keyb dev",
+    "cli": "bun --cwd apps/cli index.tsx",
     "flash-totem": "bun --cwd apps/cli1 index.tsx flash totem left -y && bun --cwd apps/cli1 index.tsx flash totem right -y",
     "flash-eyelash": "bun --cwd apps/cli1 index.tsx flash eyelash left -y && bun --cwd apps/cli1 index.tsx flash eyelash right -y",
     "flash-corne": "bun --cwd apps/cli1 index.tsx flash corne left -y && bun --cwd apps/cli1 index.tsx flash corne right -y",

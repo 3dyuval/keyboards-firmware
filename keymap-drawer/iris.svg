@@ -10,8 +10,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 .label { font-size: 14px; font-weight: bold; fill: #c0caf5; stroke: none; }
 .combo { fill: #bb9af7; stroke: #3b4261; stroke-width: 1; }
 </style>
-<g transform="translate(30, 0)" class="layer-L0">
-<text x="0" y="28" class="label" id="L0">L0:</text>
+<g transform="translate(30, 0)" class="layer-Base">
+<text x="0" y="28" class="label" id="Base">Base:</text>
 <g transform="translate(0, 56)">
 <g transform="translate(28, 49)" class="key keypos-0">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -67,7 +67,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 <g transform="translate(84, 105)" class="key keypos-13">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
 <text x="0" y="2" class="key tap">
-<tspan x="0" dy="-0.6em">LT(</tspan><tspan x="0" dy="1.2em">SYS,B)</tspan>
+<tspan x="0" dy="-0.6em">LT(Sys,</tspan><tspan x="0" dy="1.2em">B)</tspan>
 </text>
 </g>
 <g transform="translate(140, 91)" class="key keypos-14">
@@ -156,9 +156,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(812, 161)" class="key keypos-35">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">
-<tspan x="0" dy="-0.6em">MO(</tspan><tspan x="0" dy="1.2em">NUM)</tspan>
-</text>
+<text x="0" y="2" class="key tap">MO(Num)</text>
 </g>
 <g transform="translate(28, 217)" class="key keypos-36">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -225,9 +223,7 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 <g transform="translate(280, 273)" class="key keypos-51">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
-<text x="0" y="2" class="key tap">
-<tspan x="0" dy="-0.6em">MO(</tspan><tspan x="0" dy="1.2em">SYM)</tspan>
-</text>
+<text x="0" y="2" class="key tap">MO(Sym)</text>
 </g>
 <g transform="translate(342, 294)" class="key keypos-52">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -247,8 +243,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 </g>
 </g>
-<g transform="translate(30, 378)" class="layer-L1">
-<text x="0" y="28" class="label" id="L1">L1:</text>
+<g transform="translate(30, 378)" class="layer-Sym">
+<text x="0" y="28" class="label" id="Sym">Sym:</text>
 <g transform="translate(0, 56)">
 <g transform="translate(28, 49)" class="key trans keypos-0">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>
@@ -476,8 +472,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 </g>
 </g>
-<g transform="translate(30, 756)" class="layer-L2">
-<text x="0" y="28" class="label" id="L2">L2:</text>
+<g transform="translate(30, 756)" class="layer-Num">
+<text x="0" y="28" class="label" id="Num">Num:</text>
 <g transform="translate(0, 56)">
 <g transform="translate(28, 49)" class="key keypos-0">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key"/>
@@ -711,8 +707,8 @@ text.shifted { font-size: 9px; fill: #f0c878; stroke: none; transform: translate
 </g>
 </g>
 </g>
-<g transform="translate(30, 1134)" class="layer-L3">
-<text x="0" y="28" class="label" id="L3">L3:</text>
+<g transform="translate(30, 1134)" class="layer-Sys">
+<text x="0" y="28" class="label" id="Sys">Sys:</text>
 <g transform="translate(0, 56)">
 <g transform="translate(28, 49)" class="key trans keypos-0">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key trans"/>

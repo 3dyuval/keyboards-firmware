@@ -1,6 +1,6 @@
 layout: {qmk_keyboard: keebio/iris_lm/k1, layout_name: LAYOUT}
 layers:
-  L0:
+  Base:
   - F1
   - F2
   - F3
@@ -14,7 +14,7 @@ layers:
   - F11
   - F12
   - ''
-  - LT( SYS,B)
+  - LT(Sys,B)
   - L
   - D
   - W
@@ -36,7 +36,7 @@ layers:
   - A
   - E
   - I
-  - MO( NUM)
+  - MO(Num)
   - TD LSFT
   - Q
   - X
@@ -52,12 +52,12 @@ layers:
   - /
   - RSFT
   - {t: ESC, h: LCTL}
-  - MO( SYM)
+  - MO(Sym)
   - SPC
   - ENT
   - BSPC
   - LALT
-  L1:
+  Sym:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -114,7 +114,7 @@ layers:
   - {t: ▽, type: trans}
   - DEL
   - {t: ▽, type: trans}
-  L2:
+  Num:
   - F1
   - F2
   - F3
@@ -171,7 +171,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  L3:
+  Sys:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - ''
