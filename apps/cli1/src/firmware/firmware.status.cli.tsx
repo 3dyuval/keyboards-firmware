@@ -33,15 +33,15 @@ export default function FirmwareStatus() {
 
   const tableData = Object.keys(data.data)
     .sort()
-    .map((wf) => {
-      const s = data.data[wf];
+    .map((kb) => {
+      const s = data.data[kb];
       const status = s.inProgress
         ? "in_progress"
         : (s.completed?.conclusion ?? "—");
       const detail = s.completed?.created_at
-        ? `build ${new Date(s.completed.created_at).toLocaleDateString()}`
+        ? `build ${new Date(s.completed.created_at).toLocaleString()}`
         : "—";
-      return { workflow: wf, status, details: detail };
+      return { keyboard: kb, status, details: detail };
     });
 
   return (
@@ -50,7 +50,7 @@ export default function FirmwareStatus() {
       <Table
         data={tableData}
         columns={[
-          { key: "workflow", width: 12, color: "cyan" },
+          { key: "keyboard", width: 12, color: "cyan" },
           {
             key: "status",
             width: 14,

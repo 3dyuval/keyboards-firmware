@@ -8,9 +8,9 @@ import * as hw from "./hw.ts";
 export default class FirmwareService extends BaseService {
   schema = FirmwareCreateSchema;
 
-  // find — CI status for all workflows (stale-while-revalidate)
+  // find — CI status for all keyboards (stale-while-revalidate)
   async *find(params: Params): AsyncGenerator<ServiceEvent> {
-    const { workflows } = params as any;
+    const { keyboards } = params as any;
     const gh = github(this.app);
 
     // yield cached/stale results immediately from last known state
@@ -19,12 +19,15 @@ export default class FirmwareService extends BaseService {
       yield { stage: "status", stale: true, data: cached };
     }
 
-    // fetch fresh from GitHub
+    // fetch fresh from GitHub, keyed by keyboard name
     const results: Record<string, any> = {};
-    for (const wf of workflows) {
-      const label = wf.replace("build-", "").replace(".yml", "");
-      results[label] = await gh.status(wf);
-      // yield progressively as each workflow resolves
+    const fetched: Record<string, any> = {};
+    for (const [name, config] of Object.entries(keyboards) as [string, any][]) {
+      // dedupe: reuse result if workflow already fetched
+      if (!fetched[config.workflow]) {
+        fetched[config.workflow] = await gh.status(config.workflow);
+      }
+      results[name] = fetched[config.workflow];
       yield { stage: "status", stale: false, data: { ...results } };
     }
 
