@@ -17,6 +17,12 @@ export default function ({ defer }: any) {
       config: defer((cfg: any) => join(cfg.root, "keymap-drawer/config.yaml")),
     },
 
+    // MCP HTTP server settings
+    mcp: {
+      port: 3001,
+      idleTimeout: 10,
+    },
+
     // GitHub repository for CI workflow lookups
     // Auth token comes from GITHUB_TOKEN env or local.ts
     github: {

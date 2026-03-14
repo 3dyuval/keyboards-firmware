@@ -1,29 +1,25 @@
 {
-  "name": "keyb",
-  "version": "1.0.0",
+  "name": "keyb1",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
-  "bin": {
-    "keyb": "index.ts"
-  },
-  "scripts": {
-    "dev": "NODE_ENV=development bun index.ts"
-  },
   "dependencies": {
     "@feathersjs/configuration": "^5.0.42",
     "@feathersjs/feathers": "^5.0.42",
     "@inkjs/ui": "^2.0.0",
-    "config": "^4.0.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "ahooks": "^3.9.6",
     "ink": "^6.8.0",
-    "meow": "^13.0.0",
+    "json5": "^2.2.3",
     "octokit": "^5.0.5",
-    "ora": "^9.0.0",
     "react": "^19.2.4",
-    "web-tree-sitter": "0.25.3"
+    "ts-pattern": "^5.9.0",
+    "web-tree-sitter": "^0.26.6",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/config": "^3.3.0",
-    "@types/react": "^19.2.14"
+    "@types/react": "latest",
+    "react-devtools-core": "^7.0.1"
   }
 }

@@ -25,9 +25,7 @@ const [, , cmd, ...rest] = process.argv;
 if (cmd === "--mcp") {
   await startMcpServer(app);
 } else if (cmd === "--mcp-http") {
-  const portIdx = rest.indexOf("--port");
-  const port = portIdx !== -1 ? Number(rest[portIdx + 1]) : 3001;
-  await startMcpHttpServer(app, port);
+  await startMcpHttpServer(app);
 } else if (cmd === "--rest") {
   console.error("REST mode not yet implemented");
   process.exit(1);

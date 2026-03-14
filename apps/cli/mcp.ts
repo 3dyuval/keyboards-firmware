@@ -52,7 +52,7 @@ const port = (() => {
 })();
 
 if (useHttp) {
-  await startMcpHttpServer(app, port);
+  await startMcpHttpServer(app, port)
 } else {
   await startMcpServer(app);
 }
