@@ -15,12 +15,8 @@
     "draw-totem": "NODE_ENV=development bun --cwd apps/cli index.tsx draw totem",
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "NODE_ENV=development bun --cwd apps/cli index.tsx draw --",
-    "mcp": "bun --cwd apps/cli index.tsx --mcp-http",
-    "mcp-dev": "bun --cwd apps/cli --watch index.tsx --mcp-http",
-    "jam": "cd apps/mcp && inspector --config inspector.json --server keyboards",
-    "jam-stdio": "cd apps/cli && inspector --port 6275 -- bun /home/yuv/keyboards-firmware/apps/cli/index.tsx --mcp",
-    "mcp-http": "NODE_ENV=development bun --cwd apps/cli index.tsx --mcp-http",
-    "jam-http": "inspector --url http://localhost:3001/mcp --name keyb-http"
+    "jam": "bun --shell=system npx mcp-jam/inspector@latest",
+    "build-mcp": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/proj/keylytics/src-tauri/resources/keyb"
   },
   "dependencies": {
     "@mcpjam/inspector": "^2.0.5"

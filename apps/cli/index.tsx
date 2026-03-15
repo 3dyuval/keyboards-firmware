@@ -7,7 +7,7 @@ import { registerServices } from "./lib/register.ts";
 import { AppContext, RootContext } from "./lib/context.tsx";
 import { resolveCommand, allRoutes, parseArgs, routeUsage } from "./lib/route.ts";
 import { discover } from "./lib/discover.ts";
-import { mcpPresenter, mcpErrorHandler, startMcpServer, startMcpHttpServer } from "./lib/mcp.ts";
+import { mcpPresenter, startMcpServer, startMcpHttpServer } from "./lib/mcp.ts";
 
 // ── bootstrap (shared across all modes) ─────────────────────────────
 
@@ -15,7 +15,6 @@ for await (const _ of registerServices(app, join(import.meta.dir, "src"))) {}
 
 app.hooks({
   after: { all: [mcpPresenter] },
-  error: { all: [mcpErrorHandler] },
 });
 
 // ── mode dispatch ───────────────────────────────────────────────────
