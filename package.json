@@ -4,19 +4,19 @@
     "apps/*"
   ],
   "scripts": {
-    "cli": "bun --cwd apps/cli index.tsx",
-    "flash-totem": "bun --cwd apps/cli index.tsx flash totem left -y && bun --cwd apps/cli index.tsx flash totem right -y",
-    "flash-eyelash": "bun --cwd apps/cli index.tsx flash eyelash left -y && bun --cwd apps/cli index.tsx flash eyelash right -y",
-    "flash-corne": "bun --cwd apps/cli index.tsx flash corne left -y && bun --cwd apps/cli index.tsx flash corne right -y",
-    "flash-iris": "bun --cwd apps/cli index.tsx flash iris -y",
-    "draw-iris": "NODE_ENV=development bun --cwd apps/cli index.tsx draw iris",
-    "draw-corne": "NODE_ENV=development bun --cwd apps/cli index.tsx draw corne",
-    "draw-eyelash": "NODE_ENV=development bun --cwd apps/cli index.tsx draw eyelash",
-    "draw-totem": "NODE_ENV=development bun --cwd apps/cli index.tsx draw totem",
+    "cli": "bun apps/cli/index.tsx",
+    "flash-totem": "bun cli flash totem left -y && bun cli flash totem right -y",
+    "flash-eyelash": "bun cli flash eyelash left -y && bun cli flash eyelash right -y",
+    "flash-corne": "bun cli flash corne left -y && bun cli flash corne right -y",
+    "flash-iris": "bun cli flash iris -y",
+    "draw-iris": "bun cli draw iris",
+    "draw-corne": "bun cli draw corne",
+    "draw-eyelash": "bun cli draw eyelash",
+    "draw-totem": "bun cli draw totem",
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
-    "draw": "NODE_ENV=development bun --cwd apps/cli index.tsx draw --",
+    "draw": "bun cli draw --",
     "jam": "bun --shell=system npx mcp-jam/inspector@latest",
-    "build-mcp": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/proj/keylytics/src-tauri/resources/keyb"
+    "build-mcp": "bun build mcp.ts --compile --outfile /home/yuv/proj/keylytics/src-tauri/resources/keyb"
   },
   "dependencies": {
     "@mcpjam/inspector": "^2.0.5"

@@ -13,7 +13,7 @@ layers:
   - F10
   - F11
   - F12
-  - ''
+  - MO(Num)
   - LT(Sys,B)
   - L
   - D
@@ -36,7 +36,7 @@ layers:
   - A
   - E
   - I
-  - MO(Num)
+  - ''
   - TD LSFT
   - Q
   - X
@@ -128,10 +128,10 @@ layers:
   - F11
   - F12
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '7'
-  - '8'
-  - '9'
+  - HOME
+  - PGUP
+  - PGDN
+  - END
   - {t: ▽, type: trans}
   - MM STAR
   - '7'
@@ -140,10 +140,10 @@ layers:
   - '-'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '4'
-  - '5'
-  - '6'
+  - LEFT
+  - UP
+  - DOWN
+  - RGHT
   - {t: ▽, type: trans}
   - '='
   - '4'
@@ -152,10 +152,10 @@ layers:
   - +
   - {t: ▽, type: trans}
   - TAB
-  - '0'
-  - '1'
-  - '2'
-  - '3'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
