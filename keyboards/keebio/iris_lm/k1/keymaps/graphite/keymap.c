@@ -98,17 +98,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // TODO: find QMK-compatible hold behavior for SYM+C (LGUI) and SYM+V (NUM layer)
     [Sym] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
-        _______, KC_EXLM, KC_LPRN, KC_RPRN, KC_AMPR, KC_GRV,                   KC_COLN, KC_EQL,  KC_MINS, KC_PLUS, KC_UNDS, _______,
-        _______, KC_ASTR, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, KC_CIRC, KC_LCBR, KC_RCBR, KC_AT,   KC_PERC, _______, _______, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
+        _______, KC_EXLM, KC_LPRN, KC_RPRN, KC_AMPR, KC_GRV,                   KC_COLN, KC_EQL,  KC_PLUS, KC_MINS, KC_UNDS, _______,
+        _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+        _______, KC_ASTR, KC_LCBR, KC_RCBR, KC_AT,   KC_PERC, _______, _______, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
                                    KC_LCTL, _______, _______,                  _______, KC_DEL,  _______
     ),
 
     // ── Numbers ─────────────────────────────────────────────────────
     [Num] = LAYOUT(
         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                    KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-        _______, KC_HOME, KC_PGUP, KC_PGDN, KC_END,  _______,                  MM_STAR, KC_7,    KC_8,    KC_9,    KC_MINS, _______,
-        _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, _______,                  KC_EQL,  KC_4,    KC_5,    KC_6,    KC_PLUS, _______,
+        _______, KC_HOME, KC_PGUP, KC_PGDN, KC_END,  _______,                  MM_STAR, KC_7,    KC_8,    KC_9,    KC_PLUS, _______,
+        _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, _______,                  KC_EQL,  KC_4,    KC_5,    KC_6,    KC_MINS, _______,
         KC_TAB,  _______, _______, _______, _______, _______, _______, _______,  MM_SLASH,KC_1,    KC_2,    MM_N3,   KC_0,    _______,
                                    _______, _______, _______,                  _______, _______, _______
     ),
