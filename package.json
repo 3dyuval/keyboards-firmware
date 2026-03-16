@@ -16,7 +16,7 @@
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "bun cli draw --",
     "jam": "bun --shell=system npx mcp-jam/inspector@latest",
-    "build-mcp": "bun build mcp.ts --compile --outfile /home/yuv/proj/keylytics/src-tauri/resources/keyb"
+    "build-mcp": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/proj/keylytics/src-tauri/resources/keyb"
   },
   "dependencies": {
     "@mcpjam/inspector": "^2.0.5"
