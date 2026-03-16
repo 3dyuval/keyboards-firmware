@@ -30,7 +30,8 @@ export const mcpPresenter = async (context: Hook) => {
     for await (const batch of result) {
       last = batch;
     }
-    context.result = Array.isArray(last) ? last[2] : last;
+    const isServiceEvent = Array.isArray(last) && last.length === 3 && typeof last[0] === "string";
+    context.result = isServiceEvent ? last[2] : last;
     return;
   }
 };

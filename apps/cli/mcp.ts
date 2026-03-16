@@ -1,26 +1,19 @@
 #!/usr/bin/env bun
 /**
  * MCP-only entry point for compiled binary.
- * No filesystem config, no dynamic service scan.
- * All keyboard config comes via MCP tool params.
+ * No dynamic service scan — services registered statically.
+ * Keyboard config loaded from local.json5 via feathers configuration.
  */
-import { feathers } from "@feathersjs/feathers";
-import type { AppSettings } from "./types.d.ts";
-import type { App } from "./src/app.ts";
-import { BaseService } from "./src/app.ts";
+import { app } from "./src/app.ts";
 import { mcpPresenter, startMcpServer, startMcpHttpServer } from "./lib/mcp.ts";
-
-// ── minimal app (no config files) ──────────────────────────────────
-
-const app: App = feathers<any, AppSettings>();
-
-app.set("keyboards" as any, {});
-app.set("logging" as any, {});
 
 // ── static service registration ────────────────────────────────────
 
 import KeyboardsService from "./src/keyboards/keyboards.service.ts";
 import keyboardsMcp from "./src/keyboards/keyboards.mcp.ts";
+
+import ParseService from "./src/parse/parse.service.ts";
+import parseHooks from "./src/parse/parse.hooks.ts";
 
 import DrawService from "./src/draw/draw.service.ts";
 import drawHooks from "./src/draw/draw.hooks.ts";
@@ -29,6 +22,10 @@ import drawMcp from "./src/draw/draw.mcp.ts";
 const keyboards = new KeyboardsService(app);
 (keyboards as any).expose = { mcp: keyboardsMcp };
 app.use("keyboards", keyboards);
+
+const parse = new ParseService(app);
+app.use("parse", parse);
+app.service("parse").hooks(parseHooks);
 
 const draw = new DrawService(app);
 (draw as any).expose = { mcp: drawMcp };
@@ -43,14 +40,8 @@ app.hooks({
 
 // ── start ──────────────────────────────────────────────────────────
 
-const useHttp = process.argv.includes("--http");
-const port = (() => {
-  const i = process.argv.indexOf("--port");
-  return i !== -1 ? Number(process.argv[i + 1]) : 3001;
-})();
-
-if (useHttp) {
-  await startMcpHttpServer(app, port);
+if (process.argv.includes("--http")) {
+  await startMcpHttpServer(app);
 } else {
   await startMcpServer(app);
 }
