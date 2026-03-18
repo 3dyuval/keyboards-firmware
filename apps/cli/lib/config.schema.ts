@@ -17,7 +17,7 @@ export const ConfigSchema = z.object({
 
   logging: z.record(z.string(), z.array(z.string())),
 
-  keyboards: z.record(z.string(), KeyboardSchema),
+  keyboards: z.record(z.string(), KeyboardSchema).optional().default({}),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;

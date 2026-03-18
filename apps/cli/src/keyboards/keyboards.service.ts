@@ -1,6 +1,7 @@
 import type { Params } from "@feathersjs/feathers";
 import { BaseService } from "../app.ts";
 import { KeyboardSchema, type Keyboard } from "./keyboards.schema.ts";
+import { getKeyboards } from "../../lib/keyboard-hooks.ts";
 
 export interface KeyboardRow {
   name: string;
@@ -14,7 +15,7 @@ export default class KeyboardsService extends BaseService {
 
   // Progressive enrichment: yield names immediately, then enrich
   async *find(params: Params): AsyncGenerator<KeyboardRow[]> {
-    const keyboards = this.app.get("keyboards");
+    const keyboards = await getKeyboards(this.app);
     const names = Object.keys(keyboards).sort();
 
     // Phase 1 — yield keyboard configs immediately

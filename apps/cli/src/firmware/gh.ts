@@ -122,10 +122,58 @@ export function github(app: App) {
       return String(successful.id);
     },
 
+    async discoverKeyboards(): Promise<Record<string, import("../keyboards/keyboards.schema.ts").Keyboard>> {
+      const workflows = [
+        { id: "build-zmk.yml", type: "zmk" as const },
+        { id: "build-qmk.yml", type: "qmk" as const },
+      ];
+
+      const keyboards: Record<string, import("../keyboards/keyboards.schema.ts").Keyboard> = {};
+
+      for (const { id, type } of workflows) {
+        try {
+          const { data: runs } = await ok.rest.actions.listWorkflowRuns({
+            owner,
+            repo,
+            workflow_id: id,
+            status: "completed",
+            per_page: 10,
+          });
+
+          const successful = runs.workflow_runs.find(
+            (r) => r.conclusion === "success",
+          );
+          if (!successful) continue;
+
+          const { data: artifacts } =
+            await ok.rest.actions.listWorkflowRunArtifacts({
+              owner,
+              repo,
+              run_id: successful.id,
+            });
+
+          for (const artifact of artifacts.artifacts) {
+            const name = artifact.name;
+            if (name.startsWith("settings-reset")) continue;
+            // Group left/right into a single keyboard entry by base name
+            const base = name.replace(/-(?:left|right)$/, "");
+            if (!keyboards[base]) {
+              keyboards[base] = { workflow: id, artifact: base, type };
+            }
+          }
+        } catch {
+          // workflow doesn't exist in this repo, skip
+        }
+      }
+
+      return keyboards;
+    },
+
     async downloadArtifact(
       runId: string,
       artifactName: string,
       cacheDir: string,
+      side?: string,
     ): Promise<void> {
       console.debug(`downloading from run ${runId}...`);
 
@@ -136,9 +184,11 @@ export function github(app: App) {
           run_id: Number(runId),
         });
 
-      const artifact = artifacts.artifacts.find(
-        (a) => a.name === artifactName,
-      );
+      // Prefer side-specific artifact (new per-side structure), fall back to base name (legacy)
+      const sideSpecific = side ? `${artifactName}-${side}` : null;
+      const artifact =
+        (sideSpecific && artifacts.artifacts.find((a) => a.name === sideSpecific)) ||
+        artifacts.artifacts.find((a) => a.name === artifactName);
       if (!artifact)
         throw new Error(
           `artifact "${artifactName}" not found in run ${runId}`,

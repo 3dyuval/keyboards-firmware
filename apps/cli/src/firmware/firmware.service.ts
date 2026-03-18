@@ -66,7 +66,7 @@ export default class FirmwareService extends BaseService {
     yield ["status", keyboard, fresh];
   }
 
-  private async *download(params: Params): AsyncGenerator<ServiceEvent> {
+  private async *download(params: Params, side?: string): AsyncGenerator<ServiceEvent> {
     const { keyboardConfig, keyboard, runId, cacheDir } = params as any;
     const gh = github(this.app);
 
@@ -76,13 +76,13 @@ export default class FirmwareService extends BaseService {
     }
 
     yield ["downloading", `downloading run ${runId}...`, undefined];
-    await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir);
+    await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir, side);
     yield ["downloaded", "download complete", { keyboard, runId, cached: false, cacheDir }];
   }
 
   // create — download firmware with progress stages
   async *create(data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    yield* this.download(params);
+    yield* this.download(params, data?.side);
   }
 
   // patch — download + flash with full stage progression
@@ -90,7 +90,7 @@ export default class FirmwareService extends BaseService {
     const { keyboardConfig, cacheDir, keyboard } = params as any;
     const { side, reset, yes } = data;
 
-    yield* this.download(params);
+    yield* this.download(params, side);
 
     if (keyboardConfig.type === "qmk") {
       for await (const event of hw.flashQmk(cacheDir)) {
