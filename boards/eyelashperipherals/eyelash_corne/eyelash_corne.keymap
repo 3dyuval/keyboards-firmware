@@ -24,15 +24,15 @@
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
 
-        number {
-            display-name = "Number";
-            bindings = < GRAPHITE_NUM_42 >;
-            sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
-        };
-
         symbols {
             display-name = "Symbols";
             bindings = < GRAPHITE_SYM_42 >;
+            sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
+        };
+
+        number {
+            display-name = "Number";
+            bindings = < GRAPHITE_NUM_42 >;
             sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
         };
 
