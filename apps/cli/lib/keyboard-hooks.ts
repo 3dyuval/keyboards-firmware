@@ -1,3 +1,6 @@
+import { readFileSync } from "fs";
+import { join } from "path";
+import { YAML } from "bun";
 import type { Hook, App } from "../src/app.ts";
 import { github } from "../src/firmware/gh.ts";
 
@@ -13,6 +16,27 @@ export async function getKeyboards(app: App): Promise<Record<string, any>> {
     | Record<string, any>
     | undefined;
   if (cached) return cached;
+
+  const root = app.get("root") as string;
+  try {
+    const raw = readFileSync(join(root, "build.yaml"), "utf-8");
+    const parsed = YAML.parse(raw) as { include: { "artifact-name": string }[] };
+    const fromBuild: Record<string, any> = {};
+    for (const entry of parsed.include ?? []) {
+      const name = entry["artifact-name"];
+      if (!name || name.startsWith("settings-reset")) continue;
+      const base = name.replace(/-(?:left|right)$/, "");
+      if (!fromBuild[base])
+        fromBuild[base] = { workflow: "build-zmk.yml", artifact: base, type: "zmk" };
+    }
+    if (Object.keys(fromBuild).length > 0) {
+      app.set("_discoveredKeyboards", fromBuild);
+      return fromBuild;
+    }
+  } catch (e: any) {
+    if (e?.code !== "ENOENT") console.warn("build.yaml parse failed:", e?.message);
+    // fall through to GitHub
+  }
 
   const discovered = await github(app).discoverKeyboards();
   app.set("_discoveredKeyboards", discovered);
