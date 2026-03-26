@@ -64,9 +64,10 @@ export function github(app: App) {
             repo,
             run_id: run.id,
           });
-        const jobs = jobsData.jobs
-          .map((j) => `${j.conclusion}\t${j.name}`)
-          .join("\n");
+        const jobs = jobsData.jobs.map((j) => ({
+          name: j.name,
+          conclusion: j.conclusion ?? null,
+        }));
         result.completed = {
           id: run.id,
           conclusion: run.conclusion,
@@ -188,14 +189,15 @@ export function github(app: App) {
           run_id: Number(runId),
         });
 
-      // Prefer side-specific artifact (new per-side structure), fall back to base name (legacy)
+      // Prefer side-specific artifact, fall back to base name, then merged "firmware" zip
       const sideSpecific = side ? `${artifactName}-${side}` : null;
       const artifact =
         (sideSpecific && artifacts.artifacts.find((a) => a.name === sideSpecific)) ||
-        artifacts.artifacts.find((a) => a.name === artifactName);
+        artifacts.artifacts.find((a) => a.name === artifactName) ||
+        artifacts.artifacts.find((a) => a.name === "firmware");
       if (!artifact)
         throw new Error(
-          `artifact "${artifactName}" not found in run ${runId}`,
+          `artifact "${sideSpecific ?? artifactName}" not found in run ${runId}`,
         );
 
       const { data } = await ok.rest.actions.downloadArtifact({
