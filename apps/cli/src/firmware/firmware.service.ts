@@ -7,11 +7,16 @@ import * as hw from "./hw.ts";
 
 // ── status types ────────────────────────────────────────────────────
 
+export interface BuildJob {
+  name: string;
+  conclusion: string | null;
+}
+
 export interface BuildRun {
   id: number;
   created_at: Date;
   conclusion?: string | null;
-  jobs?: string;
+  jobs?: BuildJob[];
 }
 
 export interface KeyboardStatus {
@@ -41,7 +46,18 @@ export default class FirmwareService extends BaseService {
       if (!fetched[config.workflow]) {
         fetched[config.workflow] = await gh.status(config.workflow);
       }
-      results[name] = fetched[config.workflow];
+      const workflowStatus = fetched[config.workflow];
+      const jobs = workflowStatus.completed?.jobs?.filter((j) => {
+        const lastArtifact = j.name.match(/,\s*([\w-]+)\)$/)?.[1];
+        return lastArtifact === `${config.artifact}-left` ||
+               lastArtifact === `${config.artifact}-right`;
+      });
+      results[name] = {
+        ...workflowStatus,
+        completed: workflowStatus.completed
+          ? { ...workflowStatus.completed, jobs }
+          : null,
+      };
       yield ["status", `fetched ${name}`, { ...results }];
     }
 

@@ -6,15 +6,20 @@ import { match, P } from "ts-pattern";
 import { useService } from "../../lib/context.tsx";
 import { Table } from "../components/table.tsx";
 import type { ServiceEvent } from "../../lib/types.ts";
-import type { StatusMap, KeyboardStatus } from "./firmware.service.ts";
+import type { StatusMap, KeyboardStatus, BuildJob } from "./firmware.service.ts";
 
 export const aliases = ["s"];
 export const description = "Show CI build status for all keyboards";
 
 function statusRow(name: string, s: KeyboardStatus) {
-  const status = s.inProgress
+  const rawStatus = s.inProgress
     ? "in_progress"
     : (s.completed?.conclusion ?? "—");
+  const status = match(rawStatus)
+    .with("success", () => "✓")
+    .with("failure", () => "✗")
+    .with("in_progress", () => "…")
+    .otherwise(() => "—");
 
   const detail = match(s)
     .with({ completed: { created_at: P.instanceOf(Date) } }, ({ completed }) =>
@@ -22,7 +27,31 @@ function statusRow(name: string, s: KeyboardStatus) {
     )
     .otherwise(() => "—");
 
-  return { keyboard: name, status, details: detail };
+  const children = match(s.completed?.jobs)
+    .with(P.array({ name: P.string }), (jobs) => ({
+      columns: [
+        { key: "job" as const, width: 60 },
+        {
+          key: "result" as const,
+          width: 12,
+          color: (row: { result: string }) =>
+            match(row.result)
+              .with("✓", () => "green" as const)
+              .with("✗", () => "red" as const)
+              .otherwise(() => "yellow" as const),
+        },
+      ],
+      data: jobs.map((j: BuildJob) => ({
+        job: j.name,
+        result: match(j.conclusion)
+          .with("success", () => "✓")
+          .with("failure", () => "✗")
+          .otherwise(() => "—"),
+      })),
+    }))
+    .otherwise(() => undefined);
+
+  return { keyboard: name, workflow: s.workflow, status, details: detail, children };
 }
 
 export default function FirmwareStatus() {
@@ -62,13 +91,14 @@ export default function FirmwareStatus() {
         data={tableData}
         columns={[
           { key: "keyboard", width: 12, color: "cyan" },
+          { key: "workflow", width: 16, dimColor: true },
           {
             key: "status",
             width: 14,
             color: (row) =>
               match(row.status)
-                .with("success", () => "green" as const)
-                .with("in_progress", () => "yellow" as const)
+                .with("✓", () => "green" as const)
+                .with("…", () => "yellow" as const)
                 .otherwise(() => "red" as const),
           },
           { key: "details", dimColor: true },
