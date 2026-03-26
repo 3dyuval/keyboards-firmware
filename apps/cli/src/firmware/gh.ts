@@ -132,12 +132,14 @@ export function github(app: App) {
 
       for (const { id, type } of workflows) {
         try {
+          const signal = AbortSignal.timeout(10_000);
           const { data: runs } = await ok.rest.actions.listWorkflowRuns({
             owner,
             repo,
             workflow_id: id,
             status: "completed",
             per_page: 10,
+            request: { signal },
           });
 
           const successful = runs.workflow_runs.find(
@@ -150,6 +152,7 @@ export function github(app: App) {
               owner,
               repo,
               run_id: successful.id,
+              request: { signal },
             });
 
           for (const artifact of artifacts.artifacts) {
@@ -161,7 +164,8 @@ export function github(app: App) {
               keyboards[base] = { workflow: id, artifact: base, type };
             }
           }
-        } catch {
+        } catch (e: any) {
+          if (e?.name === "TimeoutError") throw e;
           // workflow doesn't exist in this repo, skip
         }
       }
