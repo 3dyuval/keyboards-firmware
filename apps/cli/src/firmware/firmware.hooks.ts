@@ -14,17 +14,18 @@ export async function resolveConfig(context: Hook) {
   const keyboards = await getKeyboards(context.app);
   const cacheDir = context.app.get("cacheDir");
 
-  context.params.cacheDir = cacheDir;
-
   if (context.method === "find") {
     context.params.workflows = [
       ...new Set(Object.values(keyboards).map((k: any) => k.workflow)),
     ];
     context.params.keyboards = keyboards;
+    context.params.cacheDir = cacheDir;
     return;
   }
 
   await resolveKeyboard(context);
+  const kb = (context.params as any).keyboard;
+  context.params.cacheDir = join(cacheDir, kb);
 }
 
 export async function resolveRunId(context: Hook) {
@@ -63,5 +64,6 @@ export default {
   },
   after: {
     create: [writeCache],
+    patch: [writeCache],
   },
 };
