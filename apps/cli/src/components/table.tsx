@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Text } from "ink";
+import { match, P } from "ts-pattern";
 
 interface Column<T> {
   key: keyof T & string;
@@ -9,38 +10,94 @@ interface Column<T> {
   dimColor?: boolean;
 }
 
-interface TableProps<T extends Record<string, any>> {
-  data: T[];
-  columns: Column<T>[];
+type Layout = "table" | "kv";
+
+interface NestedTable {
+  data: Record<string, any>[];
+  columns?: Column<Record<string, any>>[];
+  layout?: Layout;
 }
 
-export function Table<T extends Record<string, any>>({
-  data,
-  columns,
-}: TableProps<T>) {
-  return (
-    <Box flexDirection="column">
-      <Box>
-        {columns.map((col) => (
-          <Box key={col.key} width={col.width}>
-            <Text bold>{col.label ?? col.key}</Text>
-          </Box>
-        ))}
+interface TableProps<T extends Record<string, any>> {
+  data: (T & { children?: NestedTable })[];
+  columns?: Column<T>[];
+  layout?: Layout;
+  indent?: number;
+}
+
+interface RowProps {
+  layout: Layout;
+  row: Record<string, any>;
+  columns: Column<Record<string, any>>[];
+}
+
+function Row({ layout, row, columns }: RowProps) {
+  const { children, ...data } = row;
+
+  const nested = match(children)
+    .with(P.not(P.nullish), ({ data: d, columns: cols, layout: lay }) => (
+      <Table data={d} columns={cols} layout={lay} indent={2} />
+    ))
+    .otherwise(() => null);
+
+  return match(layout)
+    .with("kv", () => (
+      <Box flexDirection="column">
+        <Box>
+          {Object.entries(data).map(([k, v]) => (
+            <Box key={k}>
+              <Box width={16}>
+                <Text bold>{k}</Text>
+              </Box>
+              <Text dimColor>{String(v ?? "—")}</Text>
+            </Box>
+          ))}
+        </Box>
+        {nested}
       </Box>
-      {data.map((row, ri) => (
-        <Box key={ri}>
+    ))
+    .otherwise(() => (
+      <Box flexDirection="column">
+        <Box>
           {columns.map((col) => {
             const color =
-              typeof col.color === "function" ? col.color(row) : col.color;
+              typeof col.color === "function" ? col.color(data) : col.color;
             return (
               <Box key={col.key} width={col.width}>
                 <Text color={color} dimColor={col.dimColor}>
-                  {String(row[col.key] ?? "—")}
+                  {String(data[col.key] ?? "—")}
                 </Text>
               </Box>
             );
           })}
         </Box>
+        {nested}
+      </Box>
+    ));
+}
+
+export function Table<T extends Record<string, any>>({
+  data,
+  columns = [],
+  layout = "table",
+  indent = 0,
+}: TableProps<T>) {
+  return (
+    <Box flexDirection="column" marginLeft={indent}>
+      {match(layout)
+        .with("table", () => (
+          <Box>
+            {columns.map((col) => (
+              <Box key={col.key} width={col.width}>
+                <Text bold>{col.label ?? col.key}</Text>
+              </Box>
+            ))}
+          </Box>
+        ))
+        .with("kv", () => null)
+        .exhaustive()}
+      {data.map((row, ri) => (
+        <Row key={ri} layout={layout} row={row} columns={columns} />
       ))}
     </Box>
   );
