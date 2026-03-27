@@ -49,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // TODO: find QMK-compatible hold behavior for SYM+C (LGUI) and SYM+V (NUM layer)
     [Sym] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
-        _______, KC_EXLM, KC_LPRN, KC_RPRN, KC_AMPR, KC_EQL,                   KC_COLN, KC_QUES, KC_PLUS, KC_MINS, KC_GRV,  _______,
+        _______, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES, KC_EXLM,                  KC_COLN, KC_EQL,  KC_PLUS, KC_MINS, KC_GRV,  _______,
         _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
         _______, KC_ASTR, KC_LCBR, KC_RCBR, KC_AT,   KC_PERC, _______, _______, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
                                    KC_LCTL, _______, _______,                  _______, KC_DEL,  _______
