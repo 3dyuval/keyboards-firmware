@@ -50,8 +50,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [Sym] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
         _______, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES, KC_EXLM,                  KC_COLN, KC_EQL,  KC_PLUS, KC_MINS, KC_GRV,  _______,
-        _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,  KC_HASH,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
-        _______, KC_ASTR, KC_LCBR, KC_RCBR, KC_AT,   KC_PERC, _______, _______, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
+        _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_DLR,  KC_PERC,                  KC_PGUP, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______,
+        _______, KC_ASTR, KC_LCBR, KC_RCBR, KC_AT,   KC_HASH, _______, _______, KC_PGDN, KC_HOME, KC_END, KC_QUOT, KC_BSLS, _______,
                                    KC_LCTL, _______, _______,                  _______, KC_DEL,  _______
     ),
 
