@@ -71,6 +71,14 @@
             timeout-ms = <65>;
             layers = <BASE>;
         };
+
+        // both shifts: caps word
+        combo_caps_word {
+            key-positions = <28 41>;
+            bindings = <&caps_word>;
+            timeout-ms = <50>;
+            layers = <BASE>;
+        };
     };
 
     keymap {

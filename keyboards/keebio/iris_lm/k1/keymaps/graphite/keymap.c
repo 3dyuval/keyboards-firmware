@@ -74,6 +74,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
+// ── Combos ──────────────────────────────────────────────────────────
+
+const uint16_t PROGMEM caps_word_combo[] = {TD_LSFT, KC_RSFT, COMBO_END};
+combo_t key_combos[] = {
+    COMBO(caps_word_combo, CAPS_WORD),
+};
+
 // ── Hold-on-other-key-press (per key) ───────────────────────────────
 // LGUI_T(KC_AT) should trigger hold (LGUI) as soon as another key is
 // pressed while it is held, matching ZMK "balanced" flavor.
