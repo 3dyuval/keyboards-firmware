@@ -1,5 +1,5 @@
 import type { Params } from "@feathersjs/feathers";
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { BaseService } from "../app.ts";
 import { DrawSchema } from "./draw.schema.ts";
@@ -9,21 +9,23 @@ export default class DrawService extends BaseService {
   schema = DrawSchema;
 
   async *create(data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    const { keyboard, keyboardConfig } = params as any;
-    const { keymapPath } = keyboardConfig;
+    const { payload, keyboardConfig } = params as any;
     const { outputDir, config: configPath } = this.app.get("draw");
     mkdirSync(outputDir, { recursive: true });
 
     yield ["venv", "ensuring python venv...", undefined];
     const bin = this.ensureVenv();
 
-    if (keyboardConfig.type === "qmk") {
-      yield ["parsing", `parsing QMK keymap for ${keyboard}...`, undefined];
-      const result = await this.drawQmk(keymapPath, keyboard, bin, outputDir, configPath);
+    const format = payload.format;
+    const src = payload.src;
+
+    if (format === "qmk") {
+      yield ["parsing", `parsing QMK keymap...`, undefined];
+      const result = await this.drawQmk(src, payload.type, bin, outputDir, configPath);
       yield ["done", "done", result];
     } else {
-      yield ["parsing", `parsing ZMK keymap for ${keyboard}...`, undefined];
-      const result = await this.drawZmk(keymapPath, keyboard, bin, outputDir, configPath);
+      yield ["parsing", `parsing ZMK keymap...`, undefined];
+      const result = await this.drawZmk(src, payload.type, bin, outputDir, configPath);
       yield ["done", "done", result];
     }
   }
@@ -53,52 +55,79 @@ export default class DrawService extends BaseService {
   }
 
   private async drawZmk(
-    keymapFile: string,
-    kb: string,
+    src: string,
+    payloadType: "file" | "json",
     bin: string,
     outputDir: string,
     configPath: string,
   ) {
-    const yaml = this.keymap(bin, "-c", configPath, "parse", "-z", keymapFile);
-    const yamlPath = join(outputDir, `${kb}.yaml`);
+    const name = payloadType === "file" ? this.getNameFromPath(src) : "inline";
+    
+    let yaml: string;
+    if (payloadType === "file") {
+      yaml = this.keymap(bin, "-c", configPath, "parse", "-z", src);
+    } else {
+      // Write inline content to temp file for parsing
+      const tempPath = join(outputDir, `${name}.keymap`);
+      await Bun.write(tempPath, src);
+      yaml = this.keymap(bin, "-c", configPath, "parse", "-z", tempPath);
+    }
+    
+    const yamlPath = join(outputDir, `${name}.yaml`);
     await Bun.write(yamlPath, yaml);
 
     const svg = this.keymap(bin, "-c", configPath, "draw", yamlPath);
-    const svgPath = join(outputDir, `${kb}.svg`);
+    const svgPath = join(outputDir, `${name}.svg`);
     await Bun.write(svgPath, svg);
 
-    return { name: kb, yaml: yamlPath, svg: svgPath };
+    return { name, yaml: yamlPath, svg: svgPath };
   }
 
   private async drawQmk(
-    keymapFile: string,
-    kb: string,
+    src: string,
+    payloadType: "file" | "json",
     bin: string,
     outputDir: string,
     configPath: string,
   ) {
-    let jsonPath = keymapFile;
+    const name = payloadType === "file" ? this.getNameFromPath(src) : "inline";
+    
+    let jsonPath: string;
     let layerNames: string[] | undefined;
-    if (keymapFile.endsWith(".c")) {
-      const result = await (this.app.service("parse") as any).create(
-        { file: keymapFile },
-        {},
-      );
-      jsonPath = join(outputDir, `${kb}.json`);
-      layerNames = result.layer_names;
-      await Bun.write(jsonPath, JSON.stringify(result));
+    
+    if (payloadType === "file") {
+      if (src.endsWith(".c")) {
+        const result = await (this.app.service("parse") as any).create(
+          { file: src },
+          {},
+        );
+        jsonPath = join(outputDir, `${name}.json`);
+        layerNames = result.layer_names;
+        await Bun.write(jsonPath, JSON.stringify(result));
+      } else {
+        jsonPath = src;
+      }
+    } else {
+      // Write inline JSON to temp file
+      jsonPath = join(outputDir, `${name}.json`);
+      await Bun.write(jsonPath, src);
     }
 
     const parseArgs = ["-c", configPath, "parse", "-q", jsonPath];
     if (layerNames?.length) parseArgs.push("-l", ...layerNames);
     const yaml = this.keymap(bin, ...parseArgs);
-    const yamlPath = join(outputDir, `${kb}.yaml`);
+    const yamlPath = join(outputDir, `${name}.yaml`);
     await Bun.write(yamlPath, yaml);
 
     const svg = this.keymap(bin, "-c", configPath, "draw", yamlPath);
-    const svgPath = join(outputDir, `${kb}.svg`);
+    const svgPath = join(outputDir, `${name}.svg`);
     await Bun.write(svgPath, svg);
 
-    return { name: kb, yaml: yamlPath, svg: svgPath };
+    return { name, yaml: yamlPath, svg: svgPath };
+  }
+
+  private getNameFromPath(path: string): string {
+    const basename = path.split("/").pop() || "unknown";
+    return basename.split(".")[0] || "unknown";
   }
 }

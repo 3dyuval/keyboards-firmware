@@ -236,8 +236,6 @@ index.tsx               — entry point, mode dispatch
 - [x] move table.tsx to src/components/
 - [x] MCP provider after hook + stdio server (`--mcp` mode)
 - [x] MCP tool: list_keyboards with z.toJSONSchema input schema
-- [ ] draw — service + CLI component
-- [ ] parse — service + tree-sitter hooks
-- [ ] log — service + SQLite + global hooks
-- [ ] global log hooks
+- [x] parse — service + tree-sitter hooks
+- [ ] draw - accept --path or --config or --json
 - [ ] replace `parseArgs` with Commander via `buildCommand` (Pastel pattern)
