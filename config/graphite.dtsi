@@ -94,12 +94,6 @@
             bindings = <&kp>, <&kp>;
         };
 
-        lgui_toggle: lgui_toggle {
-            compatible = "zmk,behavior-mod-toggle";
-            #binding-cells = <0>;
-            bindings = <&kp LGUI>;
-        };
-
         mo_ht: mo_ht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -124,7 +118,7 @@
 #define GRAPHITE_SYM_36 \
    &trans          &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK    &kp COLON     &kp EQUAL       &kp PLUS        &kp MINUS       &kp GRAVE       &trans         \
    &trans          &kp CARET      &kp LBKT        &kp RBKT        &kp DOLLAR      &kp PRCNT &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &trans         \
-   &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_toggle LGUI AT_SIGN &mo_ht NUM HASH  &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
+    &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &kp LGUI         AT_SIGN &mo_ht NUM HASH  &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
                                                 &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_36 \
@@ -161,7 +155,7 @@
 #define GRAPHITE_SYM_38 \
             &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK   &kp COLON    &kp EQUAL       &kp PLUS        &kp MINUS       &kp GRAVE          \
             &kp CARET      &kp LBKT        &kp RBKT        &kp DOLLAR      &kp PRCNT &kp PG_UP     &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
- &trans     &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_toggle LGUI AT_SIGN &mo_ht NUM HASH       &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
+ &trans     &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &kp LGUI         AT_SIGN &mo_ht NUM HASH       &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
                                         &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
@@ -205,7 +199,7 @@
 #define GRAPHITE_SYM_42 \
  &trans  &kp AMPS    &kp LPAR  &kp RPAR  &kp EXCL  &kp QMARK                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp PLUS  &kp MINUS  &kp GRAVE &trans      \
  &trans  &kp CARET   &kp LBKT  &kp RBKT  &kp DOLLAR &kp PRCNT                   &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
- &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_toggle LGUI AT_SIGN &mo_ht NUM HASH &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
+  &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &kp LGUI         AT_SIGN &mo_ht NUM HASH &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
                                &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &trans
 
 #define GRAPHITE_NUM_42 \
