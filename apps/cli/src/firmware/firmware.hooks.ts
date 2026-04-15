@@ -10,14 +10,15 @@ import { github } from "./gh.ts";
 
 export { validateKeyboard };
 
+export type FirmwareSource =
+  | { kind: "remote"; runId: string }
+  | { kind: "local" };
+
 export async function resolveConfig(context: Hook) {
   const keyboards = await getKeyboards(context.app);
   const cacheDir = context.app.get("cacheDir");
 
   if (context.method === "find") {
-    context.params.workflows = [
-      ...new Set(Object.values(keyboards).map((k: any) => k.workflow)),
-    ];
     context.params.keyboards = keyboards;
     context.params.cacheDir = cacheDir;
     return;
@@ -28,30 +29,53 @@ export async function resolveConfig(context: Hook) {
   context.params.cacheDir = join(cacheDir, kb);
 }
 
-export async function resolveRunId(context: Hook) {
-  const { keyboardConfig } = context.params as any;
+export async function resolveSource(context: Hook) {
+  const { keyboardConfig, keyboard } = context.params as any;
+  const { local, run } = context.data ?? {};
+
+  if (local) {
+    if (!keyboardConfig.local) {
+      throw new Error(
+        `local build not configured for "${keyboard}" — add a local: block to config`,
+      );
+    }
+    context.params.source = { kind: "local" } satisfies FirmwareSource;
+    return;
+  }
+
+  // Normalize new remote: block and legacy top-level workflow/artifact
+  const remoteConfig = keyboardConfig.remote ??
+    (keyboardConfig.workflow
+      ? { workflow: keyboardConfig.workflow, artifact: keyboardConfig.artifact }
+      : null);
+
+  if (!remoteConfig) {
+    throw new Error(`no remote or local source configured for "${keyboard}"`);
+  }
+
   const gh = github(context.app);
-  const runId = await gh.waitAndResolve(keyboardConfig.workflow);
-  context.params.runId = runId;
+  const runId = run ?? (await gh.waitAndResolve(remoteConfig.workflow));
+  context.params.source = { kind: "remote", runId } satisfies FirmwareSource;
 }
 
 export async function checkCache(context: Hook) {
-  const { runId, cacheDir } = context.params as any;
+  const { source, cacheDir } = context.params as any;
+  if (source?.kind !== "remote") return;
+
   const stampFile = join(cacheDir, ".run-id");
   if (
     existsSync(stampFile) &&
-    readFileSync(stampFile, "utf-8").trim() === runId
+    readFileSync(stampFile, "utf-8").trim() === source.runId
   ) {
-    context.params._cached = true;
+    context.params.cached = true;
   }
 }
 
 export function writeCache(context: Hook) {
-  const { cacheDir, runId, _cached } = context.params as any;
-  if (!_cached && cacheDir && runId) {
-    mkdirSync(cacheDir, { recursive: true });
-    writeFileSync(join(cacheDir, ".run-id"), runId);
-  }
+  const { source, cacheDir, cached } = context.params as any;
+  if (source?.kind !== "remote" || cached || !cacheDir || !source.runId) return;
+  mkdirSync(cacheDir, { recursive: true });
+  writeFileSync(join(cacheDir, ".run-id"), source.runId);
 }
 
 export default {
@@ -59,8 +83,8 @@ export default {
     all: [resolveConfig],
     find: [],
     get: [validateKeyboard],
-    create: [validateKeyboard, resolveRunId, checkCache],
-    patch: [validateKeyboard, resolveRunId, checkCache],
+    create: [validateKeyboard, resolveSource, checkCache],
+    patch: [validateKeyboard, resolveSource, checkCache],
   },
   after: {
     create: [writeCache],

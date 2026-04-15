@@ -8,7 +8,7 @@ import { FirmwareFlashSchema } from "./firmware.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
 
 export const aliases = ["f"];
-export const description = "Download and flash firmware";
+export const description = "Download/build and flash firmware";
 export const args = [
   { name: "keyboard", required: true },
   { name: "side" },
@@ -20,11 +20,15 @@ export default function FirmwareFlash({
   side,
   yes,
   reset,
+  local,
+  run,
 }: {
   keyboard: string;
   side?: string;
   yes?: boolean;
   reset?: boolean;
+  local?: boolean;
+  run?: string;
 }) {
   const { exit } = useApp();
   const { call } = useService("firmware");
@@ -36,7 +40,7 @@ export default function FirmwareFlash({
       const iter = await call(
         "patch",
         keyboard,
-        { side, reset, yes },
+        { side, reset, yes, local, run },
         { keyboard },
       );
       for await (const ev of iter) {

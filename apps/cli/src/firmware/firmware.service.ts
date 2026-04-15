@@ -4,6 +4,8 @@ import { FirmwareCreateSchema } from "./firmware.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
 import { github } from "./gh.ts";
 import * as hw from "./hw.ts";
+import * as remoteSource from "./sources/remote.ts";
+import * as localSource from "./sources/local.ts";
 
 // ── status types ────────────────────────────────────────────────────
 
@@ -43,14 +45,19 @@ export default class FirmwareService extends BaseService {
     const results: StatusMap = {};
     const fetched: Record<string, KeyboardStatus> = {};
     for (const [name, config] of Object.entries(keyboards) as [string, any][]) {
-      if (!fetched[config.workflow]) {
-        fetched[config.workflow] = await gh.status(config.workflow);
+      const workflow = config.remote?.workflow ?? config.workflow;
+      if (!workflow) continue;
+      if (!fetched[workflow]) {
+        fetched[workflow] = await gh.status(workflow);
       }
-      const workflowStatus = fetched[config.workflow];
+      const workflowStatus = fetched[workflow];
+      const artifact = config.remote?.artifact ?? config.artifact ?? name;
       const jobs = workflowStatus.completed?.jobs?.filter((j) => {
         const lastArtifact = j.name.match(/,\s*([\w-]+)\)$/)?.[1];
-        return lastArtifact === `${config.artifact}-left` ||
-               lastArtifact === `${config.artifact}-right`;
+        return (
+          lastArtifact === `${artifact}-left` ||
+          lastArtifact === `${artifact}-right`
+        );
       });
       results[name] = {
         ...workflowStatus,
@@ -68,13 +75,14 @@ export default class FirmwareService extends BaseService {
   async *get(id: Id, params: Params): AsyncGenerator<ServiceEvent<KeyboardStatus>> {
     const { keyboardConfig, keyboard } = params as any;
     const gh = github(this.app);
+    const workflow = keyboardConfig.remote?.workflow ?? keyboardConfig.workflow;
 
     const cached = (this.app.get("_statusCache") as StatusMap)?.[keyboard];
     if (cached) {
       yield ["status", "cached", cached];
     }
 
-    const fresh = await gh.status(keyboardConfig.workflow);
+    const fresh = await gh.status(workflow);
     this.app.set("_statusCache", {
       ...this.app.get("_statusCache"),
       [keyboard]: fresh,
@@ -82,31 +90,44 @@ export default class FirmwareService extends BaseService {
     yield ["status", keyboard, fresh];
   }
 
-  private async *download(params: Params, side?: string): AsyncGenerator<ServiceEvent> {
-    const { keyboardConfig, keyboard, runId, cacheDir } = params as any;
-    const gh = github(this.app);
-
-    if ((params as any)._cached) {
-      yield ["cached", `run ${runId} already cached`, { keyboard, runId, cached: true, cacheDir }];
-      return;
-    }
-
-    yield ["downloading", `downloading run ${runId}...`, undefined];
-    await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir, side);
-    yield ["downloaded", "download complete", { keyboard, runId, cached: false, cacheDir }];
-  }
-
-  // create — download firmware with progress stages
+  // create — download firmware only (pre-cache)
   async *create(data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    yield* this.download(params, data?.side);
+    const { keyboardConfig, keyboard, source, cached, cacheDir } = params as any;
+    const artifact = keyboardConfig.remote?.artifact ?? keyboardConfig.artifact;
+    yield* remoteSource.acquire(this.app, {
+      runId: source.runId,
+      cached: cached ?? false,
+      keyboard,
+      artifact,
+      cacheDir,
+      side: data?.side,
+    });
   }
 
-  // patch — download + flash with full stage progression
+  // patch — acquire from source + flash
   async *patch(id: Id, data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    const { keyboardConfig, cacheDir, keyboard } = params as any;
+    const { keyboardConfig, keyboard, source, cached, cacheDir } = params as any;
     const { side, reset, yes } = data;
 
-    yield* this.download(params, side);
+    if (source.kind === "remote") {
+      const artifact = keyboardConfig.remote?.artifact ?? keyboardConfig.artifact;
+      yield* remoteSource.acquire(this.app, {
+        runId: source.runId,
+        cached: cached ?? false,
+        keyboard,
+        artifact,
+        cacheDir,
+        side,
+      });
+    } else {
+      yield* localSource.acquire(this.app, {
+        keyboard,
+        local: keyboardConfig.local,
+        type: keyboardConfig.type,
+        cacheDir,
+        side,
+      });
+    }
 
     if (keyboardConfig.type === "qmk") {
       for await (const event of hw.flashQmk(cacheDir)) {
