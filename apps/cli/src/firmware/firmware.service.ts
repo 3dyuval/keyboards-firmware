@@ -1,3 +1,4 @@
+import { join } from "path";
 import type { Id, Params } from "@feathersjs/feathers";
 import { BaseService } from "../app.ts";
 import { FirmwareCreateSchema } from "./firmware.schema.ts";
@@ -36,9 +37,7 @@ export default class FirmwareService extends BaseService {
     const gh = github(this.app);
 
     const cached = this.app.get("_statusCache") as StatusMap | undefined;
-    if (cached) {
-      yield ["status", "cached", cached];
-    }
+    if (cached) yield ["status", "cached", cached];
 
     const results: StatusMap = {};
     const fetched: Record<string, KeyboardStatus> = {};
@@ -49,14 +48,11 @@ export default class FirmwareService extends BaseService {
       const workflowStatus = fetched[config.workflow];
       const jobs = workflowStatus.completed?.jobs?.filter((j) => {
         const lastArtifact = j.name.match(/,\s*([\w-]+)\)$/)?.[1];
-        return lastArtifact === `${config.artifact}-left` ||
-               lastArtifact === `${config.artifact}-right`;
+        return lastArtifact === `${config.artifact}-left` || lastArtifact === `${config.artifact}-right`;
       });
       results[name] = {
         ...workflowStatus,
-        completed: workflowStatus.completed
-          ? { ...workflowStatus.completed, jobs }
-          : null,
+        completed: workflowStatus.completed ? { ...workflowStatus.completed, jobs } : null,
       };
       yield ["status", `fetched ${name}`, { ...results }];
     }
@@ -70,57 +66,62 @@ export default class FirmwareService extends BaseService {
     const gh = github(this.app);
 
     const cached = (this.app.get("_statusCache") as StatusMap)?.[keyboard];
-    if (cached) {
-      yield ["status", "cached", cached];
-    }
+    if (cached) yield ["status", "cached", cached];
 
     const fresh = await gh.status(keyboardConfig.workflow);
-    this.app.set("_statusCache", {
-      ...this.app.get("_statusCache"),
-      [keyboard]: fresh,
-    });
+    this.app.set("_statusCache", { ...this.app.get("_statusCache"), [keyboard]: fresh });
     yield ["status", keyboard, fresh];
   }
 
-  private async *download(params: Params, side?: string): AsyncGenerator<ServiceEvent> {
-    const { keyboardConfig, keyboard, runId, cacheDir } = params as any;
+  private async *download(params: Params): AsyncGenerator<ServiceEvent> {
+    const { keyboardConfig, artifactName, runId, cacheDir, _cached } = params as any;
     const gh = github(this.app);
 
-    if ((params as any)._cached) {
-      yield ["cached", `run ${runId} already cached`, { keyboard, runId, cached: true, cacheDir }];
+    if (_cached) {
+      yield ["cached", `run ${runId} already cached`, { artifactName, runId }];
       return;
     }
 
-    yield ["downloading", `downloading run ${runId}...`, undefined];
+    yield ["downloading", `downloading ${artifactName} from run ${runId}...`, undefined];
+    const side = artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1);
     await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir, side);
-    yield ["downloaded", "download complete", { keyboard, runId, cached: false, cacheDir }];
+    // move downloaded file to flat ci path
+    const dl = join(cacheDir, `${artifactName}.uf2`);
+    (params as any).artifactPath = dl;
+    yield ["downloaded", "download complete", { artifactName, runId }];
   }
 
-  // create — download firmware with progress stages
+  // create — download firmware only
   async *create(data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    yield* this.download(params, data?.side);
+    if ((params as any).needsGitHub) yield* this.download(params);
+    else yield ["cached", `using local artifact`, { path: (params as any).artifactPath }];
   }
 
-  // patch — download + flash with full stage progression
+  // patch — resolve path, download if needed, flash
   async *patch(id: Id, data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    const { keyboardConfig, cacheDir, keyboard } = params as any;
-    const { side, reset, yes } = data;
+    const { artifactName, keyboardConfig } = params as any;
+    const { reset, yes } = data;
 
-    yield* this.download(params, side);
+    if ((params as any).needsGitHub) yield* this.download(params);
 
-    if (keyboardConfig.type === "qmk") {
-      for await (const event of hw.flashQmk(cacheDir)) {
-        yield event;
-      }
-      yield ["done", "flashed", { keyboard, firmware: "qmk" }];
+    const artifactPath = (params as any).artifactPath;
+    if (!artifactPath) throw new Error(`could not resolve artifact path for "${artifactName}"`);
+
+    const side = artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1);
+    const keyboard = artifactName.replace(/-(?:left|right)$/, "");
+
+    if (keyboardConfig?.type === "qmk") {
+      for await (const event of hw.flashQmk(artifactPath)) yield event;
+      yield ["done", "flashed", { artifactName }];
       return;
     }
 
-    if (!side) throw new Error(`side required for ${keyboard}`);
+    if (!side) throw new Error(`cannot determine side from artifact name "${artifactName}"`);
 
-    for await (const event of hw.flashZmk(keyboard, side, reset ?? false, cacheDir, yes ?? false)) {
+    const buildDir = this.app.get("buildDir") as string;
+    for await (const event of hw.flashZmk(keyboard, side, artifactPath, reset ?? false, buildDir, yes ?? false)) {
       yield event;
     }
-    yield ["done", "flashed", { keyboard, side, reset }];
+    yield ["done", "flashed", { artifactName, side, reset }];
   }
 }

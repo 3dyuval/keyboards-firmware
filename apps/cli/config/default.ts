@@ -10,6 +10,7 @@ export default function ({ defer }: any) {
     root,
 
     cacheDir: defer((cfg: any) => join(cfg.root, ".cache/firmware")),
+    buildDir: defer((cfg: any) => join(cfg.root, ".cache")),
 
     // Keymap drawer settings for SVG generation
     draw: {

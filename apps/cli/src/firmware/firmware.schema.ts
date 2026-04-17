@@ -1,20 +1,23 @@
 import { z } from "zod";
-import { keyboardField } from "../../lib/types.ts";
 
 export const FirmwareCreateSchema = z.object({
-  keyboard: keyboardField,
+  artifact: z.string().describe("Artifact name (e.g. totem-left) or path to .uf2/.bin file"),
 });
 
 export const FirmwareFlashSchema = z.object({
-  keyboard: keyboardField,
-  side: z
-    .enum(["left", "right"])
+  artifact: z.string().describe("Artifact name (e.g. totem-left) or path to .uf2/.bin file"),
+  source: z
+    .enum(["local", "github", "auto"])
+    .default("auto")
+    .meta({ description: "Artifact source" }),
+  run: z
+    .string()
     .optional()
-    .meta({ description: "Side to flash" }),
+    .meta({ description: "Specific GitHub run ID" }),
   reset: z
     .boolean()
     .default(false)
-    .meta({ alias: "r", description: "Reset before flash" }),
+    .meta({ alias: "r", description: "Reset settings before flash" }),
   yes: z
     .boolean()
     .default(false)

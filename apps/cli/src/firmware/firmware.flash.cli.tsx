@@ -8,21 +8,22 @@ import { FirmwareFlashSchema } from "./firmware.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
 
 export const aliases = ["f"];
-export const description = "Download and flash firmware";
+export const description = "Flash firmware to keyboard";
 export const args = [
-  { name: "keyboard", required: true },
-  { name: "side" },
+  { name: "artifact", required: true, description: "Artifact name (e.g. totem-left) or path to .uf2/.bin" },
 ];
 export { FirmwareFlashSchema as schema };
 
 export default function FirmwareFlash({
-  keyboard,
-  side,
+  artifact,
+  source,
+  run,
   yes,
   reset,
 }: {
-  keyboard: string;
-  side?: string;
+  artifact: string;
+  source?: string;
+  run?: string;
   yes?: boolean;
   reset?: boolean;
 }) {
@@ -33,12 +34,7 @@ export default function FirmwareFlash({
 
   useAsyncEffect(async function* () {
     try {
-      const iter = await call(
-        "patch",
-        keyboard,
-        { side, reset, yes },
-        { keyboard },
-      );
+      const iter = await call("patch", artifact, { artifact, source, run, reset, yes }, {});
       for await (const ev of iter) {
         setEvent(ev);
         yield;
@@ -51,7 +47,7 @@ export default function FirmwareFlash({
   }, []);
 
   if (error) return <Text color="red">Error: {error.message}</Text>;
-  if (!event) return <Spinner label={`preparing ${keyboard}...`} />;
+  if (!event) return <Spinner label={`resolving ${artifact}...`} />;
 
   const [stage, message] = event;
 

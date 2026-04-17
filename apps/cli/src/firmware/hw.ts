@@ -44,15 +44,15 @@ function resetName(keyboard: string): string {
 export async function* flashZmk(
   keyboard: string,
   side: string,
+  artifactPath: string,
   reset: boolean,
-  cacheDir: string,
+  buildDir: string,
   skip = false,
 ): AsyncGenerator<ServiceEvent> {
   const firmware = `${keyboard}-${side}.uf2`;
-  const path = join(cacheDir, firmware);
+  const path = artifactPath;
   if (!existsSync(path)) {
-    const files = Bun.spawnSync(["ls", cacheDir]).stdout.toString();
-    throw new Error(`not found: ${firmware}\navailable: ${files}`);
+    throw new Error(`not found: ${path}`);
   }
 
   yield ["waiting", `put ${keyboard} ${side} in bootloader mode`, undefined];
@@ -64,7 +64,7 @@ export async function* flashZmk(
   }
 
   if (reset) {
-    const resetFile = join(cacheDir, `${resetName(keyboard)}.uf2`);
+    const resetFile = join(buildDir, "local", `${resetName(keyboard)}.uf2`);
     if (existsSync(resetFile)) {
       yield ["resetting", "flashing settings reset...", undefined];
       await Bun.spawn(["cp", resetFile, `${mount}/`]).exited;
@@ -84,11 +84,10 @@ export async function* flashZmk(
 }
 
 export async function* flashQmk(
-  cacheDir: string,
+  artifactPath: string,
 ): AsyncGenerator<ServiceEvent> {
-  const result = Bun.spawnSync(["find", cacheDir, "-name", "*.bin"]);
-  const firmware = result.stdout.toString().trim().split("\n")[0];
-  if (!firmware) throw new Error("no .bin firmware found");
+  const firmware = artifactPath;
+  if (!existsSync(firmware)) throw new Error(`not found: ${firmware}`);
 
   const dfuUtil = Bun.which("dfu-util");
   if (!dfuUtil) {
