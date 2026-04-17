@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "glab": {
+    "cli": {
       "type": "stdio",
-      "command": "glab",
-      "args": ["mcp", "serve"]
+      "command": "bun run ../apps/cli",
+      "args": ["mcp"]
     }
   }
 }

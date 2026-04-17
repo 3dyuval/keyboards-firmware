@@ -5,27 +5,6 @@
       "Bash(cd /home/yuv/keyboards-firmware && bun --cwd apps/cli1 index.tsx draw iris 2>&1)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "tavily",
-    "context7",
-    "gitingest",
-    "react-native-debugger-mcp",
-    "vuetify-mcp",
-    "discord-mcp",
-    "glab"
-  ],
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path' | grep -q 'keymap.c' && cd /home/yuv/keyboards-firmware && bun --cwd apps/cli1 index.tsx draw iris || true"
-          }
-        ]
-      }
-    ]
-  },
+  "enabledMcpjsonServers": ["tavily", "context7", "glab"],
   "enableAllProjectMcpServers": true
 }
