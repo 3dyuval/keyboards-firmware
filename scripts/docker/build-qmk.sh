@@ -5,6 +5,11 @@
 
 set -euo pipefail
 
+if [ ! -f /.dockerenv ]; then
+  echo "Run via: ./scripts/docker/build.sh qmk" >&2
+  exit 1
+fi
+
 USERSPACE_DIR=/qmk-userspace
 BUILD_OUT=/build
 

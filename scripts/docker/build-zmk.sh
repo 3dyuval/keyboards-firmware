@@ -5,6 +5,11 @@
 
 set -euo pipefail
 
+if [ ! -f /.dockerenv ]; then
+  echo "Run via: ./scripts/docker/build.sh zmk" >&2
+  exit 1
+fi
+
 REPO_DIR=/zmk-config
 CONFIG_DIR=/west/config
 WEST_DIR=/west
@@ -12,15 +17,16 @@ BUILD_OUT=/build
 
 mkdir -p "$CONFIG_DIR" "$BUILD_OUT"
 
+cp -R "$REPO_DIR/config/"* "$CONFIG_DIR/"
+
 if [ ! -f "$WEST_DIR/.initialized" ]; then
-  cp -R "$REPO_DIR/config/"* "$CONFIG_DIR/"
   west init -l "$CONFIG_DIR"
   west update --fetch-opt=--filter=tree:0
-  west zephyr-export
   touch "$WEST_DIR/.initialized"
-else
-  cp -R "$REPO_DIR/config/"* "$CONFIG_DIR/"
 fi
+
+# Re-run every time: writes to ~/.cmake inside container (not persisted in volume)
+(cd "$WEST_DIR" && west zephyr-export)
 
 REPO_DIR="$REPO_DIR" CONFIG_DIR="$CONFIG_DIR" BUILD_OUT="$BUILD_OUT" python3 - <<'EOF'
 import yaml, subprocess, sys, os
@@ -44,6 +50,7 @@ for entry in data.get("include", []):
         "-d", build_dir,
         "--",
         f"-DZMK_CONFIG={os.environ['CONFIG_DIR']}",
+        f"-DBOARD_ROOT={os.environ['REPO_DIR']}",
     ]
     if shield:
         cmd.extend([f"-DSHIELD={shield}"])
