@@ -1,6 +1,8 @@
 name: build-qmk
 on:
   push:
+    branches:
+      - main
     paths:
       - 'keyboards/keebio/iris_lm/k1/keymaps/graphite/**'
       - 'qmk.json'
