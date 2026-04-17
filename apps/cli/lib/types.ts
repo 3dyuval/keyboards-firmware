@@ -19,6 +19,7 @@ export interface McpToolDef {
   tool: string;
   description: string;
   resolves: string;
+  idParam?: string;
   schema?: ZodType;
 }
 

@@ -58,9 +58,18 @@ function createMcpServer(app: App) {
           ? Object.fromEntries(Object.entries((def.schema as any).shape))
           : undefined,
       }, async (args) => {
-        const result = isQuery
-          ? await service[method]({ ...args, provider: "mcp" })
-          : await service[method](args, { provider: "mcp" });
+        let result: any;
+        if (method === "find") {
+          result = await service.find({ ...args, provider: "mcp" });
+        } else if (method === "get" && def.idParam) {
+          const id = (args as any)[def.idParam];
+          result = await service.get(id, { provider: "mcp" });
+        } else if (method === "patch" && def.idParam) {
+          const id = (args as any)[def.idParam];
+          result = await service.patch(id, args, { provider: "mcp" });
+        } else {
+          result = await service[method](args, { provider: "mcp" });
+        }
 
         if (result?.filePath && result?.mimeType) {
           const blob = Buffer.from(

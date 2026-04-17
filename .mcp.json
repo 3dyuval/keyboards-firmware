@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "cli": {
+      "type": "stdio",
+      "command": "bun",
+      "args": ["run", "apps/cli/mcp.ts"],
+      "cwd": "/home/yuv/keyboards-firmware"
+    }
+  }
+}
