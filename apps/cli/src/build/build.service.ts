@@ -1,7 +1,7 @@
 import { join } from "path";
 import { readdirSync, existsSync } from "fs";
 import { BaseService } from "../app.ts";
-
+import type { ServiceEvent } from "../../lib/types.ts";
 export type BuildTarget = "zmk" | "qmk" | "all";
 
 const LOG_LINES = 20;
@@ -58,7 +58,7 @@ async function runBuild(jobId: string, target: BuildTarget, root: string, buildD
 }
 
 export default class BuildService extends BaseService {
-  async create(data: { target?: BuildTarget }) {
+  async *create(data: { target?: BuildTarget }): AsyncGenerator<ServiceEvent> {
     const target = data?.target ?? "zmk";
     const root = this.app.get("root") as string;
     const buildDir = join(this.app.get("buildDir") as string, "local");
@@ -67,12 +67,12 @@ export default class BuildService extends BaseService {
     jobs.set(jobId, { status: "running", target, log: [] });
     runBuild(jobId, target, root, buildDir);
 
-    return { jobId, status: "running", target };
+    yield ["started", `job ${jobId} queued`, { jobId, target }];
   }
 
   async get(id: string) {
     const job = jobs.get(id);
     if (!job) throw new Error(`build job "${id}" not found`);
-    return { jobId: id, ...job };
+    return { jobId: id, status: job.status, target: job.target, log: job.log, artifacts: job.artifacts, error: job.error };
   }
 }

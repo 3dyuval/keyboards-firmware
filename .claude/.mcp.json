@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "cli": {
-      "type": "stdio",
-      "command": "bun run ../apps/cli",
-      "args": ["mcp"]
-    }
-  }
-}
