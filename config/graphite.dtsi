@@ -149,7 +149,7 @@
 #define GRAPHITE_BASE_38 \
            &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J              \
            &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I              \
-&lshift_dance &kp Q       &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &slash_morph &kp RSHFT \
+&lshift_dance &kp Q       &kp X           &mt LGUI M      &mt LCTRL C     &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &slash_morph &kp RSHFT \
                                        &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
 
 #define GRAPHITE_SYM_38 \
