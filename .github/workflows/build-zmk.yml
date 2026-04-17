@@ -1,6 +1,8 @@
 name: build-zmk
 on:
   push:
+    branches:
+      - main
     paths:
       - 'config/graphite.dtsi'
       - 'config/corne.keymap'
