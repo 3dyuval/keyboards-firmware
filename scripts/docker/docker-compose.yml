@@ -1,0 +1,23 @@
+services:
+  zmk:
+    image: zmkfirmware/zmk-build-arm:stable
+    restart: "no"
+    volumes:
+      - zmk-west:/west
+      - ../../:/zmk-config
+      - ../../build/zmk:/build
+    command: /zmk-config/scripts/docker/build-zmk.sh
+
+  qmk:
+    image: ghcr.io/qmk/qmk_cli:latest
+    restart: "no"
+    volumes:
+      - qmk-firmware:/workspace/qmk_firmware
+      - ../../:/workspace/userspace
+      - ../../build/qmk:/build
+    working_dir: /workspace
+    command: /workspace/userspace/scripts/docker/build-qmk.sh
+
+volumes:
+  zmk-west:
+  qmk-firmware:

@@ -1,0 +1,8 @@
+[submodule "vendors/zmk"]
+	path = vendors/zmk
+	url = https://github.com/zmkfirmware/zmk
+	shallow = true
+[submodule "vendors/qmk"]
+	path = vendors/qmk
+	url = https://github.com/qmk/.github
+	shallow = true
