@@ -12,20 +12,7 @@
     "react-native-debugger-mcp",
     "vuetify-mcp",
     "discord-mcp",
-    "glab"
+    "keyboards-firmware"
   ],
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path' | grep -q 'keymap.c' && cd /home/yuv/keyboards-firmware && bun --cwd apps/cli1 index.tsx draw iris || true"
-          }
-        ]
-      }
-    ]
-  },
   "enableAllProjectMcpServers": true
 }

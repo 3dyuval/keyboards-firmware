@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "keyboards-firmware": {
+      "type": "stdio",
+      "command": "bun",
+      "args": ["mcp"]
+    }
+  }
+}
