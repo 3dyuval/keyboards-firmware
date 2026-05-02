@@ -5,20 +5,17 @@
   ],
   "scripts": {
     "cli": "bun apps/cli/index.tsx",
-    "flash-totem": "bun cli flash totem left -y && bun cli flash totem right -y",
-    "flash-eyelash": "bun cli flash eyelash left -y && bun cli flash eyelash right -y",
-    "flash-corne": "bun cli flash corne left -y && bun cli flash corne right -y",
-    "flash-iris": "bun cli flash iris -y",
+    "firmware-build-local": "scripts/docker/build.sh",
+    "firmware-flash-totem": "bun cli flash totem left -y && bun cli flash totem right -y",
+    "firmware-flash-eyelash": "bun cli flash eyelash left -y && bun cli flash eyelash right -y",
+    "firmware-flash-corne": "bun cli flash corne left -y && bun cli flash corne right -y",
+    "firmware-flash-iris": "bun cli flash iris -y",
     "draw-iris": "bun cli draw iris",
     "draw-corne": "bun cli draw corne",
     "draw-eyelash": "bun cli draw eyelash",
     "draw-totem": "bun cli draw totem",
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "bun cli draw --",
-    "jam": "bun --shell=system npx mcp-jam/inspector@latest",
-    "build-mcp": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/keylytics/src-tauri/resources/keyb"
-  },
-  "dependencies": {
-    "@mcpjam/inspector": "^2.0.5"
+    "mcp-compile": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/keylytics/src-tauri/resources/keyb"
   }
 }

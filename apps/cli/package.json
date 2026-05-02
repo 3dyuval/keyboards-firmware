@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "scripts": {
+    "jam": "bun --shell=system npx mcp-jam/inspector@latest"
+  },
   "dependencies": {
     "@feathersjs/configuration": "^5.0.42",
     "@feathersjs/feathers": "^5.0.42",
@@ -20,6 +23,7 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "latest",
-    "react-devtools-core": "^7.0.1"
+    "react-devtools-core": "^7.0.1",
+    "@mcpjam/inspector": "^2.0.5"
   }
 }
