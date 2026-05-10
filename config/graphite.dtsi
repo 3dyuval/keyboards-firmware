@@ -94,6 +94,12 @@
             bindings = <&kp>, <&kp>;
         };
 
+        lgui_toggle: lgui_toggle {
+            compatible = "zmk,behavior-sticky";
+            #binding-cells = <0>;
+            bindings = <&kp LGUI>;
+        };
+
         mo_ht: mo_ht {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
