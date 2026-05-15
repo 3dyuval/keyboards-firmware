@@ -71,6 +71,13 @@
             mods = <(MOD_LSFT|MOD_RSFT)>;
         };
 
+        plus_pipe_morph: plus_pipe_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp PLUS>, <&kp PIPE>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
         lshift_dance: lshift_dance {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
@@ -122,9 +129,9 @@
                                                &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
 
 #define GRAPHITE_SYM_36 \
-   &trans          &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK    &kp COLON     &kp EQUAL       &kp PLUS        &kp MINUS       &kp GRAVE       &trans         \
+   &trans          &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK    &kp COLON     &kp EQUAL       &plus_pipe_morph &kp MINUS       &kp GRAVE       &trans         \
    &trans          &kp CARET      &kp LBKT        &kp RBKT        &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &trans         \
-    &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
+    &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
                                                 &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_36 \
@@ -159,10 +166,10 @@
                                        &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
 
 #define GRAPHITE_SYM_38 \
-            &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK   &kp COLON    &kp EQUAL       &kp PLUS        &kp MINUS       &kp GRAVE          \
+            &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK   &kp COLON    &kp EQUAL       &plus_pipe_morph &kp MINUS       &kp GRAVE          \
             &kp CARET      &kp LBKT        &kp RBKT        &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
- &trans     &kp ASTRK      &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
-                                        &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
+ &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
+                                         &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
            &kp HOME       &kp PG_UP       &kp PG_DN       &kp END         &trans       &trans        &kp N7          &kp N8          &kp N9          &trans             \
@@ -203,9 +210,9 @@
                                 &mt LCTRL ESC &sym_ht SYM SYM &kp SPC                                                &kp RET        &kp BSPC &kp RALT
 
 #define GRAPHITE_SYM_42 \
- &trans  &kp AMPS    &kp LPAR  &kp RPAR  &kp EXCL  &kp QMARK                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &kp PLUS  &kp MINUS  &kp GRAVE &trans      \
+ &trans  &kp AMPS    &kp LPAR  &kp RPAR  &kp EXCL  &kp QMARK                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &plus_pipe_morph &kp MINUS  &kp GRAVE &trans      \
  &trans  &kp CARET   &kp LBKT  &kp RBKT  &mo_ht NUM DOLLAR &kp PRCNT             &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
-  &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &lgui_ht LALT RBRC &lgui_ht LGUI HASH  &kp AT &kp PG_DN    &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
+  &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN    &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
                                &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &trans
 
 #define GRAPHITE_NUM_42 \
