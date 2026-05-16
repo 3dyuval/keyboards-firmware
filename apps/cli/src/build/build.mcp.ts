@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const buildFirmwareMcp = {
-  tool: "build-firmware",
+  tool: "firmware-build",
   description: "Start a local firmware build via Docker. Returns a jobId immediately — poll get-build-status to check completion.",
   resolves: "create",
   schema: z.object({
@@ -10,7 +10,7 @@ export const buildFirmwareMcp = {
 };
 
 export const getBuildStatusMcp = {
-  tool: "get-build-status",
+  tool: "firmware-build-status",
   description: "Check the status of a firmware build job. Returns status (running/done/failed) and artifact paths when done.",
   resolves: "get",
   idParam: "id",

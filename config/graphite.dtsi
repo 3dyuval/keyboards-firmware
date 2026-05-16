@@ -130,8 +130,8 @@
 
 #define GRAPHITE_SYM_36 \
    &trans          &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK    &kp COLON     &kp EQUAL       &plus_pipe_morph &kp MINUS       &kp GRAVE       &trans         \
-   &trans          &kp CARET      &kp LBKT        &kp RBKT        &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &trans         \
-    &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
+   &trans          &kp CARET      &kp LBKT        &lgui_ht LGUI HASH &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT       &trans         \
+    &trans          &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &trans              &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans         \
                                                 &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_36 \
@@ -167,8 +167,8 @@
 
 #define GRAPHITE_SYM_38 \
             &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK   &kp COLON    &kp EQUAL       &plus_pipe_morph &kp MINUS       &kp GRAVE          \
-            &kp CARET      &kp LBKT        &kp RBKT        &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
- &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
+            &kp CARET      &kp LBKT        &lgui_ht LGUI HASH &mo_ht NUM DOLLAR &kp PRCNT &kp PG_UP    &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT          \
+ &kp ASTRK      &lgui_ht LSHFT LBRC &trans              &trans              &kp AT &kp PG_DN        &kp PG_DN     &kp HOME        &kp END         &kp SQT         &kp BSLH  &trans     \
                                          &kp LCTRL       &trans          &trans       &trans        &kp DEL         &trans
 
 #define GRAPHITE_NUM_38 \
@@ -211,8 +211,8 @@
 
 #define GRAPHITE_SYM_42 \
  &trans  &kp AMPS    &kp LPAR  &kp RPAR  &kp EXCL  &kp QMARK                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &plus_pipe_morph &kp MINUS  &kp GRAVE &trans      \
- &trans  &kp CARET   &kp LBKT  &kp RBKT  &mo_ht NUM DOLLAR &kp PRCNT             &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
-  &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &trans              &lgui_ht LGUI HASH  &kp AT &kp PG_DN    &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
+ &trans  &kp CARET   &kp LBKT  &lgui_ht LGUI HASH  &mo_ht NUM DOLLAR &kp PRCNT             &mmv MOVE_LEFT &mkp LCLK    &mmv MOVE_RIGHT  &kp PG_UP  &kp LEFT   &kp DOWN  &kp UP     &kp RIGHT &trans      \
+  &trans  &kp ASTRK   &lgui_ht LSHFT LBRC &trans              &trans              &kp AT &kp PG_DN    &kp C_MUTE               &mmv MOVE_DOWN                &kp PG_DN  &kp HOME   &kp END   &kp SQT    &kp BSLH  &trans      \
                                &kp LCTRL &trans    &trans                                                                   &trans     &kp DEL    &trans
 
 #define GRAPHITE_NUM_42 \
