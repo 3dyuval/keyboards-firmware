@@ -1,15 +1,15 @@
 # MCP Sidecar
 
-The `apps/cli1/mcp.ts` entry point exposes keyboard services over [Model Context Protocol](https://modelcontextprotocol.io) via stdio. It compiles to a standalone binary with no filesystem config — all keyboard data comes through tool params.
+The `apps/cli/mcp.ts` entry point exposes keyboard services over [Model Context Protocol](https://modelcontextprotocol.io) via stdio. It compiles to a standalone binary with no filesystem config — all keyboard data comes through tool params.
 
 ## Compile
 
 ```sh
-cd apps/cli1
+cd apps/cli
 bun build mcp.ts --compile --outfile keyb-mcp
 ```
 
-Output: `apps/cli1/keyb-mcp` (~50 MB standalone binary).
+Output: `apps/cli/keyb-mcp` (~50 MB standalone binary).
 
 ## Tools exposed
 
@@ -27,7 +27,7 @@ Tools are auto-discovered from `*.mcp.ts` files registered in `mcp.ts`. To add a
 Tauri expects sidecar binaries named with a target triple suffix:
 
 ```sh
-cp apps/cli1/keyb-mcp /path/to/src-tauri/binaries/keyb-mcp-x86_64-unknown-linux-gnu
+cp apps/cli/keyb-mcp /path/to/src-tauri/binaries/keyb-mcp-x86_64-unknown-linux-gnu
 ```
 
 ### 2. Register in `tauri.conf.json`
@@ -96,7 +96,7 @@ Add to `.claude/settings.json` or `claude_desktop_config.json`:
 ## Dev mode (no compile)
 
 ```sh
-cd apps/cli1
+cd apps/cli
 bun mcp.ts
 ```
 
@@ -150,6 +150,22 @@ import myMcp from "./src/<service>/<service>.mcp.ts";
 
 const my = new MyService(app);
 (my as any).expose = { mcp: myMcp };
+app.use("<service>", my);
+app.service("<service>").hooks(myHooks);
+```
+
+## Adding multiple MCP tools
+
+For services that expose multiple tools, create an array in the expose.mcp property:
+
+```ts
+import MyService from "./src/<service>/<service>.service.ts";
+import myHooks from "./src/<service>/<service>.hooks.ts";
+import tool1 from "./src/<service>/tool1.mcp.ts";
+import tool2 from "./src/<service>/tool2.mcp.ts";
+
+const my = new MyService(app);
+(my as any).expose = { mcp: [tool1, tool2] };
 app.use("<service>", my);
 app.service("<service>").hooks(myHooks);
 ```

@@ -7,10 +7,10 @@
     "jam": "bun --shell=system npx mcp-jam/inspector@latest"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@feathersjs/configuration": "^5.0.42",
     "@feathersjs/feathers": "^5.0.42",
     "@inkjs/ui": "^2.0.0",
-    "@modelcontextprotocol/sdk": "^1.27.1",
     "ahooks": "^3.9.6",
     "ink": "^6.8.0",
     "json5": "^2.2.3",
