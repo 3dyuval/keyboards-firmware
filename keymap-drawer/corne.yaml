@@ -13,7 +13,7 @@ layers:
   - U
   - J
   - ''
-  - ''
+  - LGUI
   - N
   - R
   - T
@@ -35,7 +35,7 @@ layers:
   - P
   - ','
   - .
-  - /
+  - {t: /, s: \}
   - RSHFT
   - {t: ESC, h: LCTRL}
   - {t: SYM, h: SYM}
@@ -43,6 +43,49 @@ layers:
   - RET
   - BSPC
   - RALT
+  Symbols:
+  - {t: ▽, type: trans}
+  - '&'
+  - (
+  - )
+  - '!'
+  - '?'
+  - ':'
+  - '='
+  - {t: +, s: '|'}
+  - '-'
+  - '`'
+  - {t: ▽, type: trans}
+  - Number
+  - ^
+  - '['
+  - ']'
+  - {t: $, h: Number}
+  - '%'
+  - PG UP
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '*'
+  - {t: '{', h: LSHFT}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '@'
+  - PG DN
+  - PG DN
+  - HOME
+  - END
+  - ''''
+  - \
+  - LCTRL
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - DEL
+  - {t: ▽, type: trans}
   Number:
   - {t: ▽, type: trans}
   - HOME
@@ -50,23 +93,23 @@ layers:
   - PG DN
   - END
   - {t: ▽, type: trans}
-  - {t: '*', s: ':'}
+  - {t: ▽, type: trans}
   - '7'
   - '8'
   - '9'
-  - '-'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
+  - {type: held}
   - LEFT
   - UP
   - DOWN
   - RIGHT
   - {t: ▽, type: trans}
-  - '='
+  - {t: ▽, type: trans}
   - '4'
   - '5'
   - '6'
-  - +
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - TAB
   - {t: ▽, type: trans}
@@ -74,10 +117,10 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: /, s: \}
+  - {t: ▽, type: trans}
   - '1'
   - '2'
-  - {t: '3', s: .}
+  - '3'
   - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -85,49 +128,6 @@ layers:
   - {t: ▽, type: trans}
   - RET
   - RALT
-  - {t: ▽, type: trans}
-  Symbols:
-  - {t: ▽, type: trans}
-  - '!'
-  - (
-  - )
-  - '&'
-  - '`'
-  - ':'
-  - '='
-  - '-'
-  - +
-  - _
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - '*'
-  - '['
-  - ']'
-  - $
-  - '#'
-  - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - ^
-  - '{'
-  - '}'
-  - {t: '@', h: LGUI}
-  - {t: '%', h: NumSym}
-  - PG DN
-  - HOME
-  - END
-  - ''''
-  - \
-  - {t: ▽, type: trans}
-  - LCTRL
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - DEL
   - {t: ▽, type: trans}
   System:
   - {t: ▽, type: trans}
@@ -179,11 +179,10 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: '*', s: ':'}
+  - {t: ▽, type: trans}
   - '7'
   - '8'
   - '9'
-  - '-'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -191,22 +190,23 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '='
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - '4'
   - '5'
   - '6'
-  - +
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
-  - {t: /, s: \}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - '1'
   - '2'
-  - {t: '3', s: .}
+  - '3'
   - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -218,4 +218,7 @@ layers:
 combos:
 - p: [9, 10]
   k: System
+  l: [Base]
+- p: [24, 35]
+  k: '&caps_word'
   l: [Base]

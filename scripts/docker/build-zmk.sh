@@ -21,7 +21,7 @@ cp -R "$REPO_DIR/config/"* "$CONFIG_DIR/"
 
 if [ ! -f "$WEST_DIR/.initialized" ]; then
   west init -l "$CONFIG_DIR"
-  west update --fetch-opt=--filter=tree:0
+  (cd "$WEST_DIR" && west update --fetch-opt=--filter=tree:0)
   touch "$WEST_DIR/.initialized"
 fi
 
