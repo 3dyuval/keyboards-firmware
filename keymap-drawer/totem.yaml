@@ -31,7 +31,7 @@ layers:
   - P
   - ','
   - .
-  - /
+  - {t: /, s: \}
   - RSHFT
   - {t: ESC, h: LCTRL}
   - {t: SYM, h: SYM}
@@ -39,72 +39,33 @@ layers:
   - RET
   - BSPC
   - RALT
-  Number:
-  - HOME
-  - PG UP
-  - PG DN
-  - END
-  - {t: ▽, type: trans}
-  - {t: '*', s: ':'}
-  - '7'
-  - '8'
-  - '9'
-  - '-'
-  - LEFT
-  - UP
-  - DOWN
-  - RIGHT
-  - {t: ▽, type: trans}
-  - '='
-  - '4'
-  - '5'
-  - '6'
-  - +
-  - TAB
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: /, s: \}
-  - '1'
-  - '2'
-  - {t: '3', s: .}
-  - '0'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - RET
-  - RALT
-  - {t: ▽, type: trans}
   Symbols:
-  - '!'
+  - '&'
   - (
   - )
-  - '&'
-  - '`'
+  - '!'
+  - '?'
   - ':'
   - '='
+  - {t: +, s: '|'}
   - '-'
-  - +
-  - _
-  - '*'
+  - '`'
+  - ^
   - '['
-  - ']'
-  - $
-  - '#'
+  - {t: '#', h: LGUI}
+  - {t: $, h: Number}
+  - '%'
   - PG UP
   - LEFT
   - DOWN
   - UP
   - RIGHT
+  - '*'
+  - {t: '{', h: LSHFT}
   - {t: ▽, type: trans}
-  - ^
-  - '{'
-  - '}'
-  - {t: '@', h: LGUI}
-  - {t: '%', h: NumSym}
+  - {t: ▽, type: trans}
+  - '@'
+  - PG DN
   - PG DN
   - HOME
   - END
@@ -116,6 +77,45 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - DEL
+  - {t: ▽, type: trans}
+  Number:
+  - HOME
+  - PG UP
+  - PG DN
+  - END
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '7'
+  - '8'
+  - '9'
+  - {t: ▽, type: trans}
+  - LEFT
+  - UP
+  - DOWN
+  - {t: RIGHT, type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '4'
+  - '5'
+  - '6'
+  - {t: ▽, type: trans}
+  - TAB
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '1'
+  - '2'
+  - '3'
+  - '0'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - RET
+  - RALT
   - {t: ▽, type: trans}
   Device:
   - OUT TOG
@@ -162,31 +162,31 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: '*', s: ':'}
+  - {t: ▽, type: trans}
   - '7'
   - '8'
   - '9'
-  - '-'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '='
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - '4'
   - '5'
   - '6'
-  - +
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
-  - {t: /, s: \}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - '1'
   - '2'
-  - {t: '3', s: .}
+  - '3'
   - '0'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -198,4 +198,7 @@ layers:
 combos:
 - p: [8, 9]
   k: Device
+  l: [Base]
+- p: [20, 31]
+  k: '&caps_word'
   l: [Base]
