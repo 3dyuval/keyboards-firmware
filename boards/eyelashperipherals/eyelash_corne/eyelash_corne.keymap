@@ -12,20 +12,20 @@
     combos {
         compatible = "zmk,combos";
 
+        // U+J+B+L: bootloader
+        combo_bootloader {
+            key-positions = <1 2 10 11>;
+            bindings = <&bootloader>;
+            timeout-ms = <50>;
+            layers = <BASE>;
+        };
+
         // U+J: hold for Device layer
         combo_device {
             key-positions = <10 11>;
             bindings = <&mo SYS>;
-            timeout-ms = <65>;
+            timeout-ms = <40>;
             layers = <BASE>;
-        };
-
-        // outer corners: bootloader in device layer
-        combo_bootloader {
-            key-positions = <0 12>;
-            bindings = <&bootloader>;
-            timeout-ms = <100>;
-            layers = <SYS>;
         };
     };
 

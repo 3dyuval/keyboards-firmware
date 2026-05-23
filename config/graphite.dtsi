@@ -123,10 +123,10 @@
 // ============================================================================
 
 #define GRAPHITE_BASE_36 \
-   &none           &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J           &none          \
-   &none           &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I           &none          \
-   &lshift_dance   &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &slash_morph    &kp RSHFT      \
-                                               &mt LCTRL ESC   &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
+   &kp ESC         &kp B          &kp L           &kp D           &kp W           &kp Z        &kp SEMI      &kp F           &kp O           &kp U           &kp J           &none          \
+   &kp TAB         &kp N          &kp R           &kp T           &kp S           &kp G        &kp Y         &kp H           &kp A           &kp E           &kp I           &none          \
+   &kp LSHFT       &kp Q          &kp X           &kp M           &kp C           &kp V        &kp K         &kp P           &kp COMMA       &kp DOT         &slash_morph    &kp RSHFT      \
+                                               &kp LCTRL       &sym_ht SYM SYM &kp SPC      &kp RET       &kp BSPC        &kp RALT
 
 #define GRAPHITE_SYM_36 \
    &trans          &kp AMPS       &kp LPAR        &kp RPAR        &kp EXCL        &kp QMARK    &kp COLON     &kp EQUAL       &plus_pipe_morph &kp MINUS       &kp GRAVE       &trans         \
@@ -204,10 +204,10 @@
 // ============================================================================
 
 #define GRAPHITE_BASE_42 \
-&none         &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
-&none         &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &none       \
-&lshift_dance &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &slash_morph &kp RSHFT   \
-                                &mt LCTRL ESC &sym_ht SYM SYM &kp SPC                                                &kp RET        &kp BSPC &kp RALT
+&kp ESC       &kp B      &kp L  &kp D     &kp W       &kp Z                                  &kp UP                   &kp SEMI       &kp F   &kp O      &kp U      &kp J     &none       \
+&kp TAB       &kp N      &kp R  &kp T     &kp S       &kp G                        &kp LEFT  &kp ENTER   &kp RIGHT   &kp Y          &kp H   &kp A      &kp E      &kp I     &none       \
+&kp LSHFT     &kp Q      &kp X  &kp M     &kp C       &kp V       &kp SPACE                  &kp DOWN                &kp K          &kp P   &kp COMMA  &kp DOT    &slash_morph &kp RSHFT   \
+                                &kp LCTRL     &sym_ht SYM SYM &kp SPC                                                &kp RET        &kp BSPC &kp RALT
 
 #define GRAPHITE_SYM_42 \
  &trans  &kp AMPS    &kp LPAR  &kp RPAR  &kp EXCL  &kp QMARK                                    &mmv MOVE_UP                  &kp COLON  &kp EQUAL  &plus_pipe_morph &kp MINUS  &kp GRAVE &trans      \
