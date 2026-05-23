@@ -31,6 +31,14 @@
             layers = <BASE>;
         };
 
+        // B+J: bootloader in device layer
+        combo_bootloader {
+            key-positions = <0 9>;
+            bindings = <&bootloader>;
+            timeout-ms = <100>;
+            layers = <SYS>;
+        };
+
     };
 
     keymap {
