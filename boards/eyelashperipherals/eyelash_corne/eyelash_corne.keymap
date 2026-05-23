@@ -9,6 +9,26 @@
 #include "../../../config/graphite.dtsi"
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        // U+J: hold for Device layer
+        combo_device {
+            key-positions = <10 11>;
+            bindings = <&mo SYS>;
+            timeout-ms = <65>;
+            layers = <BASE>;
+        };
+
+        // outer corners: bootloader in device layer
+        combo_bootloader {
+            key-positions = <0 12>;
+            bindings = <&bootloader>;
+            timeout-ms = <100>;
+            layers = <SYS>;
+        };
+    };
+
     rgb_encoder: rgb_encoder {
         compatible = "zmk,behavior-sensor-rotate";
         #sensor-binding-cells = <0>;
