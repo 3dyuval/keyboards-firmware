@@ -24,9 +24,9 @@ if [ ! -f "$QMK_FIRMWARE/.initialized" ]; then
 fi
 
 echo ">>> Compiling QMK userspace" && \
-qmk userspace-compile
+qmk userspace-compile --print-failures
 
-find "$QMK_FIRMWARE" -name "*.bin" -newer "$QMK_FIRMWARE/.initialized" | while read -r f; do
+find "$QMK_FIRMWARE" \( -name "*.bin" -o -name "*.uf2" \) -newer "$QMK_FIRMWARE/.initialized" | while read -r f; do
   dest="$BUILD_OUT/$(basename "$f")"
   cp "$f" "$dest"
   echo "    -> $dest"

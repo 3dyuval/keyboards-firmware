@@ -65,7 +65,8 @@ If `keyboards` is non-empty in `local.json`, it is used as-is. No network, no fi
   "keyboards": {
     "corne":   { "workflow": "build-zmk.yml", "artifact": "corne",   "type": "zmk" },
     "eyelash": { "workflow": "build-zmk.yml", "artifact": "eyelash", "type": "zmk" },
-    "totem":   { "workflow": "build-zmk.yml", "artifact": "totem",   "type": "zmk" }
+    "totem":   { "workflow": "build-zmk.yml", "artifact": "totem",   "type": "zmk" },
+    "klor":    { "workflow": "build-qmk.yml", "artifact": "klor",    "type": "qmk" }
   }
 }
 ```
@@ -133,6 +134,7 @@ Substring match works here because job names embed both `eyelash-left` and `eyel
 | `eyelash` | `eyelash-left`, `eyelash-right` | `zmk / Build (..., eyelash-left)`, `zmk / Build (..., eyelash-right)` |
 | `totem` | `totem-left`, `totem-right` | `zmk / Build (..., totem-left)`, `zmk / Build (..., totem-right)` |
 | `corne` | `corne-left`, `corne-right` | `zmk / Build (..., corne-left)`, `zmk / Build (..., corne-right)` |
+| `klor` | `geigeigeist_klor_graphite` | `qmk / Build (..., geigeigeist/klor:graphite)` |
 
 The merged `firmware` artifact (produced by the upstream ZMK reusable workflow) has no corresponding keyboard entry and is ignored by all lookup paths.
 
