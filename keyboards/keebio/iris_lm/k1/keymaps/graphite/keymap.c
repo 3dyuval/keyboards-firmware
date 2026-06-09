@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 const uint16_t PROGMEM caps_word_combo[] = {TD_LSFT, KC_RSFT, COMBO_END};
 combo_t key_combos[] = {
-    COMBO(caps_word_combo, CAPS_WORD),
+    COMBO(caps_word_combo, CW_TOGG),
 };
 
 // ── Hold-on-other-key-press (per key) ───────────────────────────────

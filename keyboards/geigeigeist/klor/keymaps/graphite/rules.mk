@@ -1,11 +1,7 @@
-# Output bin format for STM32 DFU
-FIRMWARE_FORMAT = bin
+CONVERT_TO = rp2040_ce
 
 # Enable key overrides (GUI + PLUS fix)
 KEY_OVERRIDE_ENABLE = yes
-
-# Enable tap dance (lshift/tab)
-TAP_DANCE_ENABLE = yes
 
 # Enable combos (caps word)
 COMBO_ENABLE = yes
