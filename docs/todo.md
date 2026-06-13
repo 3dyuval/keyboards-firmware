@@ -214,6 +214,11 @@ index.tsx               — entry point, mode dispatch
 - Provider injection assumes the last argument is a params object. If the last arg
   is a primitive or array, a new params object is appended instead.
 
+### Docker zmk-west volume
+- `west update` runs only once, guarded by a `.initialized` flag in `scripts/docker/build-zmk.sh`
+- Adding new modules to `config/west.yml` (e.g. `zmk-nice-oled`) has no effect until the volume is re-initialized
+- Fix: `docker volume rm docker_zmk-west` — next build will re-fetch all west modules
+
 ### Missing config
 - `cacheDir` not in `config/default.json` — firmware hooks crash on `join(undefined, ...)`
 - `status <kb>` route not wired — `firmware.get` needs a separate CLI file if needed
@@ -239,3 +244,4 @@ index.tsx               — entry point, mode dispatch
 - [x] parse — service + tree-sitter hooks
 - [ ] draw - accept --path or --config or --json
 - [ ] replace `parseArgs` with Commander via `buildCommand` (Pastel pattern)
+- [ ] add `clean` command — `docker volume rm docker_zmk-west` to force west re-initialization
