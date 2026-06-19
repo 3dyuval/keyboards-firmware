@@ -2,11 +2,15 @@ import { existsSync } from "fs";
 import { join, basename } from "path";
 import type { ServiceEvent } from "../../lib/types.ts";
 
-export function findMount(): string | null {
+export function findMount(labels?: string[]): string | null {
+  const defaultLabels = ["NICENANO", "XIAO-SENSE", "RPI-RP2", "FEATHERBOOT"];
+  const searchLabels = labels && labels.length ? [...new Set([...labels, ...defaultLabels])] : defaultLabels;
+  const labelPattern = searchLabels.join(" /dev/disk/by-label/");
+  
   const result = Bun.spawnSync([
     "sh",
     "-c",
-    `ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE /dev/disk/by-label/RPI-RP2 2>/dev/null | head -1`,
+    `ls /dev/disk/by-label/${labelPattern} 2>/dev/null | head -1`,
   ]);
   const dev = result.stdout.toString().trim();
   if (!dev) return null;
@@ -25,12 +29,12 @@ export function findMount(): string | null {
   return null;
 }
 
-async function waitForMount(): Promise<string> {
-  const mount = findMount();
+async function waitForMount(labels?: string[]): Promise<string> {
+  const mount = findMount(labels);
   if (mount) return mount;
   while (true) {
     await Bun.sleep(500);
-    const m = findMount();
+    const m = findMount(labels);
     if (m) return m;
   }
 }
@@ -121,12 +125,13 @@ export async function* flashMassStorage(
   labels: string | string[],
   keyboard: string = "keyboard",
   resetFile?: string,
+  autoReset = true,
 ): AsyncGenerator<ServiceEvent> {
   if (!existsSync(firmware)) throw new Error(`not found: ${firmware}`);
 
   const labelList = Array.isArray(labels) ? labels : [labels];
   yield ["waiting", `put ${keyboard} in bootloader mode`, undefined] as ServiceEvent;
-  const mount = await waitForMount();
+  const mount = await waitForMount(labelList);
   yield ["device-found", mount, undefined];
 
   if (resetFile && existsSync(resetFile)) {
@@ -136,17 +141,24 @@ export async function* flashMassStorage(
     yield ["reset-done", "settings reset", undefined];
 
     yield ["waiting", `put ${keyboard} back in bootloader mode`, undefined];
-    const mount2 = await waitForMount();
+    const mount2 = await waitForMount(labelList);
     yield ["device-found", mount2, undefined];
   }
 
   yield ["flashing", `copying firmware to ${mount}...`, undefined] as ServiceEvent;
-  // Copy to temp (non-uf2 extension won't trigger auto-reset), then rename to .uf2 (triggers RP2040 reset)
-  const tmpFile = join(mount, `__tmp_flash_${Date.now()}.bin`);
-  await Bun.spawn(["cp", firmware, tmpFile]).exited;
-  await Bun.spawn(["sync"]).exited;
-  const firmwareName = basename(firmware);
-  await Bun.spawn(["mv", tmpFile, `${mount}/${firmwareName}`]).exited;
-  // Board resets after receiving .uf2 — don't sync after rename (device gone)
+  // For RP2040: copy to temp .bin, rename to .uf2 triggers auto-reset
+  // For nRF52840 Feather (autoReset=false): just copy, no rename trick needed
+  if (autoReset) {
+    const tmpFile = join(mount, `__tmp_flash_${Date.now()}.bin`);
+    await Bun.spawn(["cp", firmware, tmpFile]).exited;
+    await Bun.spawn(["sync"]).exited;
+    const firmwareName = basename(firmware);
+    await Bun.spawn(["mv", tmpFile, `${mount}/${firmwareName}`]).exited;
+    // Board resets after receiving .uf2 — don't sync after rename (device gone)
+  } else {
+    // nRF52840 Feather: copy directly, board does NOT auto-reset on .uf2
+    await Bun.spawn(["cp", firmware, `${mount}/`]).exited;
+    await Bun.spawn(["sync"]).exited;
+  }
   yield ["flashed", `${keyboard} flashed`, { keyboard, firmware }] as ServiceEvent;
 }
