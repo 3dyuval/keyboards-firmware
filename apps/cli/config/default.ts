@@ -33,9 +33,17 @@ export default function ({ defer }: any) {
 
     // Flash presets — base profiles for firmware flashing
     flashPresets: {
-      dfu:     { method: "dfu",     device: "0483:df11", address: "0x08000000" },
-      rp2040:  { method: "mass-storage", label: "RPI-RP2" },
-      zmk:     { method: "mass-storage", labels: ["NICENANO", "XIAO-SENSE"] },
+      // RP2040 — UF2 mass-storage (RPI-RP2 drive)
+      rp2040:         { method: "mass-storage", label: "RPI-RP2" },
+
+      // nRF52840 — DFU mode (nice!nano, XIAO-SENSE, etc.)
+      dfu:            { method: "dfu",     device: "0483:df11", address: "0x08000000" },
+
+      // nRF52840 — UF2 mass-storage (Adafruit Feather bootloader)
+      feather-nrf52840: { method: "mass-storage", label: "FEATHERBOOT" },
+
+      // ZMK generic — mass-storage on Nordic boards with ZMK bootloader
+      zmk:            { method: "mass-storage", labels: ["NICENANO", "XIAO-SENSE"] },
     },
 
     // Which service methods to log (per service path)
