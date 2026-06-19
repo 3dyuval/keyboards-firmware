@@ -18,7 +18,7 @@ run() {
   echo ">>> building $service (log: .cache/logs/${service}-latest.log)"
 
   # Run detached, stream logs to file and stdout concurrently
-  docker compose -f "$COMPOSE_FILE" up --abort-on-container-exit -d "$service"
+  docker compose -f "$COMPOSE_FILE" up -d "$service"
   docker compose -f "$COMPOSE_FILE" logs -f "$service" | tee "$log" &
   local log_pid=$!
 
