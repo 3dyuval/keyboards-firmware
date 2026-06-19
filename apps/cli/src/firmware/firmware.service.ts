@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { existsSync, readdirSync } from "fs";
 import { join } from "path";
 import type { Id, Params } from "@feathersjs/feathers";
 import { BaseService } from "../app.ts";
@@ -6,6 +6,18 @@ import { FirmwareCreateSchema } from "./firmware.schema.ts";
 import type { ServiceEvent } from "../../lib/types.ts";
 import { github } from "./gh.ts";
 import * as hw from "./hw.ts";
+
+/** Find a firmware file by artifact name, checking .uf2/.bin/.hex extensions. */
+function findFirmwareFile(dir: string, artifact: string): string | null {
+  const base = join(dir, artifact);
+  for (const ext of [".uf2", ".bin", ".hex"]) {
+    const p = base + ext;
+    if (existsSync(p)) return p;
+  }
+  if (!existsSync(dir)) return null;
+  const entries = readdirSync(dir).filter(f => f.startsWith(artifact) && /\.(uf2|bin|hex)$/.test(f));
+  return entries.length > 0 ? join(dir, entries[0]) : null;
+}
 
 // ── status types ────────────────────────────────────────────────────
 
@@ -91,7 +103,8 @@ export default class FirmwareService extends BaseService {
       ? artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1)
       : undefined;
     await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir, side);
-    const dl = join(cacheDir, `${artifactName}.uf2`);
+    const dl = findFirmwareFile(cacheDir, artifactName);
+    if (!dl) throw new Error(`no firmware file found for "${artifactName}" in ${cacheDir}`);
     (params as any).artifactPath = dl;
     yield ["downloaded", "download complete", { artifactName, runId }];
   }
@@ -121,8 +134,8 @@ export default class FirmwareService extends BaseService {
       const resetName = keyboardName === "totem" ? "settings-reset-xiao"
         : keyboardName === "eyelash" ? "settings-reset-eyelash"
         : "settings-reset-nano";
-      const candidate = join(buildDir, "local", `${resetName}.uf2`);
-      if (existsSync(candidate)) resetFile = candidate;
+      const candidate = findFirmwareFile(join(buildDir, "local"), resetName);
+      if (candidate) resetFile = candidate;
     }
 
     // Dispatch to flash method based on config

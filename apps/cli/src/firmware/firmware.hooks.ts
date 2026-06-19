@@ -1,8 +1,21 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from "fs";
 import { join, basename, isAbsolute } from "path";
 import type { Hook } from "../app.ts";
 import { getKeyboards } from "../../lib/keyboard-hooks.ts";
 import { github } from "./gh.ts";
+
+/** Find a firmware file by artifact name, checking .uf2/.bin/.hex extensions. */
+function findFirmwareFile(dir: string, artifact: string): string | null {
+  const base = join(dir, artifact);
+  for (const ext of [".uf2", ".bin", ".hex"]) {
+    const p = base + ext;
+    if (existsSync(p)) return p;
+  }
+  // Fallback: scan directory for files matching the artifact prefix
+  if (!existsSync(dir)) return null;
+  const entries = readdirSync(dir).filter(f => f.startsWith(artifact) && /\.(uf2|bin|hex)$/.test(f));
+  return entries.length > 0 ? join(dir, entries[0]) : null;
+}
 
 export async function resolveArtifactPath(context: Hook) {
   const artifact: string = context.data?.artifact ?? context.params?.artifact;
@@ -11,6 +24,8 @@ export async function resolveArtifactPath(context: Hook) {
 
   const root = context.app.get("root") as string;
   const buildDir = context.app.get("buildDir") as string;
+  // Resolve buildDir relative to git root, not cwd
+  const resolvedBuildDir = isAbsolute(buildDir) ? buildDir : join(root, buildDir);
 
   // Explicit file path
   if (isAbsolute(artifact) || artifact.startsWith("./") || artifact.endsWith(".uf2") || artifact.endsWith(".bin")) {
@@ -48,12 +63,12 @@ export async function resolveArtifactPath(context: Hook) {
   const useArtifact = cfgArtifact !== base ? cfgArtifact : artifact;
   context.params.artifactName = useArtifact;
 
-  const localPath = join(buildDir, "local", `${useArtifact}.uf2`);
-  const ciPath = join(buildDir, "ci", `${useArtifact}.uf2`);
-  context.params.cacheDir = join(buildDir, "ci");
+  const localPath = findFirmwareFile(join(resolvedBuildDir, "local"), useArtifact);
+  const ciPath = findFirmwareFile(join(resolvedBuildDir, "ci"), useArtifact);
+  context.params.cacheDir = join(resolvedBuildDir, "ci");
 
   if (source === "local") {
-    if (!existsSync(localPath)) throw new Error(`artifact "${useArtifact}" not found locally`);
+    if (!localPath) throw new Error(`artifact "${useArtifact}" not found locally`);
     context.params.artifactPath = localPath;
     return;
   }
@@ -65,8 +80,8 @@ export async function resolveArtifactPath(context: Hook) {
   }
 
   // Auto: local → ci-cache → github
-  if (existsSync(localPath)) { context.params.artifactPath = localPath; return; }
-  if (existsSync(ciPath))    { context.params.artifactPath = ciPath;    return; }
+  if (localPath) { context.params.artifactPath = localPath; return; }
+  if (ciPath)      { context.params.artifactPath = ciPath;    return; }
 
   context.params.needsGitHub = true;
 }
@@ -82,14 +97,19 @@ export async function resolveRunId(context: Hook) {
 export async function checkCache(context: Hook) {
   if (!context.params.needsGitHub) return;
   const { runId, cacheDir, artifactName } = context.params as any;
-  const ciPath = join(cacheDir, `${artifactName}.uf2`);
   const stampFile = join(cacheDir, `${artifactName}.run-id`);
+  // Check for any firmware file in cache dir matching the artifact name
+  let cachedPath: string | null = null;
+  if (existsSync(cacheDir)) {
+    const entries = readdirSync(cacheDir).filter(f => f.startsWith(artifactName) && /\.(uf2|bin|hex)$/.test(f));
+    if (entries.length > 0) cachedPath = join(cacheDir, entries[0]);
+  }
   if (
     existsSync(stampFile) &&
     readFileSync(stampFile, "utf-8").trim() === String(runId) &&
-    existsSync(ciPath)
+    cachedPath
   ) {
-    context.params.artifactPath = ciPath;
+    context.params.artifactPath = cachedPath;
     context.params._cached = true;
   }
 }
