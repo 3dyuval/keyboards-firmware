@@ -4,8 +4,8 @@
     "apps/*"
   ],
   "scripts": {
-    "cli": "bun apps/cli/index.tsx",
-    "firmware-build-local": "scripts/docker/build.sh",
+    "cli": "bun --cwd=apps/cli index.tsx",
+    "firmware-build": "scripts/docker/build.sh",
     "firmware-flash-totem": "bun cli flash totem left -y && bun cli flash totem right -y",
     "firmware-flash-eyelash": "bun cli flash eyelash-left -y && bun cli flash eyelash-right -y",
     "firmware-flash-corne": "bun cli flash corne left -y && bun cli flash corne right -y",
@@ -17,8 +17,5 @@
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "bun cli draw --",
     "mcp-compile": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/keylytics/src-tauri/resources/keyb"
-  },
-  "dependencies": {
-    "@types/bun": "^1.3.14"
   }
 }

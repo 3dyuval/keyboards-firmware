@@ -4,7 +4,7 @@ import type { ServiceEvent } from "../../lib/types.ts";
 
 export function findMount(labels?: string[]): string | null {
   const defaultLabels = ["NICENANO", "XIAO-SENSE", "RPI-RP2", "FEATHERBOOT"];
-  const searchLabels = labels && labels.length ? [...new Set([...labels, ...defaultLabels])] : defaultLabels;
+  const searchLabels = labels && labels.length ? labels : defaultLabels;
   const labelPattern = searchLabels.join(" /dev/disk/by-label/");
   
   const result = Bun.spawnSync([
