@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2022 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ *
+ * KLOR shield overlay for Adafruit Feather nRF52840
+ * Maps Pro Micro-compatible pin labels to Feather nRF52840 GPIO
+ */
+
+#include <dt-bindings/led/led.h>
+
+&pinctrl {
+	spi1_default: spi1_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_MOSI, 0, 9)>;
+		};
+	};
+
+	spi1_sleep: spi1_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_MOSI, 0, 9)>;
+			low-power-enable;
+		};
+	};
+};
+
+&spi1 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+
+	pinctrl-0 = <&spi1_default>;
+	pinctrl-1 = <&spi1_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	led_strip: ws2812@0 {
+		compatible = "worldsemi,ws2812-spi";
+		label = "WS2812";
+
+		reg = <0>;
+		spi-max-frequency = <4000000>;
+		chain-length = <21>;
+		spi-one-frame = <0x70>;
+		spi-zero-frame = <0x40>;
+		color-mapping = <LED_COLOR_ID_RED LED_COLOR_ID_GREEN LED_COLOR_ID_BLUE>;
+	};
+};
+
+/* Pro Micro-compatible GPIO connector for klor shield matrix */
+/ {
+	chosen {
+		zmk,underglow = &led_strip;
+	};
+
+	pro_micro: connector {
+		compatible = "arduino-pro-micro";
+		#gpio-cells = <2>;
+		gpio-map-mask = <0xffffffff 0xffffffc0>;
+		gpio-map-pass-thru = <0 0x3f>;
+		gpio-map
+			= <0 0 &gpio0 11 0>	/* D0 */
+			, <1 0 &gpio0 9 0>	/* D1 */
+			, <2 0 &gpio0 8 0>	/* D2 */
+			, <3 0 &gpio0 7 0>	/* D3 */
+			, <4 0 &gpio0 6 0>	/* D4 */
+			, <5 0 &gpio1 9 0>	/* D5 */
+			, <6 0 &gpio1 10 0>	/* D6 */
+			, <7 0 &gpio0 25 0>	/* D7/TX */
+			, <8 0 &gpio0 24 0>	/* D8/RX */
+			, <9 0 &gpio0 10 0>	/* D9 */
+			, <10 0 &gpio0 26 0>	/* D10 */
+			, <16 0 &gpio0 27 0>	/* D11 */
+			, <14 0 &gpio0 8 0>	/* D12 */
+			, <15 0 &gpio0 12 0>	/* D13 */
+			, <18 0 &gpio0 3 0>	/* D14/A5 (SCL) */
+			, <19 0 &gpio0 2 0>	/* D15/A4 (SDA) */
+			, <20 0 &gpio0 28 0>	/* D16/A3 */
+			, <21 0 &gpio0 30 0>	/* D17/A2 */
+			;
+	};
+};

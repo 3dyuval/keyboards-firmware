@@ -1,0 +1,27 @@
+/*
+ * Copyright (c) 2022 GEIST
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/* Define pro_micro_i2c alias so klor_common.dtsi OLED section works on all boards.
+ * For boards that already define it (nice_nano via arduino_pro_micro_pins.dtsi),
+ * this override is functionally identical since both point to &i2c0. */
+pro_micro_i2c: &i2c0 {};
+
+#include "klor.dtsi"
+
+&kscan0 {
+	col-gpios
+		= <&pro_micro 19 GPIO_ACTIVE_HIGH>
+		, <&pro_micro 18 GPIO_ACTIVE_HIGH>
+		, <&pro_micro 15 GPIO_ACTIVE_HIGH>
+		, <&pro_micro 14 GPIO_ACTIVE_HIGH>
+		, <&pro_micro 16 GPIO_ACTIVE_HIGH>
+		, <&pro_micro 10 GPIO_ACTIVE_HIGH>
+		;
+};
+
+&left_encoder {
+	status = "okay";
+};

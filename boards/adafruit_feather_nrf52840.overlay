@@ -1,0 +1,13 @@
+/*
+ * Board overlay for Feather nRF52840 to provide Pro Micro interconnect labels
+ * needed by the klor shield. This file is picked up by Zephyr when building
+ * with BOARD=adafruit_feather_nrf52840 and BOARD_ROOT pointing to this dir.
+ */
+
+/* Alias i2c0 to pro_micro_i2c so klor_common.dtsi OLED section compiles.
+ * Feather SDA=D12/P0.12, SCL=D11/P0.11 — matches Pro Micro A4/A5 pinout. */
+pro_micro_i2c: &i2c0 {};
+
+/* Also provide other Pro Micro interconnect aliases used by klor shield */
+pro_micro_spi: &spi1 {};
+pro_micro_serial: &uart0 {};

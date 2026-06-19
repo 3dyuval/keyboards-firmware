@@ -1,0 +1,30 @@
+{
+  "root": ".",
+  "cacheDir": ".cache/firmware",
+  "buildDir": ".cache",
+  "draw": {
+    "outputDir": "keymap-drawer",
+    "config": "keymap-drawer/config.yaml"
+  },
+  "mcp": {
+    "port": 3001,
+    "idleTimeout": 10
+  },
+  "github": {
+    "owner": "",
+    "repo": ""
+  },
+  "flashPresets": {
+    "rp2040": { "method": "mass-storage", "label": "RPI-RP2" },
+    "dfu": { "method": "dfu", "device": "0483:df11", "address": "0x08000000" },
+    "feather-nrf52840": { "method": "mass-storage", "label": "FEATHERBOOT" },
+    "zmk": { "method": "mass-storage", "labels": ["NICENANO", "XIAO-SENSE"] }
+  },
+  "logging": {
+    "flash": ["create"],
+    "firmware": ["create", "get"],
+    "draw": ["create", "get"],
+    "parse": ["create"],
+    "status": ["find", "get"]
+  }
+}

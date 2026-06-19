@@ -14,6 +14,13 @@ include:
   - board: eyelash_corne_right
     shield: nice_view
     artifact-name: eyelash-right
+  # Klor Feather nRF52840 (split, uses klor shield)
+  - board: adafruit_feather_nrf52840
+    shield: klor_left
+    artifact-name: klor-feather-left
+  - board: adafruit_feather_nrf52840
+    shield: klor_right
+    artifact-name: klor-feather-right
   # TOTEM Wireless with XIAO BLE
   - board: xiao_ble//zmk
     shield: totem_left
