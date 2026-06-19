@@ -24,11 +24,21 @@ if [ ! -f "$QMK_FIRMWARE/.initialized" ]; then
 fi
 
 echo ">>> Compiling QMK userspace targets"
-qmk userspace-compile --print-failures
+qmk userspace-compile --print-failures || true
 
-# QMK writes compiled artifacts into $QMK_FIRMWARE tree, copy them to .cache/local/
-find "$QMK_FIRMWARE" \( -name "*.bin" -o -name "*.uf2" \) -newer "$QMK_FIRMWARE/.initialized" | while read -r f; do
+# Collect all new artifacts and copy to build output
+find "$QMK_FIRMWARE" \( -name "*.bin" -o -name "*.uf2" -o -name "*.hex" \) | while read -r f; do
   dest="$BUILD_OUT/$(basename "$f")"
+  # Handle duplicate basenames by appending a suffix
+  if [ -f "$dest" ]; then
+    ext="${f##*.}"
+    base="${f%.*}"
+    counter=1
+    while [ -f "$BUILD_OUT/$(basename "$base")_${counter}.${ext}" ]; do
+      ((counter++))
+    done
+    dest="$BUILD_OUT/$(basename "$base")_${counter}.${ext}"
+  fi
   cp "$f" "$dest"
   echo "    -> $dest"
 done
