@@ -20,20 +20,40 @@ export async function resolveArtifactPath(context: Hook) {
     return;
   }
 
-  // Artifact name — validate against build.yaml
+  // Artifact name — validate against keyboards map
   const keyboards = await getKeyboards(context.app);
   const base = artifact.replace(/-(?:left|right)$/, "");
-  if (!keyboards[base]) throw new Error(`unknown artifact "${artifact}" — not in build.yaml`);
+  if (!keyboards[base]) throw new Error(`unknown artifact "${artifact}" — not in keyboards config`);
 
-  context.params.artifactName = artifact;
+  context.params.keyboard = base;
   context.params.keyboardConfig = keyboards[base];
 
-  const localPath = join(buildDir, "local", `${artifact}.uf2`);
-  const ciPath = join(buildDir, "ci", `${artifact}.uf2`);
+  // Resolve flash config from preset + per-keyboard override
+  const kbFlash = keyboards[base].flash;
+  if (!kbFlash) {
+    throw new Error(`no flash configuration for keyboard "${base}" — add to local.json`);
+  }
+
+  const flashPresetName = kbFlash.preset;
+  const presets = context.app.get("flashPresets");
+  if (!flashPresetName || !presets?.[flashPresetName]) {
+    throw new Error(`unknown flash preset "${flashPresetName}" for keyboard "${base}" — defined in config/default.ts`);
+  }
+
+  const basePreset = presets[flashPresetName];
+  const mergedFlash = { ...basePreset, ...kbFlash, preset: flashPresetName };
+  context.params.flashConfig = mergedFlash;
+
+  const cfgArtifact = keyboards[base].artifact;
+  const useArtifact = cfgArtifact !== base ? cfgArtifact : artifact;
+  context.params.artifactName = useArtifact;
+
+  const localPath = join(buildDir, "local", `${useArtifact}.uf2`);
+  const ciPath = join(buildDir, "ci", `${useArtifact}.uf2`);
   context.params.cacheDir = join(buildDir, "ci");
 
   if (source === "local") {
-    if (!existsSync(localPath)) throw new Error(`artifact "${artifact}" not found in build/zmk/`);
+    if (!existsSync(localPath)) throw new Error(`artifact "${useArtifact}" not found locally`);
     context.params.artifactPath = localPath;
     return;
   }

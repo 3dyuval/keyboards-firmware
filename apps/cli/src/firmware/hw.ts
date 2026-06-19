@@ -1,12 +1,12 @@
 import { existsSync } from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import type { ServiceEvent } from "../../lib/types.ts";
 
 export function findMount(): string | null {
   const result = Bun.spawnSync([
     "sh",
     "-c",
-    `ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE 2>/dev/null | head -1`,
+    `ls /dev/disk/by-label/NICENANO /dev/disk/by-label/XIAO-SENSE /dev/disk/by-label/RPI-RP2 2>/dev/null | head -1`,
   ]);
   const dev = result.stdout.toString().trim();
   if (!dev) return null;
@@ -83,41 +83,29 @@ export async function* flashZmk(
   yield ["flashed", `${firmware} flashed`, { keyboard, side, firmware, reset }];
 }
 
-export async function* flashQmk(
-  artifactPath: string,
+export async function* flashDfu(
+  firmware: string,
+  device: string,
+  address: string,
+  keyboard: string = "keyboard",
 ): AsyncGenerator<ServiceEvent> {
-  const firmware = artifactPath;
   if (!existsSync(firmware)) throw new Error(`not found: ${firmware}`);
 
   const dfuUtil = Bun.which("dfu-util");
   if (!dfuUtil) {
-    throw new Error(
-      "dfu-util not installed. Install: sudo pacman -S dfu-util",
-    );
+    throw new Error("dfu-util not installed. Install: sudo pacman -S dfu-util");
   }
 
-  const lsusb = Bun.spawnSync(["lsusb"]).stdout.toString();
-  if (!lsusb.includes("0483:df11")) {
-    yield ["waiting", "put iris in DFU mode (double-tap reset)", undefined] as ServiceEvent;
-    while (true) {
-      await Bun.sleep(500);
-      const check = Bun.spawnSync(["lsusb"]).stdout.toString();
-      if (check.includes("0483:df11")) {
-        yield ["device-found", "DFU device found", undefined] as ServiceEvent;
-        break;
-      }
-    }
+  const [vid, pid] = device.split(":");
+  yield ["waiting", `put ${keyboard} in DFU mode (double-tap reset)`, undefined] as ServiceEvent;
+  while (!Bun.spawnSync(["lsusb"]).stdout.toString().includes(device)) {
+    await Bun.sleep(500);
   }
+  yield ["device-found", `${keyboard} in DFU mode`, undefined] as ServiceEvent;
 
   yield ["flashing", `flashing ${firmware}...`, undefined] as ServiceEvent;
   const proc = Bun.spawn(
-    [
-      dfuUtil,
-      "-a", "0",
-      "-d", "0483:df11",
-      "-s", "0x08000000:leave",
-      "-D", firmware,
-    ],
+    ["dfu-util", "-a", "0", "-d", device, "-s", `${address}:leave`, "-D", firmware],
     { stdin: "pipe", stdout: "pipe", stderr: "pipe" },
   );
   const exitCode = await proc.exited;
@@ -125,5 +113,40 @@ export async function* flashQmk(
     const stderr = await new Response(proc.stderr).text();
     throw new Error(`dfu-util failed (exit ${exitCode}): ${stderr}`);
   }
-  yield ["flashed", "iris flashed", { keyboard: "iris", firmware }] as ServiceEvent;
+  yield ["flashed", `${keyboard} flashed`, { keyboard, firmware }] as ServiceEvent;
+}
+
+export async function* flashMassStorage(
+  firmware: string,
+  labels: string | string[],
+  keyboard: string = "keyboard",
+  resetFile?: string,
+): AsyncGenerator<ServiceEvent> {
+  if (!existsSync(firmware)) throw new Error(`not found: ${firmware}`);
+
+  const labelList = Array.isArray(labels) ? labels : [labels];
+  yield ["waiting", `put ${keyboard} in bootloader mode`, undefined] as ServiceEvent;
+  const mount = await waitForMount();
+  yield ["device-found", mount, undefined];
+
+  if (resetFile && existsSync(resetFile)) {
+    yield ["resetting", "flashing settings reset...", undefined];
+    await Bun.spawn(["cp", resetFile, `${mount}/`]).exited;
+    await Bun.spawn(["sync"]).exited;
+    yield ["reset-done", "settings reset", undefined];
+
+    yield ["waiting", `put ${keyboard} back in bootloader mode`, undefined];
+    const mount2 = await waitForMount();
+    yield ["device-found", mount2, undefined];
+  }
+
+  yield ["flashing", `copying firmware to ${mount}...`, undefined] as ServiceEvent;
+  // Copy to temp (non-uf2 extension won't trigger auto-reset), then rename to .uf2 (triggers RP2040 reset)
+  const tmpFile = join(mount, `__tmp_flash_${Date.now()}.bin`);
+  await Bun.spawn(["cp", firmware, tmpFile]).exited;
+  await Bun.spawn(["sync"]).exited;
+  const firmwareName = basename(firmware);
+  await Bun.spawn(["mv", tmpFile, `${mount}/${firmwareName}`]).exited;
+  // Board resets after receiving .uf2 — don't sync after rename (device gone)
+  yield ["flashed", `${keyboard} flashed`, { keyboard, firmware }] as ServiceEvent;
 }

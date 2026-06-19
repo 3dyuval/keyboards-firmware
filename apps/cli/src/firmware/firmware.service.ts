@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { join } from "path";
 import type { Id, Params } from "@feathersjs/feathers";
 import { BaseService } from "../app.ts";
@@ -47,6 +48,9 @@ export default class FirmwareService extends BaseService {
       }
       const workflowStatus = fetched[config.workflow];
       const jobs = workflowStatus.completed?.jobs?.filter((j) => {
+        if (config.type === "qmk") {
+          return j.name.includes(config.artifact);
+        }
         const lastArtifact = j.name.match(/,\s*([\w-]+)\)$/)?.[1];
         return lastArtifact === `${config.artifact}-left` || lastArtifact === `${config.artifact}-right`;
       });
@@ -73,8 +77,8 @@ export default class FirmwareService extends BaseService {
     yield ["status", keyboard, fresh];
   }
 
-  private async *download(params: Params): AsyncGenerator<ServiceEvent> {
-    const { keyboardConfig, artifactName, runId, cacheDir, _cached } = params as any;
+     private async *download(params: Params): AsyncGenerator<ServiceEvent> {
+    const { keyboardConfig, artifactName, runId, cacheDir, _cached, keyboard } = params as any;
     const gh = github(this.app);
 
     if (_cached) {
@@ -83,9 +87,10 @@ export default class FirmwareService extends BaseService {
     }
 
     yield ["downloading", `downloading ${artifactName} from run ${runId}...`, undefined];
-    const side = artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1);
+    const side = keyboardConfig.type === "zmk"
+      ? artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1)
+      : undefined;
     await gh.downloadArtifact(runId, keyboardConfig.artifact, cacheDir, side);
-    // move downloaded file to flat ci path
     const dl = join(cacheDir, `${artifactName}.uf2`);
     (params as any).artifactPath = dl;
     yield ["downloaded", "download complete", { artifactName, runId }];
@@ -99,7 +104,7 @@ export default class FirmwareService extends BaseService {
 
   // patch — resolve path, download if needed, flash
   async *patch(id: Id, data: any, params: Params): AsyncGenerator<ServiceEvent> {
-    const { artifactName, keyboardConfig } = params as any;
+    const { artifactName, keyboardConfig, flashConfig } = params as any;
     const { reset, yes } = data;
 
     if ((params as any).needsGitHub) yield* this.download(params);
@@ -107,21 +112,39 @@ export default class FirmwareService extends BaseService {
     const artifactPath = (params as any).artifactPath;
     if (!artifactPath) throw new Error(`could not resolve artifact path for "${artifactName}"`);
 
-    const side = artifactName.match(/-(?:left|right)$/)?.[0]?.slice(1);
-    const keyboard = artifactName.replace(/-(?:left|right)$/, "");
+    const buildDir = this.app.get("buildDir") as string;
+    const keyboardName = (params as any).keyboard ?? artifactName;
 
-    if (keyboardConfig?.type === "qmk") {
-      for await (const event of hw.flashQmk(artifactPath)) yield event;
-      yield ["done", "flashed", { artifactName }];
+    // Resolve reset file path for keyboards that support it
+    let resetFile: string | undefined;
+    if (reset && keyboardConfig?.type === "zmk") {
+      const resetName = keyboardName === "totem" ? "settings-reset-xiao"
+        : keyboardName === "eyelash" ? "settings-reset-eyelash"
+        : "settings-reset-nano";
+      const candidate = join(buildDir, "local", `${resetName}.uf2`);
+      if (existsSync(candidate)) resetFile = candidate;
+    }
+
+    // Dispatch to flash method based on config
+    if (flashConfig.method === "dfu") {
+      if (!flashConfig.device) throw new Error(`flash config for "${keyboardName}" missing device (vid:pid)`);
+      if (!flashConfig.address) throw new Error(`flash config for "${keyboardName}" missing address`);
+      for await (const event of hw.flashDfu(artifactPath, flashConfig.device, flashConfig.address, keyboardName)) {
+        yield event;
+      }
+      yield ["done", "flashed", { artifactName, method: "dfu" }];
       return;
     }
 
-    if (!side) throw new Error(`cannot determine side from artifact name "${artifactName}"`);
-
-    const buildDir = this.app.get("buildDir") as string;
-    for await (const event of hw.flashZmk(keyboard, side, artifactPath, reset ?? false, buildDir, yes ?? false)) {
-      yield event;
+    if (flashConfig.method === "mass-storage") {
+      const labels = flashConfig.label ?? flashConfig.labels;
+      for await (const event of hw.flashMassStorage(artifactPath, labels, keyboardName, resetFile)) {
+        yield event;
+      }
+      yield ["done", "flashed", { artifactName, method: "mass-storage" }];
+      return;
     }
-    yield ["done", "flashed", { artifactName, side, reset }];
+
+    throw new Error(`unsupported flash method "${flashConfig.method}" for keyboard "${keyboardName}"`);
   }
 }
