@@ -31,6 +31,13 @@ export default function ({ defer }: any) {
       repo: "",
     },
 
+    // Flash presets — base profiles for firmware flashing
+    flashPresets: {
+      dfu:     { method: "dfu",     device: "0483:df11", address: "0x08000000" },
+      rp2040:  { method: "mass-storage", label: "RPI-RP2" },
+      zmk:     { method: "mass-storage", labels: ["NICENANO", "XIAO-SENSE"] },
+    },
+
     // Which service methods to log (per service path)
     logging: {
       flash: ["create"],
