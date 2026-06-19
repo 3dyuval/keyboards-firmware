@@ -4,3 +4,6 @@ node_modules
 /firmware
 .env
 **/config/local.*
+*.uf2
+*.bin
+*.hex
