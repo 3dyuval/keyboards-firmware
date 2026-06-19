@@ -188,7 +188,7 @@ Flash presets define **how** firmware files are flashed to hardware. They live i
 |---|---|---|---|
 | `rp2040` | mass-storage | `RPI-RP2` | RP2040-based keyboards (Klor RP2040, Pro Micro clones) |
 | `dfu` | dfu | `0483:df11`, address `0x08000000` | nRF52840 in DFU mode (nice!nano v2, XIAO-SENSE) |
-| `feather-nrf52840` | mass-storage | `FEATHERBOOT` | Adafruit Feather nRF52840 Express (UF2 bootloader) |
+| `feather-nrf52840` | mass-storage | `FEATHERBOOT` | Adafruit Feather nRF52840 Express (UF2 bootloader, ZMK builds produce `.bin`) |
 | `zmk` | mass-storage | `NICENANO`, `XIAO-SENSE` | Generic ZMK keyboards on Nordic nRF52840 |
 
 ### Per-keyboard flash config
