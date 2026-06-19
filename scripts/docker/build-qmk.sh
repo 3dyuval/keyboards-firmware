@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Usage: run via docker compose from scripts/docker/
 #   docker compose -f scripts/docker/docker-compose.yml up qmk
-# Builds QMK userspace targets, outputs .bin/.hex files to .cache/local/
+# Builds QMK userspace targets, outputs .bin/.uf2 files to .cache/local/
 
 set -euo pipefail
 
@@ -15,21 +15,11 @@ BUILD_OUT=/build
 
 mkdir -p "$BUILD_OUT"
 
-export QMK_FIRMWARE=/qmk_firmware
-export QMK_USERSPACE="$USERSPACE_DIR"
-
-if [ ! -f "$QMK_FIRMWARE/.initialized" ]; then
-  qmk setup --yes
-  touch "$QMK_FIRMWARE/.initialized"
-fi
-
-echo ">>> Compiling QMK userspace" && \
+echo ">>> Compiling QMK userspace targets"
 qmk userspace-compile --print-failures
 
-find "$QMK_FIRMWARE" \( -name "*.bin" -o -name "*.uf2" \) -newer "$QMK_FIRMWARE/.initialized" | while read -r f; do
-  dest="$BUILD_OUT/$(basename "$f")"
-  cp "$f" "$dest"
-  echo "    -> $dest"
+find "$BUILD_OUT" \( -name "*.bin" -o -name "*.uf2" \) | while read -r f; do
+  echo "    -> $f"
 done
 
 echo "QMK build complete."

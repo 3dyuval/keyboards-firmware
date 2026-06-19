@@ -9,7 +9,7 @@ services:
     entrypoint: ["/zmk-config/scripts/docker/build-zmk.sh"]
 
   qmk:
-    image: ghcr.io/qmk/qmk_cli:latest
+    image: jonz94/qmk_firmware:latest
     restart: "no"
     volumes:
       - qmk-firmware:/qmk_firmware
