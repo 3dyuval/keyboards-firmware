@@ -6,6 +6,55 @@ permissions:
   contents: write
 
 jobs:
-  qmk:
-    if: ${{ !vars.ACT || vars.RUN == 'qmk' }}
-    uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
+  build:
+    name: Build QMK Firmware
+    runs-on: ubuntu-latest
+    container: ghcr.io/qmk/qmk_cli:latest
+
+    steps:
+      - name: Checkout Userspace
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          submodules: recursive
+
+      - name: Checkout QMK Firmware
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          path: qmk_firmware
+          repository: qmk/qmk_firmware
+          submodules: recursive
+
+      - name: Install QMK CLI dependencies
+        run: |
+          pip install -r qmk_firmware/requirements.txt
+
+      - name: Configure QMK CLI
+        run: |
+          qmk config user.qmk_home=$GITHUB_WORKSPACE/qmk_firmware
+          qmk config user.overlay_dir=$GITHUB_WORKSPACE
+
+      - name: Build Firmware
+        run: |
+          qmk compile -k geigeigeist/klor -b geigeigeist_klor_rp2040
+          qmk compile -k geigeigeist/klor:nano -b geigeigeist_klor_nano
+          qmk compile -k keebio/iris_lm/k1 -b keebio_iris_lm_k1
+
+      - name: Upload RP2040 binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: geigeigeist_klor_rp2040
+          path: geigeigeist_klor_rp2040.uf2
+
+      - name: Upload nice_nano binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: geigeigeist_klor_nano
+          path: geigeigeist_klor_nano.uf2
+
+      - name: Upload iris binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: keebio_iris_lm_k1
+          path: keebio_iris_lm_k1.uf2
