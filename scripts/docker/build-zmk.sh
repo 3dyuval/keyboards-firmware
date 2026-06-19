@@ -66,13 +66,20 @@ for entry in data.get("include", []):
 
     uf2 = f"{build_dir}/zephyr/zmk.uf2"
     dest = f"{os.environ['BUILD_OUT']}/{artifact}.uf2"
+    bin_dest = f"{os.environ['BUILD_OUT']}/{artifact}.bin"
     if os.path.exists(uf2):
         import shutil
         shutil.copy2(uf2, dest)
         print(f"    -> {dest}", flush=True)
     else:
-        print(f"!!! No .uf2 found for {artifact}", flush=True)
-        failed.append(artifact)
+        # Some boards (e.g. Feather nRF52840) produce .bin instead of .uf2
+        bin_file = f"{build_dir}/zephyr/zmk.bin"
+        if os.path.exists(bin_file):
+            shutil.copy2(bin_file, bin_dest)
+            print(f"    -> {bin_dest} (from .bin)", flush=True)
+        else:
+            print(f"!!! No .uf2 or .bin found for {artifact}", flush=True)
+            failed.append(artifact)
 
 if failed:
     print(f"\nFailed: {failed}", file=sys.stderr)
