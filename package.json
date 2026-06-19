@@ -17,5 +17,8 @@
     "draw-all": "bun draw-iris && bun draw-corne && bun draw-eyelash && bun draw-totem",
     "draw": "bun cli draw --",
     "mcp-compile": "bun build --cwd apps/cli mcp.ts --compile --outfile /home/yuv/keylytics/src-tauri/resources/keyb"
+  },
+  "dependencies": {
+    "@types/bun": "^1.3.14"
   }
 }
