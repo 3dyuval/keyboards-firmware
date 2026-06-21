@@ -14,13 +14,15 @@ include:
   - board: eyelash_corne_right
     shield: nice_view
     artifact-name: eyelash-right
-  # Klor Feather nRF52840 (split, uses klor shield)
-  - board: adafruit_feather_nrf52840
+  # Klor nice!nano v2 (split, uses klor shield)
+  # Bare `nice_nano` (not //zmk) so the shield's boards/nice_nano.overlay —
+  # which defines the WS2812 underglow strip — is matched and loaded.
+  - board: nice_nano
     shield: klor_left
-    artifact-name: klor-feather-left
-  - board: adafruit_feather_nrf52840
+    artifact-name: klor-nice_nano-left
+  - board: nice_nano
     shield: klor_right
-    artifact-name: klor-feather-right
+    artifact-name: klor-nice_nano-right
   # TOTEM Wireless with XIAO BLE
   - board: xiao_ble//zmk
     shield: totem_left

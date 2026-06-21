@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.base.schema.json",
+  "customizations": {},
+  "containerEnv": {},
+  "forwardPorts": [],
+  "secrets": {},
+  "features": {},
+  "mounts": [
+    {
+      "type": "bind",
+      "source": "",
+      "target": ""
+    }
+  ]
+}

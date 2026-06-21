@@ -1,161 +1,126 @@
+/*
+ * KLOR (nice!nano) — Graphite layout
+ *
+ * klor shares the fleet-wide Graphite system (config/graphite.dtsi: BASE/SYM/
+ * NUM/SYS/NUMSYM). Its physical shape equals Corne_36 (5/6/6 per side, 2-key
+ * outer pinky column on rows 1-2) PLUS, per side, one extra outer thumb and one
+ * encoder push — both currently &none.
+ *
+ * Transform fill order (config/boards/shields/klor/klor.dtsi), 44 positions:
+ *   row0 (10):  RC0,1..0,5            | RC0,6..0,10
+ *   row1 (12):  RC1,0..1,5            | RC1,6..1,11
+ *   row2 (14):  RC2,0..2,5  RC3,5 RC3,6  RC2,6..2,11   (RC3,5/RC3,6 = encoders, &none)
+ *   thumbs (8): RC3,1 RC3,2 RC3,3 RC3,4 | RC3,7 RC3,8 RC3,9 RC3,10
+ *               (outermost thumb each side = extra, &none)
+ */
 
-//                               █         █    █            ▄▄▄▀▀▀▀▀▀▄▄▄        █▀▀▀▀▀▀▀▀▀▀█
-//                               █        █     █          ▄▀            ▀▄      █          █
-//                               █       █      █        ▄▀                ▀▄    █          █
-//                               █      █       █        █                  █    █          █
-//                               █     █        █       █                    █   █          █
-//                               █    █         █       █                    █   █▄▄▄▄▄▄▄▄▄▄█
-//                               █   █ █        █       █                    █   █      █
-//                               █  █   █       █        █                  █    █       █
-//                               █ █     █      █        ▀▄                ▄▀    █        █
-//                               ██       █     █          ▀▄            ▄▀      █         █
-//                               █         █    █▄▄▄▄▄▄▄▄    ▀▀▀▄▄▄▄▄▄▀▀▀        █          █
-//
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-       
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
-#include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/rgb.h>
 
+#include "graphite.dtsi"
 
-#define BASE   0
-#define LOWER  1
-#define RAISE  2
-#define ADJUST 3
+/* ===========================================================================
+ * klor-sized layer macros — Graphite _36 content placed on klor's transform.
+ * Each macro is 44 bindings in the fill order above. &none marks the 2 encoder
+ * positions (mid-row2) and the 2 extra outer thumbs.
+ * =========================================================================== */
 
+// row0: corne_36 row0 inner-10 (drops outer ESC + &none corners)
+// row1: full 12 (outer pinky present)
+// row2: 6 left | &none &none (encoders) | 6 right
+// thumbs: &none CTRL sym_ht SPC | RET BSPC RALT &none
+#define GRAPHITE_BASE_klor \
+    &kp B    &kp L    &kp D    &kp W    &kp Z                          &kp SEMI &kp F    &kp O    &kp U    &kp J    \
+    &kp TAB  &kp N    &kp R    &kp T    &kp S    &kp G                 &kp Y    &kp H    &kp A    &kp E    &kp I    &none \
+    &kp LSHFT &kp Q   &kp X    &kp M    &kp C    &kp V  &none &none    &kp K    &kp P    &kp COMMA &kp DOT &slash_morph &kp RSHFT \
+                      &none    &kp LCTRL &sym_ht SYM SYM &kp SPC       &kp RET  &kp BSPC &kp RALT &none
+
+#define GRAPHITE_SYM_klor \
+    &kp AMPS &kp LPAR &kp RPAR &kp EXCL &kp QMARK                      &kp COLON &kp EQUAL &plus_pipe_morph &kp MINUS &kp GRAVE \
+    &mo NUM  &kp CARET &kp LBKT &mo_ht NUM RBKT &lgui_ht LGUI DOLLAR &kp PRCNT  &kp PG_UP &kp LEFT &kp DOWN &kp UP   &kp RIGHT &trans \
+    &trans   &kp ASTRK &lgui_ht LSHFT LBRC &kp RBRC &kp AT &kp HASH &none &none &kp PG_DN &kp HOME &kp END  &kp SQT  &kp BSLH &trans \
+                      &none    &kp LCTRL &trans   &trans                &trans   &kp DEL  &trans   &none
+
+#define GRAPHITE_NUM_klor \
+    &kp HOME &kp PG_UP &kp PG_DN &kp END &trans                        &trans   &kp N7   &kp N8   &kp N9   &trans   \
+    &trans   &kp LEFT &kp UP   &kp DOWN &kp RIGHT &trans               &trans   &kp N4   &kp N5   &kp N6   &trans   &trans \
+    &kp TAB  &trans   &trans   &trans   &trans   &trans  &none &none   &trans   &kp N1   &kp N2   &kp N3   &kp N0   &trans \
+                      &none    &trans   &trans   &trans                &kp RET  &kp RALT &trans   &none
+
+#define GRAPHITE_SYS_klor \
+    &out OUT_TOG &trans &trans &trans  &trans                          &trans   &kp C_PP &kp C_NEXT &trans &trans  \
+    &kp PSCRN &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &trans       &kp C_VOL_DN &kp C_VOL_UP &kp C_BRI_DN &kp C_BRI_UP &trans &trans \
+    &trans   &trans   &trans   &trans   &trans   &trans  &none &none   &trans   &trans   &bt BT_CLR_ALL &trans &trans &trans \
+                      &none    &trans   &trans   &trans                &trans   &trans   &trans   &none
+
+#define GRAPHITE_NUMSYM_klor \
+    &trans   &trans   &trans   &trans   &trans                         &trans   &kp N7   &kp N8   &kp N9   &trans   \
+    &trans   &trans   &trans   &trans   &trans   &trans                &trans   &kp N4   &kp N5   &kp N6   &trans   &trans \
+    &trans   &trans   &trans   &trans   &trans   &trans  &none &none   &trans   &kp N1   &kp N2   &kp N3   &kp N0   &trans \
+                      &none    &trans   &trans   &kp RET               &trans   &trans   &trans   &none
 
 / {
-    behaviors {
-        hm: homerow_mods {
-            compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
-            #binding-cells = <2>;
-            tapping-term-ms = <150>;
-            quick_tap_ms = <0>;
-            flavor = "tap-preferred";
-            bindings = <&kp>, <&kp>;
+    combos {
+        compatible = "zmk,combos";
+
+        // Mirrors corne's combo set, adapted to klor's transform positions.
+        // klor row0 fill: pos 0-4 = B L D W Z (left), pos 5-9 = SEMI F O U J (right).
+        //   -> L=1, D=2, U=8, J=9.
+
+        // U+J: hold for SYS layer (where &out OUT_TOG lives).
+        combo_device {
+            key-positions = <8 9>;
+            bindings = <&mo SYS>;
+            timeout-ms = <40>;
+            layers = <BASE>;
         };
 
-    };
-
-     combos {
-            compatible = "zmk,combos";
-            combo_esc {
-                timeout-ms = <50>;
-                key-positions = <0 1>;
-                bindings = <&kp ESC>;
-            };
-    };
-
-
-
-        keymap {
-                compatible = "zmk,keymap";
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-
-
-                base_layer {
-// ┌───────────────────────────────────────────────────────────┐
-label= "BASE"                                                  ;
-// └───────────────────────────────────────────────────────────┘
-/*           ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │    Q    │    W    │    F    │    P    │    G    │                    │    J    │    L    │    U    │    Y    │    ;    │   
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │   TAB   │    A    │    R    │    S    │    T    │    D    │                    │    H    │    N    │    E    │    I    │    O    │    "    │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │   DEL   │    Z    │    X    │    C    │    V    │    B    ││  MUTE  ││PLY/PSE ││    K    │    M    │    ,    │    .    │    /    │    \    │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │  CTRL   │  LOWER  │  SPACE  │   ALT   ││ CMD/WIN │  ENTER  │  RAISE  │  BSPCE  │  
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */ 
- bindings = <
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              &kp Q     &kp W     &kp F     &kp P     &kp G                          &kp J     &kp L     &kp U     &kp Y     &kp SEMI
-    &kp TAB   &kp A     &kp R     &kp S   &hm LSHFT T &kp D                          &kp H   &hm RSHFT N &kp E     &kp I     &kp O     &kp SQT
-    &kp DEL   &kp Z     &kp X     &kp C     &kp V     &kp B     &trans     &trans    &kp K     &kp M     &kp COMMA &kp DOT   &kp FSLH  &kp BSLH
-                                  &kp LCTRL &mo LOWER &kp SPACE &kp LALT   &kp LGUI  &kp RET   &mo RAISE &kp BSPC    
-                        >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-                };
-
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-
-
-                lower_layer {
-// ┌───────────────────────────────────────────────────────────┐
-label= "LOWER"                                                 ;
-// └───────────────────────────────────────────────────────────┘
-/*           ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │    UP   │         │    {    │                    │    }    │    7    │    8    │    9    │    +    │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │   LEFT  │  DOWN   │  RIGHT  │    [    │                    │    ]    │    4    │    5    │    6    │    -    │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │   P UP  │ C LOCK  │ P DOWN  │    (    ││        ││        ││    )    │    1    │    2    │    3    │    *    │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │         │         │         ││         │         │    0    │         │  
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */ 
- bindings = <
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-    &ext_power EP_TOG   &trans    &kp UP    &trans    &kp LBRC                       &kp RBRC  &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp KP_PLUS
-    &trans  &rgb_ug RGB_EFF    &kp LEFT  &kp DOWN  &kp RIGHT &kp LBKT                       &kp RBKT  &kp KP_N4 &kp KP_N5 &kp KP_N6 &kp KP_MINUS &trans
-    &trans    &trans    &kp PG_UP &kp CAPS  &kp PG_DN &kp LPAR  &trans     &trans    &kp RPAR  &kp KP_N1 &kp KP_N2 &kp KP_N3 &kp KP_MULTIPLY &trans
-                                  &trans    &trans    &trans    &trans     &trans    &kp DELETE &kp KP_N0 &trans  
-                        >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-                };
-
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-
-
-                raise_layer {
-// ┌───────────────────────────────────────────────────────────┐
-label= "RAISE"                                                 ;
-// └───────────────────────────────────────────────────────────┘
-/*           ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │         │         │         │                    │         │         │    Ü    │         │         │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │    Ä    │         │    ß    │         │         │         │                    │         │         │         │         │    Ö    │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││        ││        ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │ ADJUST  │         │         │         ││         │         │         │         │  
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */ 
- bindings = <
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-              &trans    &trans    &trans    &trans    &trans                         &trans    &trans    &kp RA(U) &trans    &trans     
-    &kp RA(A) &trans    &kp RA(S) &trans    &trans    &trans                         &trans    &trans    &trans    &trans    &kp RA(O) &trans  
-    &trans    &trans    &trans    &trans    &trans    &trans    &trans     &trans    &trans    &trans    &trans    &trans    &trans    &trans
-                                  &mo ADJUST &trans   &trans    &trans     &trans    &trans    &trans    &trans  
-                        >;
-                sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-                };
-
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-
-
-                adjust_layer {
-// ┌───────────────────────────────────────────────────────────┐
-label= "ADJUST"                                                ;
-// └───────────────────────────────────────────────────────────┘
-/*           ┌─────────┬─────────┬─────────┬─────────┬─────────┐                    ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-             │         │         │         │         │         │                    │         │         │         │         │         │
-   ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         │                    │         │         │         │         │         │         │
-   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤╭────────╮╭────────╮├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-   │         │         │         │         │         │         ││        ││        ││         │         │         │         │         │         │
-   └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┼╰────────╯╰────────╯┼─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
-                                 │         │         │         │         ││         │         │         │         │  
-                                 └─────────┴─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┴─────────┘ */ 
- bindings = <
- //╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷         ╷
-             &bt BT_CLR &trans    &trans    &trans    &trans                         &trans    &trans    &trans    &trans    &bt BT_CLR   
-    &trans   &bt BT_NXT &trans    &trans    &trans    &trans                         &trans    &trans    &trans    &bt BT_NXT &trans   &trans 
-    &trans   &bt BT_PRV &trans    &trans    &kp KP_N6 &trans    &trans     &trans    &bt BT_PRV &trans   &trans    &trans    &trans    &trans    
-                                  &trans    &trans    &trans    &trans     &trans    &trans    &trans    &trans    
-                        >;
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-                };
+        // L+D+U+J: bootloader.
+        combo_bootloader {
+            key-positions = <1 2 8 9>;
+            bindings = <&bootloader>;
+            timeout-ms = <50>;
+            layers = <BASE>;
         };
+
+        // both shifts (outer pinky row2: pos 22 = LSHFT left edge, 35 = RSHFT right edge): caps word.
+        combo_caps_word {
+            key-positions = <22 35>;
+            bindings = <&caps_word>;
+            timeout-ms = <50>;
+            layers = <BASE>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            label = "Base";
+            bindings = < GRAPHITE_BASE_klor >;
+        };
+
+        symbols {
+            label = "Symbols";
+            bindings = < GRAPHITE_SYM_klor >;
+        };
+
+        number {
+            label = "Number";
+            bindings = < GRAPHITE_NUM_klor >;
+        };
+
+        system {
+            label = "System";
+            bindings = < GRAPHITE_SYS_klor >;
+        };
+
+        numsym {
+            label = "NumSym";
+            bindings = < GRAPHITE_NUMSYM_klor >;
+        };
+    };
 };

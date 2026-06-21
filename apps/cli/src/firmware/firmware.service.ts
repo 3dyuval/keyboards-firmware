@@ -151,10 +151,12 @@ export default class FirmwareService extends BaseService {
 
     if (flashConfig.method === "mass-storage") {
       const labels = flashConfig.label ?? flashConfig.labels;
-      // RP2040 auto-resets on .uf2 copy — use rename trick
-      // nRF52840 Feather does NOT auto-reset — copy directly
-      const autoReset = flashConfig.preset !== "feather-nrf52840";
-      for await (const event of hw.flashMassStorage(artifactPath, labels, keyboardName, resetFile, autoReset)) {
+      // RP2040 only flashes when a .uf2 *appears* via rename — so copy-to-tmp
+      // then rename. nRF52840 UF2 bootloaders (nice!nano) flash the instant a
+      // complete file lands and immediately unmount, which makes the rename
+      // race the disconnect and spuriously error — so copy directly instead.
+      const useRenameTrick = flashConfig.preset === "rp2040";
+      for await (const event of hw.flashMassStorage(artifactPath, labels, keyboardName, resetFile, useRenameTrick)) {
         yield event;
       }
       yield ["done", "flashed", { artifactName, method: "mass-storage" }];

@@ -17,6 +17,7 @@ BUILD_OUT=/build
 
 mkdir -p "$CONFIG_DIR" "$BUILD_OUT"
 
+rm -rf "$CONFIG_DIR/*"
 cp -R "$REPO_DIR/config/"* "$CONFIG_DIR/"
 
 if [ ! -f "$WEST_DIR/.initialized" ]; then
@@ -63,6 +64,12 @@ for entry in data.get("include", []):
         print(f"!!! FAILED: {artifact}", flush=True)
         failed.append(artifact)
         continue
+
+    # Copy the resolved devicetree out for debugging (e.g. inspecting kscan pins)
+    dts_src = f"{build_dir}/zephyr/zephyr.dts"
+    if os.path.exists(dts_src):
+        import shutil
+        shutil.copy2(dts_src, f"{os.environ['BUILD_OUT']}/{artifact}.zephyr.dts")
 
     uf2 = f"{build_dir}/zephyr/zmk.uf2"
     dest = f"{os.environ['BUILD_OUT']}/{artifact}.uf2"
