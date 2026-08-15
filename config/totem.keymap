@@ -12,6 +12,17 @@
 #include "graphite.dtsi"
 
 / {
+    behaviors {
+        mt_esc: mt_esc {
+            compatible = "zmk,behavior-mod-tap";
+            #binding-cells = <0>;
+            modifiers = <(MOD_LCTL)>;
+            tap = <&kp ESC>;
+            hold = <&kp LCTRL>;
+            hold_on_other_key_press = <0>;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
 
