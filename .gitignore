@@ -7,3 +7,7 @@ node_modules
 *.uf2
 *.bin
 *.hex
+
+# Editor / tooling junk
+nvim_exec2*
+.history/

@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, statSync } from "fs";
 import { join, basename, isAbsolute } from "path";
 import type { Hook } from "../app.ts";
 import { getKeyboards } from "../../lib/keyboard-hooks.ts";
@@ -6,15 +6,18 @@ import { github } from "./gh.ts";
 
 /** Find a firmware file by artifact name, checking .uf2/.bin/.hex extensions. */
 function findFirmwareFile(dir: string, artifact: string): string | null {
-  const base = join(dir, artifact);
-  for (const ext of [".uf2", ".bin", ".hex"]) {
-    const p = base + ext;
-    if (existsSync(p)) return p;
-  }
-  // Fallback: scan directory for files matching the artifact prefix
   if (!existsSync(dir)) return null;
-  const entries = readdirSync(dir).filter(f => f.startsWith(artifact) && /\.(uf2|bin|hex)$/.test(f));
-  return entries.length > 0 ? join(dir, entries[0]) : null;
+  // The build system writes new artifacts as numbered copies (name_1, name_2, …)
+  // rather than overwriting, so the base-name file is the OLDEST build. Match all
+  // files with the artifact prefix and return the most recently modified one, so
+  // the latest build is always flashed. An exact name+ext match only wins if it
+  // is also the newest.
+  const suffixRe = /^(_\d+)?\.(uf2|bin|hex)$/;
+  const entries = readdirSync(dir)
+    .filter(f => f.startsWith(artifact) && suffixRe.test(f.slice(artifact.length)))
+    .map(f => join(dir, f))
+    .sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs);
+  return entries.length > 0 ? entries[0] : null;
 }
 
 export async function resolveArtifactPath(context: Hook) {
@@ -27,37 +30,52 @@ export async function resolveArtifactPath(context: Hook) {
   // Resolve buildDir relative to git root, not cwd
   const resolvedBuildDir = isAbsolute(buildDir) ? buildDir : join(root, buildDir);
 
-  // Explicit file path
+  const keyboards = await getKeyboards(context.app);
+
+  // Resolve and attach flash config for a given keyboard base name.
+  const applyFlashConfig = (base: string) => {
+    context.params.keyboard = base;
+    context.params.keyboardConfig = keyboards[base];
+
+    const kbFlash = keyboards[base].flash;
+    if (!kbFlash) {
+      throw new Error(`no flash configuration for keyboard "${base}" — add to local.json`);
+    }
+
+    const flashPresetName = kbFlash.preset;
+    const presets = context.app.get("flashPresets");
+    if (!flashPresetName || !presets?.[flashPresetName]) {
+      throw new Error(`unknown flash preset "${flashPresetName}" for keyboard "${base}" — defined in config/default.ts`);
+    }
+
+    const basePreset = presets[flashPresetName];
+    context.params.flashConfig = { ...basePreset, ...kbFlash, preset: flashPresetName };
+  };
+
+  // Explicit file path — infer the keyboard from the file's basename so the
+  // flash config (method/preset) is still resolved, then flash the file as-is.
   if (isAbsolute(artifact) || artifact.startsWith("./") || artifact.endsWith(".uf2") || artifact.endsWith(".bin")) {
     if (!existsSync(artifact)) throw new Error(`path not found: ${artifact}`);
+    const fileBase = basename(artifact).replace(/\.(uf2|bin|hex)$/, "");
+    // Match against each keyboard's configured artifact name (prefix match).
+    const match = Object.keys(keyboards).find(k => {
+      const cfgArtifact = keyboards[k].artifact ?? k;
+      return fileBase === cfgArtifact || fileBase.startsWith(cfgArtifact);
+    });
+    if (!match) {
+      throw new Error(`could not infer keyboard for "${basename(artifact)}" — no configured artifact name matches; flash by keyboard name instead`);
+    }
+    applyFlashConfig(match);
     context.params.artifactPath = artifact;
-    context.params.artifactName = basename(artifact).replace(/\.(uf2|bin)$/, "");
+    context.params.artifactName = fileBase;
     return;
   }
 
   // Artifact name — validate against keyboards map
-  const keyboards = await getKeyboards(context.app);
   const base = artifact.replace(/-(?:left|right)$/, "");
   if (!keyboards[base]) throw new Error(`unknown artifact "${artifact}" — not in keyboards config`);
 
-  context.params.keyboard = base;
-  context.params.keyboardConfig = keyboards[base];
-
-  // Resolve flash config from preset + per-keyboard override
-  const kbFlash = keyboards[base].flash;
-  if (!kbFlash) {
-    throw new Error(`no flash configuration for keyboard "${base}" — add to local.json`);
-  }
-
-  const flashPresetName = kbFlash.preset;
-  const presets = context.app.get("flashPresets");
-  if (!flashPresetName || !presets?.[flashPresetName]) {
-    throw new Error(`unknown flash preset "${flashPresetName}" for keyboard "${base}" — defined in config/default.ts`);
-  }
-
-  const basePreset = presets[flashPresetName];
-  const mergedFlash = { ...basePreset, ...kbFlash, preset: flashPresetName };
-  context.params.flashConfig = mergedFlash;
+  applyFlashConfig(base);
 
   const cfgArtifact = keyboards[base].artifact;
   const useArtifact = cfgArtifact !== base ? cfgArtifact : artifact;
